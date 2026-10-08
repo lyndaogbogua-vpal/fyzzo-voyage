@@ -223,12 +223,14 @@ img {
 
 /* 2. Header & Nav */
 .site-header {
-    background-color: #FFFFFF;
-    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, #07162C 0%, #0B2545 100%);
+    border-bottom: 1px solid rgba(201, 151, 56, 0.35);
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 .nav-container {
@@ -243,24 +245,30 @@ img {
 .brand-link {
     display: flex;
     align-items: center;
+    gap: 10px;
+    text-decoration: none;
 }
 
 .brand-logo {
-    height: 52px;
+    height: 56px;
     width: auto;
+    max-width: 240px;
     object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
 }
 
 .main-nav {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 22px;
 }
 
 .main-nav a {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--navy-dark);
+    color: #F8FAFC;
+    transition: color 0.2s ease;
 }
 
 .main-nav a:hover {
@@ -268,11 +276,12 @@ img {
 }
 
 .main-nav .nav-highlight {
-    background-color: var(--gold-light);
-    color: var(--gold);
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #D4AF37 0%, #C99738 100%);
+    color: #FFFFFF !important;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-weight: 700;
+    box-shadow: 0 4px 12px rgba(201, 151, 56, 0.35);
 }
 
 .header-cta {
@@ -295,7 +304,7 @@ img {
     display: block;
     width: 24px;
     height: 3px;
-    background-color: var(--navy-dark);
+    background-color: var(--gold);
     border-radius: 2px;
 }
 
@@ -3638,16 +3647,18 @@ body {
 
 /* 2. Sleek Header Polish */
 .site-header {
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(7, 22, 44, 0.96) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    border-bottom: 1px solid rgba(201, 151, 56, 0.35) !important;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
 }
 
 .main-nav a {
     position: relative;
     padding: 6px 0;
+    color: #F8FAFC !important;
     transition: color 0.2s ease;
 }
 
@@ -3663,17 +3674,21 @@ body {
     border-radius: 2px;
 }
 
+.main-nav a:hover {
+    color: var(--gold) !important;
+}
+
 .main-nav a:hover::after {
     width: 100%;
 }
 
 .main-nav .nav-highlight {
-    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-    color: #92400E !important;
-    border: 1px solid rgba(217, 119, 6, 0.3);
+    background: linear-gradient(135deg, #D4AF37 0%, #C99738 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
     padding: 6px 14px;
     border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
+    box-shadow: 0 4px 12px rgba(201, 151, 56, 0.35);
 }
 
 .main-nav .nav-highlight::after {
