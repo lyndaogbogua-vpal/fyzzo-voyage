@@ -357,7 +357,7 @@
                     <div class="service-pill-card">
                         <div class="svc-icon">🚐</div>
                         <h4>Airport Transfers</h4>
-                        <p>Coordinating verified airport pickups and seamless terminal transfers to ensure safe arrival at your destination.</p>
+                        <p>Coordinating trusted airport pickup options and seamless terminal transfers to ensure safe arrival at your destination.</p>
                     </div>
                 </div>
             </div>
@@ -382,7 +382,7 @@
                     <div class="service-pill-card">
                         <div class="svc-icon">🏡</div>
                         <h4>Temporary Accommodation Guidance</h4>
-                        <p>Guidance on short-term rentals, student halls, and verified booking channels to avoid overseas rental scams.</p>
+                        <p>Guidance on short-term rentals, student halls, and reputable booking channels to avoid overseas rental scams.</p>
                     </div>
                     <div class="service-pill-card">
                         <div class="svc-icon">🎓</div>
@@ -660,12 +660,21 @@
                     <!-- Left Column: Inputs -->
                     <div class="calc-col-inputs">
                         <h3 class="calc-col-title">1. Your Study Details</h3>
+
+                        <div class="calc-form-group">
+                            <label for="ruleVersion">Immigration Rules Version *</label>
+                            <select id="ruleVersion" onchange="recalculateUKFinancials()">
+                                <option value="current" selected>Standard Rules (£1,529 London / £1,171 Outside London)</option>
+                                <option value="updated">Updated Rules (£1,570 London / £1,203 Outside London)</option>
+                            </select>
+                            <span class="calc-help-text">Select applicable rules based on your planned application submission date.</span>
+                        </div>
                         
                         <div class="calc-form-group">
                             <label for="studyLocation">Study Location *</label>
                             <select id="studyLocation" onchange="recalculateUKFinancials()">
-                                <option value="outside_london">Outside London (£1,171 / month)</option>
-                                <option value="london">London (£1,529 / month)</option>
+                                <option value="outside_london">Outside London</option>
+                                <option value="london">London (Inner & Outer Boroughs)</option>
                             </select>
                             <span class="calc-help-text">London covers the City of London and the 32 London boroughs.</span>
                         </div>
@@ -691,7 +700,7 @@
                             <label for="dependantCount">Eligible Accompanying Dependants</label>
                             <select id="dependantCount" onchange="recalculateUKFinancials()">
                                 <option value="0">0 Dependants (Single Student)</option>
-                                <option value="1">1 Dependant (£680 or £845 / month)</option>
+                                <option value="1">1 Dependant</option>
                                 <option value="2">2 Dependants</option>
                                 <option value="3">3 Dependants</option>
                             </select>
@@ -705,12 +714,20 @@
 
                         <div class="calc-breakdown-box">
                             <div class="breakdown-row">
-                                <span>Outstanding Tuition Fee:</span>
-                                <strong id="outTuition">£12,000</strong>
+                                <span>Rule Base & Location:</span>
+                                <strong id="outLocationRule">Outside London (Standard Rules)</strong>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Monthly Maintenance Rate:</span>
+                                <strong id="outMonthlyRate">£1,171 / month</strong>
                             </div>
                             <div class="breakdown-row">
                                 <span>Student Maintenance (Max 9 Months):</span>
                                 <strong id="outMaintenance">£10,539</strong>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Outstanding Tuition Fee:</span>
+                                <strong id="outTuition">£12,000</strong>
                             </div>
                             <div class="breakdown-row" id="dependantRow" style="display: none;">
                                 <span>Dependant Maintenance:</span>
@@ -724,9 +741,9 @@
                         </div>
 
                         <div class="naira-total-box">
-                            <span class="naira-lbl">ESTIMATED NAIRA (₦) VALUE (WITH 10% FX BUFFER)</span>
+                            <span class="naira-lbl">ESTIMATED NAIRA (₦) EQUIVALENT</span>
                             <div class="naira-amount" id="outNaira">₦54,544,380</div>
-                            <span class="naira-buffer-tag">Calculated with indicative exchange rate + 10% safety buffer</span>
+                            <span class="naira-buffer-tag">Calculated using an indicative GBP/NGN exchange rate (₦2,200/£). Optional planning buffer: 10% for personal budgeting.</span>
                         </div>
 
                         <div class="calc-actions">
@@ -739,7 +756,7 @@
 
                 <!-- Calculator Disclaimer (§12, §13) -->
                 <div class="calc-sub-note">
-                    <p><strong>Disclaimer:</strong> This calculator provides an estimate for guidance only. Immigration financial requirements can change. Always confirm the current requirements on the official UK Government website before submitting your application. Fyzzo Voyage provides document readiness guidance and does not manufacture or supply financial evidence.</p>
+                    <p><strong>Statutory Planning Note:</strong> Financial requirements are subject to the applicable Immigration Rules and effective date. The planning buffer is for personal budgeting purposes only and is not an immigration requirement. Always verify the current requirement on GOV.UK before submitting your application. Fyzzo Voyage provides document readiness guidance and does not manufacture or supply financial evidence.</p>
                 </div>
             </div>
 
@@ -749,14 +766,14 @@
                     <span class="pof-icon">🛡️</span>
                     <div>
                         <h3>Proof of Funds & Financial Documentation Guidance</h3>
-                        <p>We help you understand your statutory financial requirements, review your available evidence, and build a complete, compliant document checklist.</p>
+                        <p>We help you understand your statutory financial requirements, review your available evidence, and build a clear and compliant document checklist.</p>
                     </div>
                 </div>
 
                 <div class="pof-pillars-grid">
                     <div class="pof-pillar-item">
                         <h4>Financial Requirement Guidance</h4>
-                        <p>Detailed explanation of statutory 28-day holding period rules, acceptable financial institutions, and currency conversion formulas.</p>
+                        <p>Detailed explanation of the 28-day financial evidence requirement, acceptable financial institutions and currency conversion rules.</p>
                     </div>
                     <div class="pof-pillar-item">
                         <h4>Document Review</h4>
@@ -795,7 +812,7 @@
                 <div class="story-card">
                     <div class="story-card-top">
                         <div class="story-stars">★★★★★</div>
-                        <span class="story-date">Verified Client</span>
+                        <span class="story-date">Client Story</span>
                     </div>
                     <p class="story-quote">"We had already started the process with another agent, but we became uncomfortable with how things were being handled. Fyzzo Voyage stepped in, reviewed my sister's documents and prepared her properly for the school interview. They conducted several mock sessions with her before the interview, and she eventually got through successfully. The support gave us confidence."</p>
                     <div class="story-author-box">
@@ -811,7 +828,7 @@
                 <div class="story-card">
                     <div class="story-card-top">
                         <div class="story-stars">★★★★★</div>
-                        <span class="story-date">Verified Client</span>
+                        <span class="story-date">Client Story</span>
                     </div>
                     <p class="story-quote">"I needed to attend a professional conference in London on short notice. Fyzzo Voyage helped structure my employer documentation, conference invitation, and travel explanation letter with total clarity. The document checklist made everything straightforward, and the visa was granted smoothly."</p>
                     <div class="story-author-box">
@@ -827,7 +844,7 @@
                 <div class="story-card">
                     <div class="story-card-top">
                         <div class="story-stars">★★★★★</div>
-                        <span class="story-date">Verified Client</span>
+                        <span class="story-date">Client Story</span>
                     </div>
                     <p class="story-quote">"I had a four-year study gap after my first degree and was worried about explaining it. The team helped me align my genuine work experience with my intended postgraduate course in Canada. Their guidance on drafting my study plan and organizing my sponsor documents was invaluable."</p>
                     <div class="story-author-box">
@@ -926,9 +943,9 @@
                         <span class="team-avatar-initials">AD</span>
                     </div>
                     <div class="team-info">
-                        <h3>Admissions & Visa Advisory Desk</h3>
-                        <span class="team-role">Senior Documentation Specialists</span>
-                        <p>Providing specialized application reviews, academic statement structuring, financial readiness checklists, and visa interview coaching.</p>
+                        <h3>Fyzzo Voyage Advisory Desk</h3>
+                        <span class="team-role">Admissions & Visa Documentation</span>
+                        <p>Our advisory desk supports application review, academic documentation and interview preparation.</p>
                     </div>
                 </div>
 
@@ -938,8 +955,8 @@
                     </div>
                     <div class="team-info">
                         <h3>Travel & Settlement Desk</h3>
-                        <span class="team-role">Flight & Arrival Coordinators</span>
-                        <p>Managing flight comparisons, verified accommodation sourcing, airport pickup logistics, and post-arrival transition support.</p>
+                        <span class="team-role">Flight & Arrival Coordination</span>
+                        <p>Our travel desk coordinates flight comparisons, reputable accommodation options, airport pickup logistics, and post-arrival transition support.</p>
                     </div>
                 </div>
             </div>
