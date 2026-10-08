@@ -20,16 +20,28 @@ const CONFIG = {
     adminPin: "fyzzo2026",
     currentIntake: "January 2027 Intake",
     
-    // Statutory UK Student Visa Maintenance Requirements (2026/2027 Guidelines §12)
+    // Statutory UK Student Visa Maintenance Requirements (§12, §13)
     ukVisa: {
-        londonMonthly: 1529,
-        londonMax9Months: 13761,
-        outsideLondonMonthly: 1171,
-        outsideLondonMax9Months: 10539,
-        dependantLondonMonthly: 845,
-        dependantOutsideLondonMonthly: 680,
+        current: {
+            name: "Standard Rules",
+            londonMonthly: 1529,
+            londonMax9Months: 13761,
+            outsideLondonMonthly: 1171,
+            outsideLondonMax9Months: 10539,
+            dependantLondonMonthly: 845,
+            dependantOutsideLondonMonthly: 680
+        },
+        updated: {
+            name: "Updated Rules",
+            londonMonthly: 1570,
+            londonMax9Months: 14130,
+            outsideLondonMonthly: 1203,
+            outsideLondonMax9Months: 10827,
+            dependantLondonMonthly: 874,
+            dependantOutsideLondonMonthly: 702
+        },
         exchangeRateGBPtoNGN: 2200, // Indicative baseline
-        fxBufferPercent: 0.10 // 10% statutory volatility buffer
+        planningBufferPercent: 0.10 // 10% optional personal budgeting buffer
     },
 
     // Google Form Sync Endpoint for Lead Capture
@@ -46,6 +58,7 @@ const CONFIG = {
 // 2. UK STUDENT VISA FINANCIAL CALCULATOR (§12, §13)
 // ==========================================================================
 function recalculateUKFinancials() {
+    const ruleVersionEl = document.getElementById('ruleVersion');
     const locationEl = document.getElementById('studyLocation');
     const tuitionTotalEl = document.getElementById('tuitionTotal');
     const tuitionPaidEl = document.getElementById('tuitionPaid');
@@ -53,6 +66,8 @@ function recalculateUKFinancials() {
 
     if (!locationEl || !tuitionTotalEl || !tuitionPaidEl) return;
 
+    const ruleVersion = (ruleVersionEl && ruleVersionEl.value === 'updated') ? 'updated' : 'current';
+    const rules = CONFIG.ukVisa[ruleVersion];
     const location = locationEl.value; // 'london' or 'outside_london'
     const tuitionTotal = parseFloat(tuitionTotalEl.value) || 0;
     const tuitionPaid = parseFloat(tuitionPaidEl.value) || 0;
@@ -63,20 +78,23 @@ function recalculateUKFinancials() {
 
     // 2. Student Maintenance (9 Months Statutory Maximum)
     const isLondon = (location === 'london');
-    const studentMaintenance = isLondon ? CONFIG.ukVisa.londonMax9Months : CONFIG.ukVisa.outsideLondonMax9Months;
+    const monthlyRate = isLondon ? rules.londonMonthly : rules.outsideLondonMonthly;
+    const studentMaintenance = isLondon ? rules.londonMax9Months : rules.outsideLondonMax9Months;
 
     // 3. Dependant Maintenance (9 Months)
-    const depRateMonthly = isLondon ? CONFIG.ukVisa.dependantLondonMonthly : CONFIG.ukVisa.dependantOutsideLondonMonthly;
+    const depRateMonthly = isLondon ? rules.dependantLondonMonthly : rules.dependantOutsideLondonMonthly;
     const dependantMaintenance = dependants * (depRateMonthly * 9);
 
     // 4. Total Evidence in GBP
     const totalGBP = outstandingTuition + studentMaintenance + dependantMaintenance;
 
-    // 5. Total in NGN with 10% Buffer
-    const effectiveRate = CONFIG.ukVisa.exchangeRateGBPtoNGN * (1 + CONFIG.ukVisa.fxBufferPercent);
+    // 5. Total in NGN with 10% Optional Planning Buffer
+    const effectiveRate = CONFIG.ukVisa.exchangeRateGBPtoNGN * (1 + CONFIG.ukVisa.planningBufferPercent);
     const totalNGN = Math.round(totalGBP * effectiveRate);
 
     // Update DOM
+    const outLocationRuleEl = document.getElementById('outLocationRule');
+    const outMonthlyRateEl = document.getElementById('outMonthlyRate');
     const outTuitionEl = document.getElementById('outTuition');
     const outMaintenanceEl = document.getElementById('outMaintenance');
     const outDependantEl = document.getElementById('outDependant');
@@ -85,13 +103,18 @@ function recalculateUKFinancials() {
     const outNairaEl = document.getElementById('outNaira');
     const calcWaBtnEl = document.getElementById('calcWaBtn');
 
+    const locLabel = isLondon ? 'Inside London' : 'Outside London';
+    const ruleLabel = rules.name;
+
+    if (outLocationRuleEl) outLocationRuleEl.textContent = `${locLabel} (${ruleLabel})`;
+    if (outMonthlyRateEl) outMonthlyRateEl.textContent = `£${monthlyRate.toLocaleString()} / month`;
     if (outTuitionEl) outTuitionEl.textContent = `£${outstandingTuition.toLocaleString()}`;
     if (outMaintenanceEl) outMaintenanceEl.textContent = `£${studentMaintenance.toLocaleString()}`;
     
     if (dependantRowEl && outDependantEl) {
         if (dependants > 0) {
             dependantRowEl.style.display = 'flex';
-            outDependantEl.textContent = `£${dependantMaintenance.toLocaleString()} (${dependants} dep.)`;
+            outDependantEl.textContent = `£${dependantMaintenance.toLocaleString()} (${dependants} dep. @ £${depRateMonthly}/mo)`;
         } else {
             dependantRowEl.style.display = 'none';
         }
@@ -102,8 +125,7 @@ function recalculateUKFinancials() {
 
     // Update WhatsApp CTA Message
     if (calcWaBtnEl) {
-        const locLabel = isLondon ? 'Inside London' : 'Outside London';
-        const msg = `Hello Fyzzo Voyage, I used your UK Student Visa Calculator. Location: ${locLabel}, Outstanding Tuition: £${outstandingTuition.toLocaleString()}, Total Estimated Evidence: £${totalGBP.toLocaleString()} (approx ₦${totalNGN.toLocaleString()}). I would like to review my financial documentation.`;
+        const msg = `Hello Fyzzo Voyage, I used your UK Student Visa Calculator. Location: ${locLabel} (${ruleLabel}), Maintenance: £${studentMaintenance.toLocaleString()}, Outstanding Tuition: £${outstandingTuition.toLocaleString()}, Total Estimated Evidence: £${totalGBP.toLocaleString()} (approx ₦${totalNGN.toLocaleString()}). I would like to review my financial documentation.`;
         calcWaBtnEl.href = `https://wa.me/${CONFIG.whatsappClean}?text=${encodeURIComponent(msg)}`;
     }
 }
@@ -137,7 +159,7 @@ function initReviews() {
             name: "Augustine U.",
             service: "Student Visa Support — United Kingdom",
             rating: 5,
-            date: "Verified Client",
+            date: "Client Story",
             text: "We had already started the process with another agent, but we became uncomfortable with how things were being handled. Fyzzo Voyage stepped in, reviewed my sister's documents and prepared her properly for the school interview. They conducted several mock sessions with her before the interview, and she eventually got through successfully. The support gave us confidence."
         },
         {
@@ -145,7 +167,7 @@ function initReviews() {
             name: "Mrs. Adebayo",
             service: "Visit Visa Support — United Kingdom",
             rating: 5,
-            date: "Verified Client",
+            date: "Client Story",
             text: "I needed to attend a professional conference in London on short notice. Fyzzo Voyage helped structure my employer documentation, conference invitation, and travel explanation letter with total clarity. The document checklist made everything straightforward, and the visa was granted smoothly."
         },
         {
@@ -153,7 +175,7 @@ function initReviews() {
             name: "Chinedu O.",
             service: "Study Abroad Support — Canada",
             rating: 5,
-            date: "Verified Client",
+            date: "Client Story",
             text: "I had a four-year study gap after my first degree and was worried about explaining it. The team helped me align my genuine work experience with my intended postgraduate course in Canada. Their guidance on drafting my study plan and organizing my sponsor documents was invaluable."
         }
     ];
@@ -181,7 +203,7 @@ function renderReviews() {
         <div class="story-card" id="card-${rev.id}">
             <div class="story-card-top">
                 <div class="story-stars">${'★'.repeat(rev.rating)}${'☆'.repeat(5 - rev.rating)}</div>
-                <span class="story-date">${escapeHTML(rev.date || 'Verified Client')}</span>
+                <span class="story-date">${escapeHTML(rev.date || 'Client Story')}</span>
             </div>
             <p class="story-quote">"${escapeHTML(rev.text)}"</p>
             <div class="story-author-box">
@@ -447,13 +469,13 @@ function processFyvoyMessage(userInput) {
             appendFyvoyMessage('bot', `Great question, ${fyvoyState.userName}! For the **January 2027 Intake**, we provide:\n\n1. **University Selection Guidance:** Identifying suitable courses across UK, Canada, Ireland and Europe.\n2. **Statement of Purpose (SOP) Guidance:** Structuring a compelling academic intent letter.\n3. **CAS / I-20 Support & Tracking:** Working alongside your institution.\n4. **Student Visa Preparation:** Comprehensive document audits.\n\nOur full Study Abroad Advisory Suite is **₦500,000**. Would you like to start your application plan?`);
         } 
         else if (lower.includes('pof') || lower.includes('fund') || lower.includes('bank') || lower.includes('maintenance') || lower.includes('financial') || lower.includes('calculator')) {
-            appendFyvoyMessage('bot', `Under official UK Student Visa guidelines, you are required to hold:\n\n• **London:** £1,529/month (max £13,761 for 9 months)\n• **Outside London:** £1,171/month (max £10,539 for 9 months)\n+ any outstanding Year 1 tuition fee in your bank account for 28 consecutive days.\n\n💡 *Fyzzo Voyage provides Proof of Funds Readiness Reviews (₦100,000) to ensure your genuine bank statements satisfy every criteria.*`);
+            appendFyvoyMessage('bot', `Under official UK Student Visa guidelines:\n\n• **Inside London:** £1,529/mo (Standard) or £1,570/mo (Updated rules) for max 9 months\n• **Outside London:** £1,171/mo (Standard) or £1,203/mo (Updated rules) for max 9 months\n+ any outstanding Year 1 tuition fee, held for the statutory 28-day financial evidence requirement.\n\n💡 *Fyzzo Voyage provides Proof of Funds Readiness Reviews (₦100,000) to ensure your genuine bank statements meet every compliance rule.*`);
         }
         else if (lower.includes('visit') || lower.includes('tourist') || lower.includes('conference') || lower.includes('family')) {
             appendFyvoyMessage('bot', `For **Visit & Family Visas (₦380,000 service fee)**, our support includes:\n\n• Custom document checklist for your profile\n• Professionally prepared Cover Letter / Travel Explanation\n• Online application review & civil ties audit\n• Biometric scheduling assistance\n\nWe cover UK, Canada, USA, Schengen, and other destinations.`);
         }
         else if (lower.includes('flight') || lower.includes('ticket') || lower.includes('hotel') || lower.includes('fare') || lower.includes('accommodation')) {
-            appendFyvoyMessage('bot', `Our Travel Desk assists with:\n\n• **Flight Booking:** Comparing available flight options, routes, and student baggage allowances.\n• **Accommodation Options:** Identifying verified hotels or student halls near your campus/centre.\n• **Airport Transfers:** Coordinating verified terminal pickups.\n\nService fee for flight & accommodation sourcing is **₦15,000**.`);
+            appendFyvoyMessage('bot', `Our Travel Desk assists with:\n\n• **Flight Booking:** Comparing available flight options, routes, and student baggage allowances.\n• **Accommodation Options:** Identifying suitable hotels or student halls near your campus/centre.\n• **Airport Transfers:** Coordinating trusted terminal pickups.\n\nService fee for flight & accommodation sourcing is **₦15,000**.`);
         }
         else if (lower.includes('price') || lower.includes('cost') || lower.includes('fee') || lower.includes('rate')) {
             appendFyvoyMessage('bot', `Here is our transparent service fee summary:\n\n• **Study Abroad Guidance Suite:** ₦500,000\n• **Visit & Family Visa Support:** ₦380,000\n• **Visa Refusal Review & Roadmap:** ₦380,000\n• **Proof of Funds Readiness Review:** ₦100,000\n• **SOP / Personal Statement Guidance:** ₦100,000\n• **1-on-1 Mock Visa Interview Prep:** ₦100,000\n• **Flight & Accommodation Sourcing:** ₦15,000\n\n*Note: Statutory embassy/university fees are paid directly to the authorities.*`);
