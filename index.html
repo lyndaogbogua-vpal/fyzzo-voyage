@@ -192,7 +192,7 @@
                     <span class="trust-icon">📋</span>
                     <div>
                         <strong>Document-Focused</strong>
-                        <p>Rigorous document review to eliminate gaps</p>
+                        <p>Rigorous document review to identify and address documentation gaps</p>
                     </div>
                 </div>
             </div>
@@ -642,6 +642,11 @@
             <div class="service-agreement-notice">
                 <h4>📜 Service Terms & Fee Transparency</h4>
                 <p>All Fyzzo Voyage service fees represent professional advisory, document review, and application preparation services. Third-party statutory fees (such as embassy application fees, university deposits, immigration healthcare surcharges, biometric centre charges, flights, and hotels) are paid directly to the respective authorities or service providers unless otherwise agreed in writing.</p>
+                <div class="text-center" style="margin-top: 15px;">
+                    <button class="btn btn-outline-dark" onclick="openInstallmentModal()" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; padding: 10px 20px;">
+                        <span>💳</span> Flexible 60% Initial Deposit Option Available &rarr;
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -664,10 +669,10 @@
                         <div class="calc-form-group">
                             <label for="ruleVersion">Immigration Rules Version *</label>
                             <select id="ruleVersion" onchange="recalculateUKFinancials()">
-                                <option value="current" selected>Standard Rules (£1,529 London / £1,171 Outside London)</option>
-                                <option value="updated">Updated Rules (£1,570 London / £1,203 Outside London)</option>
+                                <option value="current" selected>Applications submitted before 30 November 2026 (£1,529 London / £1,171 Outside London)</option>
+                                <option value="updated">Applications submitted from 30 November 2026 (£1,570 London / £1,203 Outside London)</option>
                             </select>
-                            <span class="calc-help-text">Select applicable rules based on your planned application submission date.</span>
+                            <span class="calc-help-text">Select applicable rules based on your planned visa application submission date.</span>
                         </div>
                         
                         <div class="calc-form-group">
@@ -715,7 +720,7 @@
                         <div class="calc-breakdown-box">
                             <div class="breakdown-row">
                                 <span>Rule Base & Location:</span>
-                                <strong id="outLocationRule">Outside London (Standard Rules)</strong>
+                                <strong id="outLocationRule">Outside London (Before 30 Nov 2026)</strong>
                             </div>
                             <div class="breakdown-row">
                                 <span>Monthly Maintenance Rate:</span>
@@ -743,7 +748,7 @@
                         <div class="naira-total-box">
                             <span class="naira-lbl">ESTIMATED NAIRA (₦) EQUIVALENT</span>
                             <div class="naira-amount" id="outNaira">₦54,544,380</div>
-                            <span class="naira-buffer-tag">Calculated using an indicative GBP/NGN exchange rate (₦2,200/£). Optional planning buffer: 10% for personal budgeting.</span>
+                            <span class="naira-buffer-tag">Indicative baseline: ₦2,200 / £1 (Updated: October 2026). Optional 10% planning buffer applied for personal budgeting purposes (not an immigration requirement).</span>
                         </div>
 
                         <div class="calc-actions">
@@ -754,9 +759,14 @@
                     </div>
                 </div>
 
-                <!-- Calculator Disclaimer (§12, §13) -->
+                <!-- Calculator Disclaimer & Official Link (§12, §13) -->
                 <div class="calc-sub-note">
                     <p><strong>Statutory Planning Note:</strong> Financial requirements are subject to the applicable Immigration Rules and effective date. The planning buffer is for personal budgeting purposes only and is not an immigration requirement. Always verify the current requirement on GOV.UK before submitting your application. Fyzzo Voyage provides document readiness guidance and does not manufacture or supply financial evidence.</p>
+                    <div style="margin-top: 14px;">
+                        <a href="https://www.gov.uk/student-visa/money" target="_blank" rel="noopener" class="btn btn-outline-dark" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.82rem; padding: 7px 16px; border-radius: 6px;">
+                            <span>🏛️</span> Official UKVI Financial Guidance (GOV.UK/student-visa/money) &rarr;
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -785,7 +795,7 @@
                     </div>
                     <div class="pof-pillar-item">
                         <h4>Financial Evidence Checklist</h4>
-                        <p>A step-by-step checklist ensuring your financial evidence satisfies every statutory criteria before visa submission.</p>
+                        <p>A step-by-step checklist helping organize and review your financial evidence in line with statutory requirements before submission.</p>
                     </div>
                 </div>
 
@@ -1142,6 +1152,32 @@
             </div>
         </div>
     </footer>
+
+    <!-- 60% Flexible Installment Option Modal -->
+    <div id="installmentModal" class="lead-modal" style="display: none;">
+        <div class="lead-modal-backdrop" onclick="closeInstallmentModal()"></div>
+        <div class="lead-modal-dialog" style="max-width: 540px;">
+            <button class="lead-modal-close" onclick="closeInstallmentModal()" aria-label="Close Modal">&times;</button>
+            <div class="lead-modal-header text-center">
+                <span class="gift-badge">💳 FLEXIBLE PAYMENT PLAN</span>
+                <h3>60% Initial Deposit Option</h3>
+                <p>To help you manage your study abroad and visa preparation budgeting comfortably, Fyzzo Voyage offers a structured installment plan on our comprehensive advisory packages.</p>
+            </div>
+            <div class="installment-modal-body" style="padding: 12px 0; color: #334155; font-size: 0.92rem; line-height: 1.6;">
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                    <p style="margin: 0 0 10px 0; color: #0B2545;"><strong>• Stage 1 (Commencement):</strong> <strong>60% initial deposit</strong> to commence university/visa advisory, course strategy, and comprehensive document review.</p>
+                    <p style="margin: 0; color: #0B2545;"><strong>• Stage 2 (Final Submission):</strong> <strong>40% balance</strong> payable prior to final documentation audit and submission.</p>
+                </div>
+                <p style="font-size: 0.82rem; color: #64748B; margin: 0; line-height: 1.5;"><em>Note: Applies to Fyzzo professional service fees. Statutory third-party fees (embassy visa application fees, university deposits, healthcare surcharges) are paid directly to official authorities.</em></p>
+            </div>
+            <div class="text-center" style="margin-top: 20px;">
+                <a href="https://wa.me/2348062499796?text=Hello%20Fyzzo%20Voyage,%20I%20would%20like%20to%20inquire%20about%20your%2060%25%20installment%20payment%20option%20for%20advisory%20services." target="_blank" rel="noopener" class="btn btn-whatsapp btn-block">
+                    💬 Inquire About Installments on WhatsApp
+                </a>
+                <button class="btn btn-outline-dark btn-block" onclick="closeInstallmentModal()" style="margin-top: 10px;">Close Window</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Review Submission Modal -->
     <div id="reviewSubmissionModal" class="lead-modal" style="display: none;">
