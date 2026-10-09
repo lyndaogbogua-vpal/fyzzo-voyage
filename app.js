@@ -23,7 +23,7 @@ const CONFIG = {
     // Statutory UK Student Visa Maintenance Requirements (§12, §13)
     ukVisa: {
         current: {
-            name: "Standard Rules",
+            name: "Before 30 Nov 2026",
             londonMonthly: 1529,
             londonMax9Months: 13761,
             outsideLondonMonthly: 1171,
@@ -32,7 +32,7 @@ const CONFIG = {
             dependantOutsideLondonMonthly: 680
         },
         updated: {
-            name: "Updated Rules",
+            name: "From 30 Nov 2026",
             londonMonthly: 1570,
             londonMax9Months: 14130,
             outsideLondonMonthly: 1203,
@@ -40,7 +40,7 @@ const CONFIG = {
             dependantLondonMonthly: 874,
             dependantOutsideLondonMonthly: 702
         },
-        exchangeRateGBPtoNGN: 2200, // Indicative baseline
+        exchangeRateGBPtoNGN: 2200, // Indicative baseline (Updated: October 2026)
         planningBufferPercent: 0.10 // 10% optional personal budgeting buffer
     },
 
@@ -289,6 +289,19 @@ function closeReviewModal() {
     if (modal) modal.style.display = 'none';
 }
 
+// 60% Flexible Installment Modal Handlers
+function openInstallmentModal() {
+    const modal = document.getElementById('installmentModal');
+    if (modal) modal.style.display = 'flex';
+    sessionStorage.setItem('fyzzo_installment_seen', 'true');
+}
+
+function closeInstallmentModal() {
+    const modal = document.getElementById('installmentModal');
+    if (modal) modal.style.display = 'none';
+    sessionStorage.setItem('fyzzo_installment_seen', 'true');
+}
+
 // ==========================================================================
 // 5. START YOUR JOURNEY / INTAKE FORM HANDLER (§25)
 // ==========================================================================
@@ -300,13 +313,37 @@ function handleJourneySubmit(e) {
     const fullName = document.getElementById('fullName').value.trim();
     const whatsapp = document.getElementById('whatsappNumber').value.trim();
     const email = document.getElementById('emailAddress').value.trim();
+    const countryResidence = document.getElementById('countryResidence') ? document.getElementById('countryResidence').value.trim() : 'Nigeria';
     const destination = document.getElementById('targetDestination').value;
     const service = document.getElementById('serviceRequired').value;
     const intakeDate = document.getElementById('preferredDate').value;
+    const referralSource = document.getElementById('referralSource') ? document.getElementById('referralSource').value : '';
     const currentSituation = document.getElementById('currentSituation').value.trim();
 
-    // Construct formatted message
-    const summaryMsg = `Hello Fyzzo Voyage, I submitted an intake form on your website:\n\n👤 Name: ${fullName}\n📞 WhatsApp: ${whatsapp}\n✉️ Email: ${email}\n🌍 Destination: ${destination}\n📋 Service: ${service}\n⏳ Target Date: ${intakeDate}\n📝 Notes: ${currentSituation || 'None'}\n\nI would like to discuss my next steps.`;
+    // 1. Save lead locally to ensure 0% lead loss
+    const lead = {
+        id: "lead-" + Date.now(),
+        submittedAt: new Date().toISOString(),
+        fullName,
+        whatsapp,
+        email,
+        countryResidence,
+        destination,
+        service,
+        intakeDate,
+        referralSource,
+        currentSituation
+    };
+    try {
+        const existingLeads = JSON.parse(localStorage.getItem('fyzzo_voyage_leads') || '[]');
+        existingLeads.unshift(lead);
+        localStorage.setItem('fyzzo_voyage_leads', JSON.stringify(existingLeads));
+    } catch (err) {
+        console.warn("Local lead storage warning:", err);
+    }
+
+    // 2. Construct formatted message for WhatsApp direct connection
+    const summaryMsg = `Hello Fyzzo Voyage, I submitted an intake form on your website:\n\n👤 Name: ${fullName}\n📞 WhatsApp: ${whatsapp}\n✉️ Email: ${email}\n📍 Residence: ${countryResidence}\n🌍 Destination: ${destination}\n📋 Service: ${service}\n⏳ Target Date: ${intakeDate}\n📢 Source: ${referralSource}\n📝 Notes: ${currentSituation || 'None'}\n\nI would like to discuss my next steps.`;
 
     showToast("✅ Application details received! Redirecting to WhatsApp...");
     
@@ -547,6 +584,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // 5. Gentle Installment Plan Awareness (Non-intrusive, once per session after 25s)
+    setTimeout(() => {
+        if (!sessionStorage.getItem('fyzzo_installment_seen')) {
+            const drawer = document.getElementById('mobileDrawer');
+            const chatWin = document.getElementById('fyvoyChatWindow');
+            // Only trigger if no other modal/drawer is active
+            if ((!drawer || !drawer.classList.contains('open')) && 
+                (!chatWin || chatWin.style.display === 'none' || chatWin.style.display === '')) {
+                openInstallmentModal();
+            }
+        }
+    }, 25000);
 
     console.log("Fyzzo Voyage 2.0 digital platform initialized successfully.");
 });
