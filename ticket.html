@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Client-side PDF generator library (Direct 100% 1-page PDF export with colors intact) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root {
       --primary: #0b1f3a;
@@ -26,49 +28,43 @@
       color: var(--text-main);
       padding: 20px;
     }
-    .container { max-width: 1240px; margin: 0 auto; }
+    .container { max-width: 1260px; margin: 0 auto; }
     .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px; }
     .header-bar h1 { font-size: 22px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
     .header-bar .badge { background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
     .actions-bar { display: flex; gap: 10px; }
-    button { cursor: pointer; font-family: inherit; font-weight: 600; border-radius: 8px; padding: 9px 18px; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: #172554; }
-    .btn-gold { background: var(--accent-gold); color: white; }
+    button { cursor: pointer; font-family: inherit; font-weight: 700; border-radius: 8px; padding: 10px 18px; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+    .btn-download { background: #c59b27; color: white; box-shadow: 0 4px 12px rgba(197, 155, 39, 0.3); }
+    .btn-download:hover { background: #b0891f; }
+    .btn-print { background: var(--primary); color: white; }
+    .btn-print:hover { background: #172554; }
     .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
     .btn-outline:hover { background: #f1f5f9; }
+    
     .main-grid { display: grid; grid-template-columns: 390px 1fr; gap: 24px; }
     @media (max-width: 992px) { .main-grid { grid-template-columns: 1fr; } }
     
     /* Control Panel */
     .editor-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid var(--border); height: fit-content; }
-    .editor-card h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; }
-    .form-group { margin-bottom: 11px; }
+    .editor-card h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; }
+    .form-group { margin-bottom: 10px; }
     .form-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     input, select { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 12px; font-family: inherit; color: var(--text-main); background: #fff; }
     input:focus, select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15); }
+    
     .markup-calculator { background: #eff6ff; border: 1px dashed #93c5fd; padding: 12px; border-radius: 8px; margin-top: 8px; margin-bottom: 12px; }
     .markup-calculator h3 { font-size: 12px; color: #1e40af; margin-bottom: 6px; font-weight: 700; }
     .calc-row { display: flex; justify-content: space-between; font-size: 11px; color: #334155; margin-bottom: 3px; }
     .calc-profit { font-weight: 800; color: var(--success); font-size: 13px; border-top: 1px solid #bfdbfe; padding-top: 5px; margin-top: 5px; }
-    
-    .print-tip {
-      background: #fefce8;
-      border: 1px solid #fef08a;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      color: #854d0e;
-      margin-bottom: 14px;
-      line-height: 1.4;
-    }
 
-    /* Ticket Document Preview */
+    /* PREVIEW CONTAINER */
     .preview-container { background: #cbd5e1; padding: 20px; border-radius: 12px; overflow-x: auto; display: flex; justify-content: center; }
-    .ticket-paper {
-      background: white;
-      width: 760px;
+    
+    /* THE EXACT A4 TICKET DOCUMENT */
+    #ticketDoc {
+      background: #ffffff !important;
+      width: 794px; /* Standard 96 DPI A4 Pixel Width */
       box-shadow: 0 10px 25px rgba(0,0,0,0.12);
       border-radius: 4px;
       position: relative;
@@ -76,48 +72,38 @@
       flex-direction: column;
       overflow: hidden;
       color: #0f172a;
+      box-sizing: border-box;
     }
 
-    /* Ticket Layout Components */
+    /* Ticket Components using solid colors + border styles so they always render in any print engine */
     .ticket-header {
-      background: #0b1f3a !important;
-      background: linear-gradient(135deg, #0b1f3a 0%, #173872 100%) !important;
+      background-color: #0b1f3a !important;
       color: #ffffff !important;
-      padding: 20px 28px;
+      padding: 22px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
+      border-bottom: 4px solid #c59b27 !important;
     }
-    .ticket-header::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: #c59b27 !important;
-      background: linear-gradient(90deg, #c59b27, #f59e0b, #c59b27) !important;
-    }
-    .brand-col h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; letter-spacing: 1px; font-weight: 700; color: #ffffff !important; margin: 0; }
-    .brand-col p { font-size: 10px; color: #93c5fd !important; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+    .brand-col h1 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; letter-spacing: 1px; font-weight: 700; color: #ffffff !important; margin: 0; }
+    .brand-col p { font-size: 10.5px; color: #93c5fd !important; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
     .doc-type-badge { text-align: right; }
-    .doc-type-badge h2 { font-size: 16px; font-weight: 800; letter-spacing: 1px; color: #fef08a !important; text-transform: uppercase; }
+    .doc-type-badge h2 { font-size: 17px; font-weight: 800; letter-spacing: 1px; color: #fef08a !important; text-transform: uppercase; }
     .doc-type-badge p { font-size: 10px; color: #cbd5e1 !important; }
     
-    .ticket-body { padding: 18px 28px 12px; flex: 1; }
+    .ticket-body { padding: 18px 28px 10px; flex: 1; }
     
     .status-ribbon {
-      background: #f0fdf4 !important;
-      border: 1px solid #bbf7d0 !important;
+      background-color: #f0fdf4 !important;
+      border: 1px solid #86efac !important;
       color: #166534 !important;
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
-      font-size: 11px;
+      font-size: 11.5px;
     }
     .status-ribbon span strong { color: #15803d !important; }
     
@@ -125,64 +111,64 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      background: #f8fafc !important;
+      background-color: #f8fafc !important;
       padding: 10px 14px;
       border-radius: 6px;
       border: 1px solid #e2e8f0 !important;
       margin-bottom: 14px;
     }
     .info-item .lbl { font-size: 9px; font-weight: 700; color: #64748b !important; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-    .info-item .val { font-size: 12px; font-weight: 700; color: #0b1f3a !important; }
-    .info-item .val.pnr { font-family: 'Space Grotesk', monospace; color: #1d4ed8 !important; font-size: 14px; letter-spacing: 1px; }
+    .info-item .val { font-size: 12.5px; font-weight: 700; color: #0b1f3a !important; }
+    .info-item .val.pnr { font-family: 'Space Grotesk', monospace; color: #1d4ed8 !important; font-size: 14.5px; letter-spacing: 1px; }
     
     .section-title { font-size: 11px; font-weight: 800; color: #0b1f3a !important; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-    .section-title::before { content: ''; display: inline-block; width: 3px; height: 11px; background: #c59b27 !important; border-radius: 2px; }
+    .section-title::before { content: ''; display: inline-block; width: 4px; height: 11px; background-color: #c59b27 !important; border-radius: 2px; }
     
-    .flight-segment-box { border: 1px solid #e2e8f0 !important; border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+    .flight-segment-box { border: 1px solid #cbd5e1 !important; border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
     .segment-header {
-      background: #f1f5f9 !important;
-      padding: 6px 14px;
-      font-size: 11px;
+      background-color: #f1f5f9 !important;
+      padding: 7px 14px;
+      font-size: 11.5px;
       font-weight: 700;
       color: #334155 !important;
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid #e2e8f0 !important;
+      border-bottom: 1px solid #cbd5e1 !important;
     }
-    .segment-route-visual { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: white; }
+    .segment-route-visual { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; background-color: #ffffff !important; }
     .route-city { text-align: left; flex: 1; }
     .route-city.dest { text-align: right; }
-    .route-city .code { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 800; color: #0b1f3a !important; line-height: 1; }
+    .route-city .code { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 800; color: #0b1f3a !important; line-height: 1; }
     .route-city .city-name { font-size: 11px; font-weight: 600; color: #475569 !important; margin-top: 2px; }
-    .route-city .datetime { font-size: 10px; color: #64748b !important; margin-top: 2px; }
+    .route-city .datetime { font-size: 10.5px; color: #64748b !important; margin-top: 2px; }
     .flight-path { flex: 1.2; display: flex; flex-direction: column; align-items: center; padding: 0 12px; }
     .flight-line-wrap { width: 100%; display: flex; align-items: center; position: relative; margin-bottom: 3px; }
-    .flight-dot { width: 6px; height: 6px; background: #c59b27 !important; border-radius: 50%; }
-    .flight-dashed { flex: 1; height: 2px; border-top: 2px dashed #cbd5e1 !important; margin: 0 4px; }
-    .flight-airplane { color: #0b1f3a !important; font-size: 14px; }
-    .flight-type-tag { font-size: 9px; font-weight: 700; color: #1d4ed8 !important; background: #eff6ff !important; padding: 2px 7px; border-radius: 999px; }
+    .flight-dot { width: 7px; height: 7px; background-color: #c59b27 !important; border-radius: 50%; }
+    .flight-dashed { flex: 1; height: 2px; border-top: 2px dashed #94a3b8 !important; margin: 0 4px; }
+    .flight-airplane { color: #0b1f3a !important; font-size: 15px; }
+    .flight-type-tag { font-size: 9px; font-weight: 700; color: #1d4ed8 !important; background-color: #eff6ff !important; padding: 2px 7px; border-radius: 999px; border: 1px solid #bfdbfe !important; }
     
     .segment-details-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      padding: 7px 14px;
-      background: #f8fafc !important;
-      border-top: 1px solid #f1f5f9 !important;
-      font-size: 10px;
+      padding: 8px 14px;
+      background-color: #f8fafc !important;
+      border-top: 1px solid #e2e8f0 !important;
+      font-size: 10.5px;
     }
     .segment-detail-col span { color: #64748b !important; font-size: 9px; text-transform: uppercase; }
     .segment-detail-col strong { color: #334155 !important; display: block; font-size: 11px; margin-top: 1px; }
     
     .pax-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 11px; }
-    .pax-table th { background: #f1f5f9 !important; text-align: left; padding: 5px 10px; color: #475569 !important; font-weight: 700; border-bottom: 1px solid #e2e8f0 !important; font-size: 9.5px; text-transform: uppercase; }
-    .pax-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9 !important; color: #1e293b !important; }
+    .pax-table th { background-color: #f1f5f9 !important; text-align: left; padding: 6px 10px; color: #475569 !important; font-weight: 700; border-bottom: 1px solid #cbd5e1 !important; font-size: 9.5px; text-transform: uppercase; }
+    .pax-table td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9 !important; color: #1e293b !important; }
     
     .billing-card {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f8fafc !important;
-      border: 1px solid #e2e8f0 !important;
+      background-color: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
       padding: 10px 14px;
       border-radius: 6px;
       margin-bottom: 12px;
@@ -190,11 +176,11 @@
     .billing-notes { font-size: 10px; color: #64748b !important; max-width: 440px; line-height: 1.35; }
     .billing-amount-box { text-align: right; }
     .billing-amount-box .lbl { font-size: 9px; font-weight: 700; color: #64748b !important; text-transform: uppercase; }
-    .billing-amount-box .amt { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: #0b1f3a !important; }
+    .billing-amount-box .amt { font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 800; color: #0b1f3a !important; }
     
     .notices-box {
       border-left: 3px solid #c59b27 !important;
-      background: #fffbeb !important;
+      background-color: #fffbeb !important;
       padding: 8px 12px;
       border-radius: 0 4px 4px 0;
       font-size: 9.5px;
@@ -204,9 +190,9 @@
     }
     
     .ticket-footer {
-      border-top: 1px solid #e2e8f0 !important;
+      border-top: 1px solid #cbd5e1 !important;
       padding: 12px 28px 14px;
-      background: white;
+      background-color: #ffffff !important;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -214,9 +200,9 @@
       color: #64748b !important;
       margin-top: auto;
     }
-    .footer-left strong { color: #0b1f3a !important; display: block; margin-bottom: 1px; font-size: 10px; }
+    .footer-left strong { color: #0b1f3a !important; display: block; margin-bottom: 1px; font-size: 10.5px; }
     .footer-stamp {
-      border: 1.5px dashed #94a3b8 !important;
+      border: 1.5px dashed #64748b !important;
       padding: 4px 10px;
       border-radius: 5px;
       text-align: center;
@@ -227,59 +213,43 @@
       text-transform: uppercase;
     }
 
-    /* STRICT SINGLE-PAGE A4 PRINT CONFIGURATION */
+    /* PRINT RULES */
     @page {
       size: A4 portrait;
-      margin: 0mm !important; /* Zero margin removes default headers/footers */
+      margin: 0 !important;
     }
 
     @media print {
-      *, *:before, *:after {
+      * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         color-adjust: exact !important;
       }
-
-      html, body {
-        width: 210mm !important;
-        height: 297mm !important;
-        max-height: 297mm !important;
+      body {
         margin: 0 !important;
         padding: 0 !important;
-        background: #ffffff !important;
-        overflow: hidden !important;
+        background: white !important;
       }
-
-      .header-bar, .editor-card, .print-tip {
+      .header-bar, .editor-card {
         display: none !important;
       }
-
       .main-grid {
         display: block !important;
         margin: 0 !important;
         padding: 0 !important;
       }
-
       .preview-container {
         padding: 0 !important;
         margin: 0 !important;
         background: transparent !important;
-        display: block !important;
       }
-
-      .ticket-paper {
-        width: 210mm !important;
-        height: 296mm !important; /* strictly under 297mm so no 2nd page is ever created */
-        max-height: 296mm !important;
+      #ticketDoc {
+        width: 100% !important;
+        max-width: 100% !important;
         box-shadow: none !important;
         border-radius: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        page-break-inside: avoid !important;
-        page-break-before: avoid !important;
         page-break-after: avoid !important;
-        break-inside: avoid !important;
-        overflow: hidden !important;
+        break-after: avoid !important;
       }
     }
   </style>
@@ -293,17 +263,13 @@
     </div>
     <div class="actions-bar">
       <button type="button" class="btn-outline" onclick="loadSampleData()">Load Sample Data</button>
-      <button type="button" class="btn-primary" onclick="triggerPrint()">Print / Save as PDF</button>
+      <button type="button" class="btn-download" onclick="downloadPdfDirect()">⬇️ Download PDF (1-Page & Colors)</button>
+      <button type="button" class="btn-print" onclick="window.print()">🖨️ Browser Print</button>
     </div>
   </div>
 
   <div class="main-grid">
     <div class="editor-card">
-      <div class="print-tip">
-        <strong>💡 Perfect Color & 1-Page PDF Tip:</strong><br>
-        In the print dialog, ensure <strong>Background graphics</strong> is checked under More settings (this preserves the Navy & Gold colors).
-      </div>
-
       <h2>Booking & Markup Controls</h2>
       <div class="form-group">
         <label>Passenger Name</label>
@@ -410,6 +376,7 @@
       </div>
     </div>
 
+    <!-- TICKET DOCUMENT -->
     <div class="preview-container">
       <div class="ticket-paper" id="ticketDoc">
         <div class="ticket-header">
@@ -615,8 +582,36 @@
     updateTicket();
   }
 
-  function triggerPrint() {
-    window.print();
+  // DIRECT 1-PAGE COLOR PDF DOWNLOAD (Bypasses all browser print dialog limitations)
+  function downloadPdfDirect() {
+    const element = document.getElementById('ticketDoc');
+    const paxName = document.getElementById('inpPaxName').value.trim() || 'Passenger';
+    const pnr = document.getElementById('inpPnr').value.trim() || 'Ticket';
+    const filename = 'FYZZO_Voyage_ETicket_' + pnr + '.pdf';
+
+    const opt = {
+      margin:       0,
+      filename:     filename,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    };
+
+    const btn = document.querySelector('.btn-download');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Generating PDF...';
+    btn.disabled = true;
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }).catch(err => {
+      console.error(err);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      alert('Generating PDF failed, falling back to print dialog.');
+      window.print();
+    });
   }
 
   window.addEventListener('DOMContentLoaded', () => {
