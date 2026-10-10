@@ -61,6 +61,8 @@
                 <a href="#visa-support" class="nav-link">Visa Support</a>
                 <a href="#travel" class="nav-link">Travel</a>
                 <a href="#relocation" class="nav-link">Relocation</a>
+                <a href="#quiz" class="nav-link">Eligibility Quiz</a>
+                <a href="#calculator" class="nav-link">UK Calculator</a>
                 <a href="#about" class="nav-link">About Fyzzo</a>
                 <a href="#reviews" class="nav-link">Client Stories</a>
                 <a href="#contact" class="nav-link">Contact</a>
@@ -90,6 +92,7 @@
             <a href="#visa-support" class="mobile-link" onclick="closeDrawer()">Visa Support</a>
             <a href="#travel" class="mobile-link" onclick="closeDrawer()">Travel & Flights</a>
             <a href="#relocation" class="mobile-link" onclick="closeDrawer()">Relocation & Settlement</a>
+            <a href="#quiz" class="mobile-link" onclick="closeDrawer()">Relocation Eligibility Quiz</a>
             <a href="#calculator" class="mobile-link" onclick="closeDrawer()">UK Visa Financial Calculator</a>
             <a href="#about" class="mobile-link" onclick="closeDrawer()">About Fyzzo Voyage</a>
             <a href="#reviews" class="mobile-link" onclick="closeDrawer()">Client Stories</a>
@@ -121,6 +124,7 @@
 
             <div class="hero-actions">
                 <a href="#contact" class="btn btn-gold btn-large">Start Your Journey &rarr;</a>
+                <a href="#quiz" class="btn btn-large" style="background: rgba(255,255,255,0.15); border: 1.5px solid var(--gold); color: #FFFFFF;">🎯 Eligibility Quiz</a>
                 <a href="https://wa.me/2348062499796?text=Hello%20Fyzzo%20Voyage,%20I%20would%20like%20to%20chat%20with%20an%20advisor%20about%20my%20travel%20or%20study%20plans." class="btn btn-outline btn-large" target="_blank" rel="noopener">
                     <span>💬</span> Chat With Fyzzo
                 </a>
@@ -620,6 +624,7 @@
                             <strong>Available Modules:</strong>
                             <ul class="pricing-list">
                                 <li><strong>Proof of Funds Readiness Review:</strong> ₦100,000</li>
+                                <li><strong>Proof of Work / Employment & Study Gap Documentation:</strong> ₦200,000</li>
                                 <li><strong>Personal Statement / SOP Guidance:</strong> ₦100,000</li>
                                 <li><strong>Cover Letter / Travel Explanation Drafting:</strong> ₦60,000</li>
                                 <li><strong>1-on-1 Visa Interview Coaching:</strong> ₦100,000</li>
@@ -642,10 +647,388 @@
             <div class="service-agreement-notice">
                 <h4>📜 Service Terms & Fee Transparency</h4>
                 <p>All Fyzzo Voyage service fees represent professional advisory, document review, and application preparation services. Third-party statutory fees (such as embassy application fees, university deposits, immigration healthcare surcharges, biometric centre charges, flights, and hotels) are paid directly to the respective authorities or service providers unless otherwise agreed in writing.</p>
-                <div class="text-center" style="margin-top: 15px;">
-                    <button class="btn btn-outline-dark" onclick="openInstallmentModal()" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; padding: 10px 20px;">
-                        <span>💳</span> Flexible 60% Initial Deposit Option Available &rarr;
-                    </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7b. Global Relocation & Eligibility Assessment Quiz -->
+    <section class="eligibility-quiz-section" id="quiz">
+        <div class="section-container">
+            <div class="section-header text-center">
+                <span class="section-kicker">INSTANT PROFILE EVALUATION</span>
+                <h2>Global Relocation & Visa Eligibility Assessment</h2>
+                <p class="section-sub">Discover your strongest destination countries, evaluate your visa qualifications, and receive a personalized relocation plan based on your education, work profile, and budget.</p>
+            </div>
+
+            <div class="quiz-card" id="quizContainer">
+                <!-- Progress Header -->
+                <div class="quiz-progress-wrap" id="quizProgressWrap">
+                    <div class="quiz-progress-meta">
+                        <span id="quizStepIndicator">Step 1 of 6: Your Core Objective</span>
+                        <span id="quizPercentIndicator">17% Complete</span>
+                    </div>
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quizProgressFill" style="width: 16.6%;"></div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Goal / Objective -->
+                <div class="quiz-step-pane active" id="quizStep1">
+                    <div class="quiz-question-header">
+                        <h3>What is your primary goal or reason for going abroad?</h3>
+                        <p>Select the option that best reflects what you want to achieve.</p>
+                    </div>
+                    <div class="quiz-options-list">
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(1, 'Study & Post-Study Work / PR', this)">
+                            <span class="opt-icon">🎓</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Study & Post-Study Work / Permanent Residency</span>
+                                <span class="opt-desc">Undergraduate or Postgraduate degree with pathway to post-study work visa and residency.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(1, 'Direct Skilled Work / Career Relocation', this)">
+                            <span class="opt-icon">💼</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Direct Skilled Work / Career Relocation</span>
+                                <span class="opt-desc">Professional relocation through job sponsorship or skilled worker immigration point systems.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(1, 'Family Relocation & Settlement', this)">
+                            <span class="opt-icon">👨‍👩‍👧</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Family Relocation & Dependent Settlement</span>
+                                <span class="opt-desc">Relocating with spouse and children for better healthcare, education, and long-term security.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(1, 'Visit, Tourism & Business Conference', this)">
+                            <span class="opt-icon">✈️</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Visit, Tourism or Business Conference</span>
+                                <span class="opt-desc">Short-term international travel for holiday, professional workshops, or visiting relatives.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(1, 'Business Setup / Investor Migration', this)">
+                            <span class="opt-icon">🏢</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Business Expansion or Investor Migration</span>
+                                <span class="opt-desc">Setting up an overseas subsidiary, commercial branch, or investor-class visa.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Highest Qualification -->
+                <div class="quiz-step-pane" id="quizStep2">
+                    <div class="quiz-question-header">
+                        <h3>What is your highest educational qualification?</h3>
+                        <p>Immigration authorities assess credentials when calculating points or issuing admission offers.</p>
+                    </div>
+                    <div class="quiz-options-list">
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(2, 'Bachelor Degree (First Class / 2:1)', this)">
+                            <span class="opt-icon">📜</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Bachelor’s Degree (First Class or 2:1 Second Class Upper)</span>
+                                <span class="opt-desc">Strong academic standing eligible for direct Masters, tuition discounts, and high immigration points.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(2, 'Bachelor Degree (2:2 / 3rd Class)', this)">
+                            <span class="opt-icon">📄</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Bachelor’s Degree (2:2 Second Class Lower or 3rd Class)</span>
+                                <span class="opt-desc">Eligible for select direct master’s universities or Pre-Master’s pathway programmes.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(2, 'Master Degree / PhD', this)">
+                            <span class="opt-icon">🎓</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Master’s Degree or Doctorate (PhD)</span>
+                                <span class="opt-desc">Advanced graduate qualifications; maximum education points in Express Entry and global talent.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(2, 'HND / OND / Polytechnic Diploma', this)">
+                            <span class="opt-icon">🏛️</span>
+                            <div class="opt-text">
+                                <span class="opt-title">HND, OND or Polytechnic National Diploma</span>
+                                <span class="opt-desc">Eligible for university top-up degrees, post-graduate diplomas, or Canadian college diplomas.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(2, 'WAEC / NECO / High School', this)">
+                            <span class="opt-icon">📝</span>
+                            <div class="opt-text">
+                                <span class="opt-title">WAEC / NECO / High School Certificate</span>
+                                <span class="opt-desc">Direct undergraduate admissions (with English grade C6+ accepted without IELTS).</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                    </div>
+                    <div class="quiz-actions-row">
+                        <button type="button" class="btn-quiz-back" onclick="prevQuizStep(1)">&larr; Back</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Work Experience / Professional Field -->
+                <div class="quiz-step-pane" id="quizStep3">
+                    <div class="quiz-question-header">
+                        <h3>What is your current professional field & experience level?</h3>
+                        <p>Helps us match you with country-specific shortage occupation lists.</p>
+                    </div>
+                    <div class="quiz-options-list">
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(3, 'Tech, Software & Engineering (STEM)', this)">
+                            <span class="opt-icon">💻</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Tech, Software, Data & Engineering (STEM)</span>
+                                <span class="opt-desc">Software development, cybersecurity, data analysis, civil/electrical engineering. High global shortage demand.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(3, 'Healthcare, Nursing & Medical Sciences', this)">
+                            <span class="opt-icon">🩺</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Healthcare, Nursing, Pharmacy & Medical Sciences</span>
+                                <span class="opt-desc">Registered nurses, doctors, public health, pharmacists. Expedited healthcare visa pathways.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(3, 'Business, Finance, Banking & Management', this)">
+                            <span class="opt-icon">📊</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Business, Banking, Finance, Accounting & Management</span>
+                                <span class="opt-desc">Chartered accountants, auditors, project managers, marketing executives, HR specialists.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(3, 'Education, Logistics, Law & Hospitality', this)">
+                            <span class="opt-icon">🛠️</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Education, Supply Chain, Law, Trades & General Services</span>
+                                <span class="opt-desc">Teachers, legal practitioners, procurement officers, culinary, logistics managers.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(3, 'Fresh Graduate / Entry Level (0-1 Year)', this)">
+                            <span class="opt-icon">🌱</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Fresh Graduate / School Leaver / NYSC (0 - 1 Year)</span>
+                                <span class="opt-desc">Starting out; best suited for direct bachelor’s or master’s progression abroad.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                    </div>
+                    <div class="quiz-actions-row">
+                        <button type="button" class="btn-quiz-back" onclick="prevQuizStep(2)">&larr; Back</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Country Preference -->
+                <div class="quiz-step-pane" id="quizStep4">
+                    <div class="quiz-question-header">
+                        <h3>Which destination country do you prefer, or should we recommend?</h3>
+                        <p>Select your top choice or choose 'Open / Recommend Best' for our algorithmic recommendation.</p>
+                    </div>
+                    <div class="quiz-options-list">
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(4, 'United Kingdom', this)">
+                            <span class="opt-icon">🇬🇧</span>
+                            <div class="opt-text">
+                                <span class="opt-title">United Kingdom</span>
+                                <span class="opt-desc">Fast admissions, 2-year Graduate Route work visa, January & September intakes, straightforward eVisa process.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(4, 'Canada', this)">
+                            <span class="opt-icon">🇨🇦</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Canada</span>
+                                <span class="opt-desc">High quality of life, Post-Graduation Work Permit (PGWP) up to 3 years, and direct Express Entry / PNP permanent residence routes.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(4, 'Europe & Ireland', this)">
+                            <span class="opt-icon">🇪🇺</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Europe & Ireland (Germany, Poland, France, Ireland)</span>
+                                <span class="opt-desc">Affordable tuition fees, 2-year post-study work in Ireland, EU Blue Card skilled worker permits, Schengen mobility.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(4, 'United States', this)">
+                            <span class="opt-icon">🇺🇸</span>
+                            <div class="opt-text">
+                                <span class="opt-title">United States</span>
+                                <span class="opt-desc">World-leading research universities, 3-year STEM OPT work authorization, Ivy League & global career exposure.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(4, 'Australia & New Zealand', this)">
+                            <span class="opt-icon">🇦🇺</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Australia & New Zealand</span>
+                                <span class="opt-desc">High hourly wages, regional migration incentives, and strong permanent residency streams for skilled professionals.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(4, 'Open / Recommend Best Option', this)">
+                            <span class="opt-icon">🌐</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Open to Recommendations (Best Country for My Profile)</span>
+                                <span class="opt-desc">Let Fyzzo Voyage evaluate my qualifications, budget, and timeline to recommend the highest approval chance.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                    </div>
+                    <div class="quiz-actions-row">
+                        <button type="button" class="btn-quiz-back" onclick="prevQuizStep(3)">&larr; Back</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Budget / Proof of Funds Readiness -->
+                <div class="quiz-step-pane" id="quizStep5">
+                    <div class="quiz-question-header">
+                        <h3>What is your estimated total budget / Proof of Funds capacity?</h3>
+                        <p>This includes tuition, living expenses, embassy fees, and statutory maintenance funds.</p>
+                    </div>
+                    <div class="quiz-options-list">
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(5, 'Budget-Conscious (Under ₦12 Million)', this)">
+                            <span class="opt-icon">💡</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Budget-Conscious: Under ₦12 Million</span>
+                                <span class="opt-desc">Suited for European low-tuition public universities, short visit visas, or affordable pathway programmes.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(5, 'Mid-Range (₦12 Million - ₦25 Million)', this)">
+                            <span class="opt-icon">⚖️</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Mid-Range: ₦12 Million - ₦25 Million</span>
+                                <span class="opt-desc">Comfortably covers UK outside-London university deposits + POF maintenance, Canadian college certificates, Ireland.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(5, 'Well-Funded (₦25 Million - ₦45 Million)', this)">
+                            <span class="opt-icon">🌟</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Well-Funded: ₦25 Million - ₦45 Million</span>
+                                <span class="opt-desc">Covers full London/UK Master’s, Canadian university degrees, US institutions, or skilled family relocation.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                        <button type="button" class="quiz-opt-btn" onclick="selectQuizOption(5, 'Premium / High Net Worth (₦45 Million+)', this)">
+                            <span class="opt-icon">👑</span>
+                            <div class="opt-text">
+                                <span class="opt-title">Premium / High Net Worth: ₦45 Million+</span>
+                                <span class="opt-desc">Full flexibility for top-tier global institutions, family relocations, or business/investor pathways.</span>
+                            </div>
+                            <span class="opt-check">✓</span>
+                        </button>
+                    </div>
+                    <div class="quiz-actions-row">
+                        <button type="button" class="btn-quiz-back" onclick="prevQuizStep(4)">&larr; Back</button>
+                    </div>
+                </div>
+
+                <!-- Step 6: Contact Information & Submission -->
+                <div class="quiz-step-pane" id="quizStep6">
+                    <div class="quiz-question-header text-center">
+                        <span class="gift-badge">🎯 FINAL STEP</span>
+                        <h3>Where should we send your personalized assessment?</h3>
+                        <p>Provide your accurate details. We calculate your exact match score and send an official copy to your email and our advisory desk.</p>
+                    </div>
+
+                    <form id="quizLeadForm" onsubmit="handleQuizLeadSubmit(event)">
+                        <div class="quiz-lead-grid">
+                            <div class="form-group full-width">
+                                <label for="quizFullName">Full Name *</label>
+                                <input type="text" id="quizFullName" required placeholder="e.g. Augustine Nnamdi" autocomplete="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="quizWhatsapp">WhatsApp Phone Number *</label>
+                                <input type="tel" id="quizWhatsapp" required placeholder="e.g. 08062499796" autocomplete="tel">
+                            </div>
+                            <div class="form-group">
+                                <label for="quizEmail">Email Address *</label>
+                                <input type="email" id="quizEmail" required placeholder="e.g. yourname@gmail.com" autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="quiz-guarantee-note">
+                            <span>🔒</span>
+                            <span>Your details are safe and confidential. Fyzzo Voyage does not share your data.</span>
+                        </div>
+
+                        <div class="quiz-actions-row">
+                            <button type="button" class="btn-quiz-back" onclick="prevQuizStep(5)">&larr; Back</button>
+                            <button type="submit" class="btn btn-gold btn-large" id="quizSubmitBtn">
+                                🎯 Generate My Relocation Eligibility Result &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result Box (Injected / Shown after Step 6) -->
+                <div class="quiz-result-wrapper" id="quizResultBox" style="display: none;">
+                    <div class="quiz-result-hero">
+                        <span class="quiz-match-badge" id="resMatchScore">94% QUALIFICATION MATCH</span>
+                        <h3 class="quiz-result-title" id="resPrimaryCountry">Recommended Destination: United Kingdom (Post-Grad Pathway)</h3>
+                        <p class="quiz-result-subtitle" id="resSummaryText">Based on your educational background and budget, you have a high probability of admission and visa approval.</p>
+                    </div>
+
+                    <div class="quiz-breakdown-grid">
+                        <div class="quiz-box">
+                            <h4><span>✅</span> Why This Pathway Fits You</h4>
+                            <ul id="resWhyPoints">
+                                <!-- Dynamic items -->
+                            </ul>
+                        </div>
+                        <div class="quiz-box">
+                            <h4><span>📋</span> Mandatory Compliance Requirements</h4>
+                            <ul id="resReqPoints">
+                                <!-- Dynamic items -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="quiz-roadmap-box">
+                        <h4>🗺️ Your Tailored 4-Step Move Abroad Plan</h4>
+                        <div class="roadmap-steps-grid">
+                            <div class="roadmap-step-item">
+                                <span class="roadmap-step-num">1</span>
+                                <strong>Profile & Admissions</strong>
+                                <p>Course matching, SOP review, and university application submission.</p>
+                            </div>
+                            <div class="roadmap-step-item">
+                                <span class="roadmap-step-num">2</span>
+                                <strong>POF & CAS / LOA</strong>
+                                <p>Bank statement seasoning under 28-day rule and CAS/I-20 clearance.</p>
+                            </div>
+                            <div class="roadmap-step-item">
+                                <span class="roadmap-step-num">3</span>
+                                <strong>Visa Documentation</strong>
+                                <p>Rigorous document audit, cover letter drafting, and visa lodgement.</p>
+                            </div>
+                            <div class="roadmap-step-item">
+                                <span class="roadmap-step-num">4</span>
+                                <strong>Flight & Settlement</strong>
+                                <p>Flight booking, airport terminal pickup, and initial housing onboarding.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-cta-banner">
+                        <a id="resWhatsappBtn" href="https://wa.me/2348062499796" target="_blank" rel="noopener" class="btn btn-whatsapp btn-large">
+                            💬 Discuss This Move Abroad Plan on WhatsApp (08062499796)
+                        </a>
+                        <button type="button" class="btn btn-outline-dark" onclick="resetQuiz()" style="font-size: 0.85rem; padding: 8px 16px; align-self: center; margin-top: 6px;">
+                            🔄 Retake Assessment with Different Choices
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -815,6 +1198,40 @@
                 <span class="section-kicker">REAL EXPERIENCES</span>
                 <h2>Client Stories & Testimonials</h2>
                 <p class="section-sub">Real feedback from clients we have supported through admissions, visa preparation, and travel planning.</p>
+            </div>
+
+            <!-- Spotlight Student Case & Evidence Gallery -->
+            <div class="case-spotlight">
+                <div class="case-info">
+                    <span class="case-tag">UK JANUARY INTAKE STUDENT SUCCESS</span>
+                    <h3>Case Study: From Nigeria to University of Wolverhampton & UK eVisa Approval</h3>
+                    <p class="case-desc">Our student, Augustine, successfully secured a conditional offer for <strong>BA (Hons) Business Management (Year 1) at University of Wolverhampton (£17,600 Tuition)</strong>, resolved study gap requirements and WAEC verification, completed Pre-CAS vetting, had Proof of Funds structured, and received their official <strong>UK Student eVisa</strong> valid through 2028!</p>
+                    <ul class="case-points">
+                        <li>✅ <strong>Program:</strong> BA (Hons) Business Management (Jan Intake)</li>
+                        <li>✅ <strong>Institution:</strong> University of Wolverhampton, United Kingdom</li>
+                        <li>✅ <strong>Visa Issued:</strong> UKVI Student eVisa (Ref: NGA)</li>
+                        <li>✅ <strong>Full Settlement:</strong> Flight booked, arrival hotel arranged, safely settled in the UK!</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-gold">Start Your Own Success Story &rarr;</a>
+                </div>
+                <div class="case-gallery">
+                    <div class="gallery-item" onclick="openLightbox('assets/proof_wolverhampton_offer.jpg', 'University of Wolverhampton Official Offer Letter (£17,600 Tuition)')" title="Click to inspect offer letter">
+                        <img src="assets/proof_wolverhampton_offer.jpg" alt="University of Wolverhampton Official Offer Letter (£17,600)">
+                        <div class="gallery-overlay"><span>📄 University Offer Letter</span></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox('assets/proof_evisa_status_1.jpg', 'Official UKVI Student eVisa Approval (Ref: NGA)')" title="Click to inspect UKVI eVisa approval">
+                        <img src="assets/proof_evisa_status_1.jpg" alt="Official UKVI Student eVisa Approval">
+                        <div class="gallery-overlay"><span>🇬🇧 UKVI eVisa Approved</span></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox('assets/proof_student_uk_arrival.jpg', 'Student Safely Arrived and Enrolled in the UK')" title="Click to inspect UK arrival">
+                        <img src="assets/proof_student_uk_arrival.jpg" alt="Student Safely Arrived and Enrolled in the UK">
+                        <div class="gallery-overlay"><span>✈️ Safely Arrived in UK</span></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox('assets/proof_evisa_status_2.jpg', 'UK Student eVisa Digital Portal Status (Valid to 2028)')" title="Click to inspect digital eVisa portal pass">
+                        <img src="assets/proof_evisa_status_2.jpg" alt="UK Student eVisa Digital Portal Status">
+                        <div class="gallery-overlay"><span>📱 eVisa Portal Pass</span></div>
+                    </div>
+                </div>
             </div>
 
             <div class="testimonials-wall">
@@ -1153,29 +1570,71 @@
         </div>
     </footer>
 
-    <!-- 60% Flexible Installment Option Modal -->
-    <div id="installmentModal" class="lead-modal" style="display: none;">
-        <div class="lead-modal-backdrop" onclick="closeInstallmentModal()"></div>
-        <div class="lead-modal-dialog" style="max-width: 540px;">
-            <button class="lead-modal-close" onclick="closeInstallmentModal()" aria-label="Close Modal">&times;</button>
+    <!-- Complimentary 2027 Study & Visa Master Guide Lead Magnet Modal -->
+    <div id="leadMagnetModal" class="lead-modal" style="display: none;">
+        <div class="lead-modal-backdrop" onclick="closeLeadMagnetModal()"></div>
+        <div class="lead-modal-dialog">
+            <button class="lead-modal-close" onclick="closeLeadMagnetModal()" aria-label="Close Modal">&times;</button>
             <div class="lead-modal-header text-center">
-                <span class="gift-badge">💳 FLEXIBLE PAYMENT PLAN</span>
-                <h3>60% Initial Deposit Option</h3>
-                <p>To help you manage your study abroad and visa preparation budgeting comfortably, Fyzzo Voyage offers a structured installment plan on our comprehensive advisory packages.</p>
+                <span class="gift-badge">🎁 COMPLIMENTARY EXCLUSIVE GUIDE</span>
+                <h3>Get The 2027 Study & Visa Success Blueprint (Free PDF)</h3>
+                <p>The insider blueprint: <strong>10 Bank Statement & Proof of Funds (POF) Rules That Prevent Visa Refusals</strong> + UK, Canada & Europe admissions requirements accepting WAEC & study gaps.</p>
             </div>
-            <div class="installment-modal-body" style="padding: 12px 0; color: #334155; font-size: 0.92rem; line-height: 1.6;">
-                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-                    <p style="margin: 0 0 10px 0; color: #0B2545;"><strong>• Stage 1 (Commencement):</strong> <strong>60% initial deposit</strong> to commence university/visa advisory, course strategy, and comprehensive document review.</p>
-                    <p style="margin: 0; color: #0B2545;"><strong>• Stage 2 (Final Submission):</strong> <strong>40% balance</strong> payable prior to final documentation audit and submission.</p>
+
+            <form id="leadMagnetForm" class="lead-magnet-form" onsubmit="handleLeadMagnetSubmit(event)">
+                <div class="lead-form-group">
+                    <label for="lmName">Your First Name *</label>
+                    <input type="text" id="lmName" name="lmName" placeholder="e.g. Augustine" required>
                 </div>
-                <p style="font-size: 0.82rem; color: #64748B; margin: 0; line-height: 1.5;"><em>Note: Applies to Fyzzo professional service fees. Statutory third-party fees (embassy visa application fees, university deposits, healthcare surcharges) are paid directly to official authorities.</em></p>
+                <div class="lead-form-group">
+                    <label for="lmPhone">WhatsApp Phone Number *</label>
+                    <input type="tel" id="lmPhone" name="lmPhone" placeholder="e.g. 08062499796" required>
+                </div>
+                <div class="lead-form-group">
+                    <label for="lmEmail">Email Address (To Receive Guide) *</label>
+                    <input type="email" id="lmEmail" name="lmEmail" placeholder="e.g. yourname@gmail.com" required>
+                </div>
+                <div class="lead-form-group">
+                    <label for="lmDestination">Destination of Interest *</label>
+                    <select id="lmDestination" name="lmDestination" required>
+                        <option value="UK Student Visa (Jan 2027)">🇬🇧 United Kingdom (January 2027 Intake)</option>
+                        <option value="Canada Study / PGWP">🇨🇦 Canada (Study & PGWP)</option>
+                        <option value="Europe / Ireland Degree">🇪🇺 Europe / Ireland Admissions</option>
+                        <option value="Visit / Tourist Visa (UK, US, Canada, Schengen)">✈️ Visit / Tourist Visa (UK, US, Canada, Schengen)</option>
+                        <option value="Proof of Funds / Work Support">💳 Proof of Funds / Work Support</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-block btn-large">
+                    📥 Download Free Guide & Send to My WhatsApp
+                </button>
+                <p class="modal-footnote text-center">
+                    🔒 Zero Spam. 100% Free. Unsubscribe anytime.
+                </p>
+            </form>
+
+            <div id="lmSuccessBox" class="lm-success text-center" style="display: none;">
+                <div class="success-icon">🎉</div>
+                <h4>Your Free Master Guide Is Ready!</h4>
+                <p>Your download is starting automatically. You can also chat directly with our Senior Advisory Desk on WhatsApp:</p>
+                <div class="lm-success-actions">
+                    <a id="lmDownloadLink" href="assets/Fyzzo_Voyage_2027_Study_and_Visa_Master_Guide.pdf" download="Fyzzo_Voyage_2027_Study_and_Visa_Master_Guide.pdf" class="btn btn-gold btn-block">
+                        📄 Download Free Master Guide (PDF)
+                    </a>
+                    <a id="lmWaBtn" href="https://wa.me/2348062499796" target="_blank" rel="noopener" class="btn btn-whatsapp btn-block" style="margin-top: 10px;">
+                        💬 Chat with Senior Advisor on WhatsApp (08062499796)
+                    </a>
+                </div>
             </div>
-            <div class="text-center" style="margin-top: 20px;">
-                <a href="https://wa.me/2348062499796?text=Hello%20Fyzzo%20Voyage,%20I%20would%20like%20to%20inquire%20about%20your%2060%25%20installment%20payment%20option%20for%20advisory%20services." target="_blank" rel="noopener" class="btn btn-whatsapp btn-block">
-                    💬 Inquire About Installments on WhatsApp
-                </a>
-                <button class="btn btn-outline-dark btn-block" onclick="closeInstallmentModal()" style="margin-top: 10px;">Close Window</button>
-            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal for Evidence Inspection -->
+    <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox()">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close Lightbox">&times;</button>
+            <img id="lightboxImg" src="" alt="Verified Document">
+            <div id="lightboxCaption" class="lightbox-caption"></div>
         </div>
     </div>
 
