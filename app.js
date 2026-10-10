@@ -289,18 +289,397 @@ function closeReviewModal() {
     if (modal) modal.style.display = 'none';
 }
 
-// 60% Flexible Installment Modal Handlers
-function openInstallmentModal() {
-    const modal = document.getElementById('installmentModal');
-    if (modal) modal.style.display = 'flex';
-    sessionStorage.setItem('fyzzo_installment_seen', 'true');
+// ==========================================================================
+// 4b. VERIFIED PROOF LIGHTBOX MODAL
+// ==========================================================================
+function openLightbox(src, caption) {
+    const modal = document.getElementById('lightboxModal');
+    const img = document.getElementById('lightboxImg');
+    const cap = document.getElementById('lightboxCaption');
+    if (!modal || !img) return;
+    img.src = src;
+    img.alt = caption || 'Verified Evidence Document';
+    if (cap) cap.textContent = caption || '';
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
-function closeInstallmentModal() {
-    const modal = document.getElementById('installmentModal');
-    if (modal) modal.style.display = 'none';
-    sessionStorage.setItem('fyzzo_installment_seen', 'true');
+function closeLightbox() {
+    const modal = document.getElementById('lightboxModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
 }
+
+// ==========================================================================
+// 4c. COMPLIMENTARY 2027 STUDY & VISA MASTER GUIDE MODAL
+// ==========================================================================
+function openLeadMagnetModal() {
+    if (sessionStorage.getItem('fyzzo_lead_magnet_shown')) return;
+    const modal = document.getElementById('leadMagnetModal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    sessionStorage.setItem('fyzzo_lead_magnet_shown', 'true');
+}
+
+function closeLeadMagnetModal() {
+    const modal = document.getElementById('leadMagnetModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    sessionStorage.setItem('fyzzo_lead_magnet_shown', 'true');
+}
+
+function handleLeadMagnetSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('lmName').value.trim();
+    const phone = document.getElementById('lmPhone').value.trim();
+    const email = document.getElementById('lmEmail').value.trim();
+    const destination = document.getElementById('lmDestination').value;
+
+    const lead = {
+        id: 'lm-' + Date.now(),
+        type: 'Lead Magnet Blueprint Download',
+        name: name,
+        phone: phone,
+        email: email,
+        destination: destination,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        const stored = JSON.parse(localStorage.getItem('fyzzo_voyage_leads') || '[]');
+        stored.unshift(lead);
+        localStorage.setItem('fyzzo_voyage_leads', JSON.stringify(stored));
+    } catch(err) {
+        console.warn('Storage error:', err);
+    }
+
+    fetch('https://formsubmit.co/ajax/fyzzovoyage@gmail.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: 'New Lead Magnet Download: ' + name + ' (' + phone + ')',
+            Name: name,
+            WhatsApp: phone,
+            Email: email,
+            Destination: destination,
+            DownloadedResource: 'Fyzzo Voyage 2027 Study & Visa Master Guide'
+        })
+    }).catch(function(e) { console.log('Formsubmit dispatch status:', e); });
+
+    const form = document.getElementById('leadMagnetForm');
+    const successBox = document.getElementById('lmSuccessBox');
+    if (form) form.style.display = 'none';
+    if (successBox) successBox.style.display = 'block';
+
+    const dlLink = document.createElement('a');
+    dlLink.href = 'assets/Fyzzo_Voyage_2027_Study_and_Visa_Master_Guide.pdf';
+    dlLink.download = 'Fyzzo_Voyage_2027_Study_and_Visa_Master_Guide.pdf';
+    document.body.appendChild(dlLink);
+    dlLink.click();
+    document.body.removeChild(dlLink);
+
+    const waBtn = document.getElementById('lmWaBtn');
+    if (waBtn) {
+        const waMsg = 'Hello Fyzzo Voyage, my name is ' + name + '. I just downloaded the 2027 Master Guide for ' + destination + '. I would like to chat with a Senior Advisor about my journey.';
+        waBtn.href = 'https://wa.me/' + CONFIG.whatsappClean + '?text=' + encodeURIComponent(waMsg);
+    }
+
+    showToast('🎉 2027 Master Guide downloading! Redirecting details...');
+}
+
+// ==========================================================================
+// 4d. GLOBAL RELOCATION & ELIGIBILITY ASSESSMENT QUIZ ENGINE
+// ==========================================================================
+const quizState = {
+    currentStep: 1,
+    answers: {
+        goal: '',
+        education: '',
+        profession: '',
+        country: '',
+        budget: ''
+    },
+    lead: {
+        fullName: '',
+        whatsapp: '',
+        email: ''
+    }
+};
+
+function selectQuizOption(stepNum, val, btnEl) {
+    if (stepNum === 1) quizState.answers.goal = val;
+    if (stepNum === 2) quizState.answers.education = val;
+    if (stepNum === 3) quizState.answers.profession = val;
+    if (stepNum === 4) quizState.answers.country = val;
+    if (stepNum === 5) quizState.answers.budget = val;
+
+    const parent = btnEl.closest('.quiz-options-list');
+    if (parent) {
+        parent.querySelectorAll('.quiz-opt-btn').forEach(function(b) { b.classList.remove('selected'); });
+    }
+    btnEl.classList.add('selected');
+
+    setTimeout(function() {
+        goToQuizStep(stepNum + 1);
+    }, 280);
+}
+
+function prevQuizStep(targetStep) {
+    goToQuizStep(targetStep);
+}
+
+function goToQuizStep(step) {
+    quizState.currentStep = step;
+    
+    document.querySelectorAll('.quiz-step-pane').forEach(function(pane) {
+        pane.classList.remove('active');
+    });
+
+    const targetPane = document.getElementById('quizStep' + step);
+    if (targetPane) targetPane.classList.add('active');
+
+    const progressFill = document.getElementById('quizProgressFill');
+    const percentIndicator = document.getElementById('quizPercentIndicator');
+    const stepIndicator = document.getElementById('quizStepIndicator');
+
+    const stepTitles = [
+        'Your Core Objective',
+        'Highest Qualification',
+        'Professional Experience',
+        'Country Preference',
+        'Relocation Budget & POF',
+        'Your Contact Information'
+    ];
+
+    const pct = Math.round((step / 6) * 100);
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (percentIndicator) percentIndicator.textContent = pct + '% Complete';
+    if (stepIndicator && stepTitles[step - 1]) {
+        stepIndicator.textContent = 'Step ' + step + ' of 6: ' + stepTitles[step - 1];
+    }
+}
+
+function calculateQuizEligibility(answers) {
+    let matchScore = 92;
+    let recCountry = 'United Kingdom (Postgraduate Jan 2027 Route)';
+    let summary = 'Strong alignment for academic progression, fast visa turnaround and 2-year post-study work authorization.';
+    let whyPoints = [];
+    let reqPoints = [];
+
+    const goal = answers.goal || '';
+    const edu = answers.education || '';
+    const prof = answers.profession || '';
+    const country = answers.country || '';
+    const budget = answers.budget || '';
+
+    if (country.indexOf('Canada') !== -1 || (country.indexOf('Open') !== -1 && (edu.indexOf('Master') !== -1 || edu.indexOf('First Class') !== -1))) {
+        recCountry = 'Canada — Study-to-Permanent Residency (PGWP & Express Entry)';
+        matchScore = 94;
+        summary = 'Your educational standing provides maximum Comprehensive Ranking System (CRS) points under Canadian express entry streams.';
+        whyPoints = [
+            'Up to 3-year Post-Graduation Work Permit (PGWP) upon completion',
+            'High points bonus for Canadian credentials towards permanent residency',
+            'Spouse open work permit eligibility for master\'s/doctoral programmes',
+            'High-demand career opportunities across Ontario, Alberta and British Columbia'
+        ];
+        reqPoints = [
+            'WES or equivalent educational credential assessment (ECA)',
+            'Proof of unencumbered living funds + Year 1 tuition deposit',
+            'Statement of Purpose detailing ties to Nigeria and career roadmap'
+        ];
+    } else if (country.indexOf('Europe') !== -1 || budget.indexOf('Under ₦12 Million') !== -1) {
+        recCountry = 'Europe / Ireland — Low-Tuition & EU Blue Card Pathway';
+        matchScore = 90;
+        summary = 'Outstanding cost efficiency with minimal tuition exposure and direct Schengen mobility benefits.';
+        whyPoints = [
+            'Tuition fees significantly lower than UK/US counterparts, with partial scholarships',
+            'Ireland offers 2-year Third Level Graduate Scheme work visa',
+            'Germany offers 18-month job search visa and EU Blue Card fast-track',
+            'Schengen mobility allowing travel across 29 European countries'
+        ];
+        reqPoints = [
+            'Blocked bank account or verified sponsor proof of maintenance funds',
+            'Apostilled degree certificates and transcripts',
+            'Clear academic progression explanation addressing any study gaps'
+        ];
+    } else if (country.indexOf('United States') !== -1) {
+        recCountry = 'United States — Degree & 3-Year STEM OPT Pathway';
+        matchScore = 88;
+        summary = 'World-class university recognition paired with extensive Optional Practical Training (OPT) for STEM career development.';
+        whyPoints = [
+            '36-month STEM Optional Practical Training (OPT) work authorization',
+            'Access to world-ranked research institutions and graduate assistantships',
+            'Direct corporate recruitment by Fortune 500 tech and healthcare leaders'
+        ];
+        reqPoints = [
+            'Form I-20 issuance requiring evidence of full Year 1 liquid funding',
+            'DS-160 application and rigorous embassy credibility interview coaching',
+            'Demonstration of compelling non-immigrant intent and home country ties'
+        ];
+    } else if (country.indexOf('Australia') !== -1) {
+        recCountry = 'Australia & New Zealand — Regional Skilled Migration';
+        matchScore = 91;
+        summary = 'Lucrative wage rates with targeted regional migration points concessions.';
+        whyPoints = [
+            'Temporary Graduate visa (subclass 485) offering 2 to 4 years post-study stay',
+            'Additional 5 migration points for studying in designated regional centres',
+            'Highest minimum wage rates among OECD developed nations'
+        ];
+        reqPoints = [
+            'Genuine Student (GS) compliance test demonstration',
+            'Mandatory Overseas Student Health Cover (OSHC) for duration of stay',
+            'Statutory 3-month funds seasoning in approved financial institutions'
+        ];
+    } else {
+        recCountry = 'United Kingdom — January 2027 Fast-Track & Graduate Route';
+        matchScore = 95;
+        summary = 'Most streamlined admissions and visa turnaround with WAEC English waiver and 2-year Graduate Route.';
+        whyPoints = [
+            'Admissions currently open for January 2027 intake with rapid offer issuances',
+            'WAEC English C6+ accepted by numerous partner universities without IELTS',
+            '2-year post-study Graduate Route visa to work or start a business',
+            'Digital UKVI eVisa approval with no physical passport vignette wait'
+        ];
+        reqPoints = [
+            'Proof of Funds held strictly for 28 consecutive days before visa submission',
+            'Valid CAS (Confirmation of Acceptance for Studies) from licensed sponsor',
+            'Pre-CAS interview vetting and academic credibility verification'
+        ];
+    }
+
+    if (prof.indexOf('Tech') !== -1 || prof.indexOf('Healthcare') !== -1) {
+        matchScore = Math.min(98, matchScore + 3);
+        whyPoints.unshift('Priority consideration: ' + prof.split('(')[0].trim() + ' is currently on national shortage occupation lists.');
+    }
+
+    return {
+        matchScore: matchScore,
+        primaryCountry: recCountry,
+        summary: summary,
+        whyPoints: whyPoints,
+        reqPoints: reqPoints
+    };
+}
+
+function handleQuizLeadSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('quizSubmitBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Analyzing Profile & Calculating Pathway...';
+    }
+
+    const fullName = document.getElementById('quizFullName').value.trim();
+    const whatsapp = document.getElementById('quizWhatsapp').value.trim();
+    const email = document.getElementById('quizEmail').value.trim();
+
+    quizState.lead = { fullName: fullName, whatsapp: whatsapp, email: email };
+
+    const evaluation = calculateQuizEligibility(quizState.answers);
+
+    const quizLeadRecord = {
+        id: 'quiz-' + Date.now(),
+        submittedAt: new Date().toISOString(),
+        fullName: fullName,
+        whatsapp: whatsapp,
+        email: email,
+        answers: quizState.answers,
+        evaluation: evaluation
+    };
+
+    try {
+        const storedQuiz = JSON.parse(localStorage.getItem('fyzzo_quiz_leads') || '[]');
+        storedQuiz.unshift(quizLeadRecord);
+        localStorage.setItem('fyzzo_quiz_leads', JSON.stringify(storedQuiz));
+    } catch(err) {
+        console.warn('Storage warning:', err);
+    }
+
+    fetch('https://formsubmit.co/ajax/fyzzovoyage@gmail.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: '🎯 New Relocation Quiz Assessment: ' + fullName + ' (' + whatsapp + ')',
+            ProspectName: fullName,
+            WhatsApp: whatsapp,
+            Email: email,
+            PrimaryGoal: quizState.answers.goal,
+            EducationLevel: quizState.answers.education,
+            Profession: quizState.answers.profession,
+            PreferredCountry: quizState.answers.country,
+            BudgetRange: quizState.answers.budget,
+            EligibilityMatchScore: evaluation.matchScore + '% Match',
+            RecommendedPathway: evaluation.primaryCountry,
+            ExecutiveSummary: evaluation.summary
+        })
+    }).catch(function(err) { console.log('Email dispatch status:', err); });
+
+    setTimeout(function() {
+        document.getElementById('quizProgressWrap').style.display = 'none';
+        document.querySelectorAll('.quiz-step-pane').forEach(function(p) { p.style.display = 'none'; });
+
+        const resBox = document.getElementById('quizResultBox');
+        if (resBox) resBox.style.display = 'block';
+
+        const scoreEl = document.getElementById('resMatchScore');
+        const countryEl = document.getElementById('resPrimaryCountry');
+        const sumEl = document.getElementById('resSummaryText');
+        const whyList = document.getElementById('resWhyPoints');
+        const reqList = document.getElementById('resReqPoints');
+        const waBtn = document.getElementById('resWhatsappBtn');
+
+        if (scoreEl) scoreEl.textContent = evaluation.matchScore + '% QUALIFICATION MATCH';
+        if (countryEl) countryEl.textContent = 'Recommended Pathway: ' + evaluation.primaryCountry;
+        if (sumEl) sumEl.textContent = evaluation.summary;
+
+        if (whyList) {
+            whyList.innerHTML = evaluation.whyPoints.map(function(pt) { return '<li>• ' + escapeHTML(pt) + '</li>'; }).join('');
+        }
+        if (reqList) {
+            reqList.innerHTML = evaluation.reqPoints.map(function(pt) { return '<li>• ' + escapeHTML(pt) + '</li>'; }).join('');
+        }
+
+        const waText = 'Hello Fyzzo Voyage, my name is ' + fullName + '.\n\nI completed your Global Relocation Assessment Quiz on your website:\n• Goal: ' + quizState.answers.goal + '\n• Education: ' + quizState.answers.education + '\n• Field: ' + quizState.answers.profession + '\n• Preference: ' + quizState.answers.country + '\n• Budget: ' + quizState.answers.budget + '\n\nMy Match Result: ' + evaluation.primaryCountry + ' (' + evaluation.matchScore + '% Match).\n\nI would like to discuss my personalized move abroad plan with a Senior Advisor.';
+
+        if (waBtn) {
+            waBtn.href = 'https://wa.me/' + CONFIG.whatsappClean + '?text=' + encodeURIComponent(waText);
+        }
+
+        showToast('🎯 Assessment successfully generated! Official copy sent to our desk.');
+        resBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 600);
+}
+
+function resetQuiz() {
+    quizState.currentStep = 1;
+    quizState.answers = { goal: '', education: '', profession: '', country: '', budget: '' };
+    
+    document.getElementById('quizProgressWrap').style.display = 'block';
+    document.querySelectorAll('.quiz-step-pane').forEach(function(p) {
+        p.style.display = '';
+        p.classList.remove('active');
+    });
+    document.querySelectorAll('.quiz-opt-btn').forEach(function(b) { b.classList.remove('selected'); });
+    
+    const resBox = document.getElementById('quizResultBox');
+    if (resBox) resBox.style.display = 'none';
+
+    const submitBtn = document.getElementById('quizSubmitBtn');
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🎯 Generate My Relocation Eligibility Result →';
+    }
+
+    goToQuizStep(1);
+}
+
 
 // ==========================================================================
 // 5. START YOUR JOURNEY / INTAKE FORM HANDLER (§25)
@@ -515,7 +894,7 @@ function processFyvoyMessage(userInput) {
             appendFyvoyMessage('bot', `Our Travel Desk assists with:\n\n• **Flight Booking:** Comparing available flight options, routes, and student baggage allowances.\n• **Accommodation Options:** Identifying suitable hotels or student halls near your campus/centre.\n• **Airport Transfers:** Coordinating trusted terminal pickups.\n\nService fee for flight & accommodation sourcing is **₦15,000**.`);
         }
         else if (lower.includes('price') || lower.includes('cost') || lower.includes('fee') || lower.includes('rate')) {
-            appendFyvoyMessage('bot', `Here is our transparent service fee summary:\n\n• **Study Abroad Guidance Suite:** ₦500,000\n• **Visit & Family Visa Support:** ₦380,000\n• **Visa Refusal Review & Roadmap:** ₦380,000\n• **Proof of Funds Readiness Review:** ₦100,000\n• **SOP / Personal Statement Guidance:** ₦100,000\n• **1-on-1 Mock Visa Interview Prep:** ₦100,000\n• **Flight & Accommodation Sourcing:** ₦15,000\n\n*Note: Statutory embassy/university fees are paid directly to the authorities.*`);
+            appendFyvoyMessage('bot', `Here is our transparent service fee summary:\n\n• **Study Abroad Guidance Suite:** ₦500,000\n• **Visit & Family Visa Support:** ₦380,000\n• **Visa Refusal Review & Roadmap:** ₦380,000\n• **Proof of Work / Employment & Study Gap Documentation:** ₦200,000\n• **Proof of Funds Readiness Review:** ₦100,000\n• **SOP / Personal Statement Guidance:** ₦100,000\n• **1-on-1 Mock Visa Interview Prep:** ₦100,000\n• **Flight & Accommodation Sourcing:** ₦15,000\n\n*Note: Statutory embassy/university fees are paid directly to the authorities.*`);
         }
         else if (lower.includes('human') || lower.includes('advisor') || lower.includes('whatsapp') || lower.includes('speak') || lower.includes('call')) {
             appendFyvoyMessage('bot', `You can chat directly with our Senior Advisory Desk on WhatsApp right now:\n\n👉 **<a href="https://wa.me/${CONFIG.whatsappClean}?text=${encodeURIComponent('Hello Fyzzo Voyage, I was chatting with Fyvoy AI and would like to speak with a Senior Advisor.')}" target="_blank" style="color: #10B981; font-weight: 800;">Click Here to Open WhatsApp (08062499796)</a>**`);
@@ -585,18 +964,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Gentle Installment Plan Awareness (Non-intrusive, once per session after 25s)
-    setTimeout(() => {
-        if (!sessionStorage.getItem('fyzzo_installment_seen')) {
-            const drawer = document.getElementById('mobileDrawer');
-            const chatWin = document.getElementById('fyvoyChatWindow');
-            // Only trigger if no other modal/drawer is active
-            if ((!drawer || !drawer.classList.contains('open')) && 
-                (!chatWin || chatWin.style.display === 'none' || chatWin.style.display === '')) {
-                openInstallmentModal();
-            }
+    // 5. Scroll & Exit-Intent Triggers for Complimentary Master Guide Popup
+    let scrollTriggered = false;
+    window.addEventListener('scroll', () => {
+        if (scrollTriggered || sessionStorage.getItem('fyzzo_lead_magnet_shown')) return;
+        const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (scrollPercent > 0.48) {
+            scrollTriggered = true;
+            openLeadMagnetModal();
         }
-    }, 25000);
+    }, { passive: true });
+
+    let exitTriggered = false;
+    document.addEventListener('mouseleave', (e) => {
+        if (exitTriggered || sessionStorage.getItem('fyzzo_lead_magnet_shown')) return;
+        if (e.clientY <= 15) {
+            exitTriggered = true;
+            openLeadMagnetModal();
+        }
+    });
+
+    // Close Lightbox and Lead Magnet on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeLightbox();
+            closeLeadMagnetModal();
+        }
+    });
 
     console.log("Fyzzo Voyage 2.0 digital platform initialized successfully.");
 });
