@@ -3,220 +3,731 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FYZZO Voyage — Official Flight E-Ticket & Itinerary Generator</title>
+  <title>FYZZO Voyage — Luxury Travel E-Ticket & Itinerary Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-  <!-- Client-side PDF generator library (Direct 100% 1-page PDF export with colors intact) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- html2pdf.js for 100% color preservation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root {
-      --primary: #0b1f3a;
-      --accent-gold: #c59b27;
+      --primary: #0a192f;
+      --primary-gradient: linear-gradient(135deg, #071529 0%, #102a4e 100%);
+      --gold-main: #c59b27;
+      --gold-gradient: linear-gradient(90deg, #b8860b 0%, #d4af37 50%, #b8860b 100%);
       --accent-blue: #1d4ed8;
-      --bg-light: #f8fafc;
+      --bg-slate: #f1f5f9;
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --border: #e2e8f0;
-      --success: #059669;
+      --border-subtle: #e2e8f0;
+      --success-green: #059669;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      background: var(--bg-light);
+      background: #eaeff5;
       color: var(--text-main);
-      padding: 20px;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
     }
-    .container { max-width: 1260px; margin: 0 auto; }
-    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px; }
-    .header-bar h1 { font-size: 22px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
-    .header-bar .badge { background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-    .actions-bar { display: flex; gap: 10px; }
-    button { cursor: pointer; font-family: inherit; font-weight: 700; border-radius: 8px; padding: 10px 18px; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
-    .btn-download { background: #c59b27; color: white; box-shadow: 0 4px 12px rgba(197, 155, 39, 0.3); }
-    .btn-download:hover { background: #b0891f; }
-    .btn-print { background: var(--primary); color: white; }
-    .btn-print:hover { background: #172554; }
-    .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
-    .btn-outline:hover { background: #f1f5f9; }
-    
-    .main-grid { display: grid; grid-template-columns: 390px 1fr; gap: 24px; }
-    @media (max-width: 992px) { .main-grid { grid-template-columns: 1fr; } }
-    
-    /* Control Panel */
-    .editor-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid var(--border); height: fit-content; }
-    .editor-card h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; }
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    input, select { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 12px; font-family: inherit; color: var(--text-main); background: #fff; }
-    input:focus, select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15); }
-    
-    .markup-calculator { background: #eff6ff; border: 1px dashed #93c5fd; padding: 12px; border-radius: 8px; margin-top: 8px; margin-bottom: 12px; }
-    .markup-calculator h3 { font-size: 12px; color: #1e40af; margin-bottom: 6px; font-weight: 700; }
-    .calc-row { display: flex; justify-content: space-between; font-size: 11px; color: #334155; margin-bottom: 3px; }
-    .calc-profit { font-weight: 800; color: var(--success); font-size: 13px; border-top: 1px solid #bfdbfe; padding-top: 5px; margin-top: 5px; }
 
-    /* PREVIEW CONTAINER */
-    .preview-container { background: #cbd5e1; padding: 20px; border-radius: 12px; overflow-x: auto; display: flex; justify-content: center; }
-    
-    /* THE EXACT A4 TICKET DOCUMENT */
+    .app-wrapper {
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    /* TOP HEADER BAR */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #cbd5e1;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-title-wrap h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .badge-desk {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0a192f;
+      color: #d4af37;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .top-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 10px 20px;
+      border: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-gold {
+      background: var(--gold-gradient);
+      color: #071529;
+      box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35);
+      border: 1px solid #b8860b;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(184, 134, 11, 0.45);
+    }
+
+    .btn-navy {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-navy:hover {
+      background: #102a4e;
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+    }
+
+    .btn-outline:hover {
+      background: #f8fafc;
+    }
+
+    /* WORKSPACE GRID */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 1040px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+    }
+
+    /* CONTROL PANEL */
+    .control-panel {
+      background: white;
+      padding: 26px;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .panel-header {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 18px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 7px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-main);
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    }
+
+    .confidential-pricing-box {
+      background: #f8fafc;
+      border: 1.5px dashed #93c5fd;
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+
+    .confidential-pricing-box h3 {
+      font-size: 12px;
+      color: #1e40af;
+      margin-bottom: 6px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+
+    .calc-profit {
+      font-weight: 800;
+      color: var(--success-green);
+      font-size: 14px;
+      border-top: 1px solid #bfdbfe;
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+
+    /* TICKET PREVIEW CANVAS */
+    .preview-canvas {
+      display: flex;
+      justify-content: center;
+      background: #cbd5e1;
+      padding: 24px;
+      border-radius: 14px;
+      overflow-x: auto;
+    }
+
+    /* THE LUXURY A4 TICKET DOCUMENT */
     #ticketDoc {
-      background: #ffffff !important;
-      width: 794px; /* Standard 96 DPI A4 Pixel Width */
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-      border-radius: 4px;
-      position: relative;
+      width: 800px; /* Golden standard width for crisp high-res 1-page A4 */
+      background: #ffffff;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.15);
+      border-radius: 6px;
       display: flex;
       flex-direction: column;
+      position: relative;
       overflow: hidden;
       color: #0f172a;
       box-sizing: border-box;
     }
 
-    /* Ticket Components using solid colors + border styles so they always render in any print engine */
+    /* 1. LUXURY HEADER */
     .ticket-header {
-      background-color: #0b1f3a !important;
-      color: #ffffff !important;
-      padding: 22px 30px;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      padding: 30px 40px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 4px solid #c59b27 !important;
+      position: relative;
     }
-    .brand-col h1 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; letter-spacing: 1px; font-weight: 700; color: #ffffff !important; margin: 0; }
-    .brand-col p { font-size: 10.5px; color: #93c5fd !important; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
-    .doc-type-badge { text-align: right; }
-    .doc-type-badge h2 { font-size: 17px; font-weight: 800; letter-spacing: 1px; color: #fef08a !important; text-transform: uppercase; }
-    .doc-type-badge p { font-size: 10px; color: #cbd5e1 !important; }
-    
-    .ticket-body { padding: 18px 28px 10px; flex: 1; }
-    
+
+    .ticket-header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .brand-col h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      letter-spacing: 2px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .brand-col p {
+      font-size: 11px;
+      color: #93c5fd;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    .doc-type-badge {
+      text-align: right;
+    }
+
+    .doc-type-badge h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #fef08a;
+      text-transform: uppercase;
+    }
+
+    .doc-type-badge p {
+      font-size: 11px;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* TICKET BODY */
+    .ticket-body {
+      padding: 28px 40px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px; /* Elegant, spacious rhythm */
+    }
+
+    /* 2. STATUS RIBBON */
     .status-ribbon {
-      background-color: #f0fdf4 !important;
-      border: 1px solid #86efac !important;
-      color: #166534 !important;
-      padding: 7px 14px;
-      border-radius: 6px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 10px 18px;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      font-size: 11.5px;
+      font-size: 13px;
     }
-    .status-ribbon span strong { color: #15803d !important; }
-    
-    .info-grid {
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      color: #15803d;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    }
+
+    /* 3. META DATA CARDS */
+    .meta-cards-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      background-color: #f8fafc !important;
-      padding: 10px 14px;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0 !important;
-      margin-bottom: 14px;
+      gap: 14px;
     }
-    .info-item .lbl { font-size: 9px; font-weight: 700; color: #64748b !important; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-    .info-item .val { font-size: 12.5px; font-weight: 700; color: #0b1f3a !important; }
-    .info-item .val.pnr { font-family: 'Space Grotesk', monospace; color: #1d4ed8 !important; font-size: 14.5px; letter-spacing: 1px; }
-    
-    .section-title { font-size: 11px; font-weight: 800; color: #0b1f3a !important; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-    .section-title::before { content: ''; display: inline-block; width: 4px; height: 11px; background-color: #c59b27 !important; border-radius: 2px; }
-    
-    .flight-segment-box { border: 1px solid #cbd5e1 !important; border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
-    .segment-header {
-      background-color: #f1f5f9 !important;
-      padding: 7px 14px;
-      font-size: 11.5px;
+
+    .meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px 14px;
+      border-radius: 8px;
+    }
+
+    .meta-card .lbl {
+      font-size: 10px;
       font-weight: 700;
-      color: #334155 !important;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+    }
+
+    .meta-card .val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .meta-card .val.pnr {
+      font-family: 'Space Grotesk', monospace;
+      color: #1d4ed8;
+      font-size: 16px;
+      letter-spacing: 1.5px;
+    }
+
+    /* 4. PASSENGER ROW */
+    .section-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 4px;
+      height: 13px;
+      background: #c59b27;
+      border-radius: 2px;
+    }
+
+    .pax-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .pax-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .pax-table th {
+      background: #f1f5f9;
+      text-align: left;
+      padding: 10px 16px;
+      color: #475569;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .pax-table td {
+      padding: 12px 16px;
+      color: #1e293b;
+      font-weight: 500;
+    }
+
+    .pax-table td strong {
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+
+    /* 5. FLIGHT ROUTE BOARDING HERO CARD */
+    .flight-hero-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .flight-hero-top {
+      background: #f8fafc;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid #cbd5e1 !important;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13px;
     }
-    .segment-route-visual { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; background-color: #ffffff !important; }
-    .route-city { text-align: left; flex: 1; }
-    .route-city.dest { text-align: right; }
-    .route-city .code { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 800; color: #0b1f3a !important; line-height: 1; }
-    .route-city .city-name { font-size: 11px; font-weight: 600; color: #475569 !important; margin-top: 2px; }
-    .route-city .datetime { font-size: 10.5px; color: #64748b !important; margin-top: 2px; }
-    .flight-path { flex: 1.2; display: flex; flex-direction: column; align-items: center; padding: 0 12px; }
-    .flight-line-wrap { width: 100%; display: flex; align-items: center; position: relative; margin-bottom: 3px; }
-    .flight-dot { width: 7px; height: 7px; background-color: #c59b27 !important; border-radius: 50%; }
-    .flight-dashed { flex: 1; height: 2px; border-top: 2px dashed #94a3b8 !important; margin: 0 4px; }
-    .flight-airplane { color: #0b1f3a !important; font-size: 15px; }
-    .flight-type-tag { font-size: 9px; font-weight: 700; color: #1d4ed8 !important; background-color: #eff6ff !important; padding: 2px 7px; border-radius: 999px; border: 1px solid #bfdbfe !important; }
-    
-    .segment-details-grid {
+
+    .airline-tag {
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cabin-pill {
+      font-size: 11px;
+      font-weight: 700;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .flight-route-hero {
+      padding: 22px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .route-node {
+      flex: 1;
+    }
+
+    .route-node.dest {
+      text-align: right;
+    }
+
+    .airport-iata {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+
+    .airport-city {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 4px;
+    }
+
+    .flight-time-badge {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .flight-visual-connector {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    .flight-line-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    .line-dot {
+      width: 8px;
+      height: 8px;
+      background: #c59b27;
+      border-radius: 50%;
+    }
+
+    .line-track {
+      flex: 1;
+      height: 2px;
+      border-top: 2px dashed #94a3b8;
+      margin: 0 8px;
+    }
+
+    .airplane-icon {
+      font-size: 16px;
+      color: var(--primary);
+    }
+
+    .flight-duration-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .amenities-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      padding: 8px 14px;
-      background-color: #f8fafc !important;
-      border-top: 1px solid #e2e8f0 !important;
-      font-size: 10.5px;
+      padding: 12px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      font-size: 12px;
     }
-    .segment-detail-col span { color: #64748b !important; font-size: 9px; text-transform: uppercase; }
-    .segment-detail-col strong { color: #334155 !important; display: block; font-size: 11px; margin-top: 1px; }
-    
-    .pax-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 11px; }
-    .pax-table th { background-color: #f1f5f9 !important; text-align: left; padding: 6px 10px; color: #475569 !important; font-weight: 700; border-bottom: 1px solid #cbd5e1 !important; font-size: 9.5px; text-transform: uppercase; }
-    .pax-table td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9 !important; color: #1e293b !important; }
-    
-    .billing-card {
+
+    .amenity-item span {
+      display: block;
+      font-size: 10px;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .amenity-item strong {
+      color: #1e293b;
+      font-size: 12.5px;
+    }
+
+    /* 6. PAYMENT RECEIPT CARD (Zero wholesale traces) */
+    .receipt-card {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: #f8fafc !important;
-      border: 1px solid #cbd5e1 !important;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+    }
+
+    .receipt-notes {
+      font-size: 11.5px;
+      color: #64748b;
+      max-width: 460px;
+      line-height: 1.45;
+    }
+
+    .receipt-notes strong {
+      color: var(--primary);
+    }
+
+    .receipt-amount-wrap {
+      text-align: right;
+    }
+
+    .receipt-amount-wrap .lbl {
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .receipt-amount-wrap .total-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+
+    /* 7. ADVISORY & BARCODE ROW */
+    .bottom-layout-row {
+      display: grid;
+      grid-template-columns: 1fr 190px;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .advisory-box {
+      border-left: 3px solid #c59b27;
+      background: #fffbeb;
       padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 11px;
+      color: #92400e;
+      line-height: 1.45;
+    }
+
+    .barcode-container {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 6px;
-      margin-bottom: 12px;
-    }
-    .billing-notes { font-size: 10px; color: #64748b !important; max-width: 440px; line-height: 1.35; }
-    .billing-amount-box { text-align: right; }
-    .billing-amount-box .lbl { font-size: 9px; font-weight: 700; color: #64748b !important; text-transform: uppercase; }
-    .billing-amount-box .amt { font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 800; color: #0b1f3a !important; }
-    
-    .notices-box {
-      border-left: 3px solid #c59b27 !important;
-      background-color: #fffbeb !important;
       padding: 8px 12px;
-      border-radius: 0 4px 4px 0;
-      font-size: 9.5px;
-      color: #92400e !important;
-      line-height: 1.35;
-      margin-bottom: 10px;
+      text-align: center;
     }
-    
+
+    .mock-barcode {
+      height: 28px;
+      background: repeating-linear-gradient(
+        90deg,
+        #1e293b,
+        #1e293b 2px,
+        transparent 2px,
+        transparent 4px,
+        #1e293b 4px,
+        #1e293b 7px,
+        transparent 7px,
+        transparent 9px
+      );
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .barcode-num {
+      font-family: monospace;
+      font-size: 9px;
+      color: #64748b;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* 8. TICKET FOOTER */
     .ticket-footer {
-      border-top: 1px solid #cbd5e1 !important;
-      padding: 12px 28px 14px;
-      background-color: #ffffff !important;
+      border-top: 1px solid #e2e8f0;
+      padding: 18px 40px;
+      background: #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 9.5px;
-      color: #64748b !important;
+      font-size: 11px;
+      color: #64748b;
       margin-top: auto;
     }
-    .footer-left strong { color: #0b1f3a !important; display: block; margin-bottom: 1px; font-size: 10.5px; }
+
+    .footer-info strong {
+      color: var(--primary);
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
     .footer-stamp {
-      border: 1.5px dashed #64748b !important;
-      padding: 4px 10px;
-      border-radius: 5px;
+      border: 2px dashed #94a3b8;
+      padding: 6px 14px;
+      border-radius: 6px;
       text-align: center;
-      color: #0b1f3a !important;
+      color: var(--primary);
       font-weight: 800;
-      font-size: 8.5px;
-      letter-spacing: 0.8px;
+      font-size: 10px;
+      letter-spacing: 1px;
       text-transform: uppercase;
+      background: #f8fafc;
     }
 
     /* PRINT RULES */
     @page {
       size: A4 portrait;
-      margin: 0 !important;
+      margin: 0;
     }
 
     @media print {
@@ -228,19 +739,16 @@
       body {
         margin: 0 !important;
         padding: 0 !important;
-        background: white !important;
+        background: #ffffff !important;
       }
-      .header-bar, .editor-card {
+      .top-header, .control-panel {
         display: none !important;
       }
-      .main-grid {
+      .workspace-grid {
         display: block !important;
-        margin: 0 !important;
-        padding: 0 !important;
       }
-      .preview-container {
+      .preview-canvas {
         padding: 0 !important;
-        margin: 0 !important;
         background: transparent !important;
       }
       #ticketDoc {
@@ -255,26 +763,31 @@
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="header-bar">
-    <div>
-      <h1>FYZZO Voyage Ticket & Mark-up Station <span class="badge">Travel Desk</span></h1>
-      <p style="color: #64748b; font-size: 13px; margin-top: 2px;">Generate clean, client-facing e-tickets with 100% FYZZO branding & confidential margins.</p>
+
+<div class="app-wrapper">
+  <!-- TOP HEADER -->
+  <div class="top-header">
+    <div class="brand-title-wrap">
+      <h1>FYZZO VOYAGE <span class="badge-desk">Luxury Travel Desk</span></h1>
+      <p>Issue executive e-ticket receipts & client itineraries with confidential margins.</p>
     </div>
-    <div class="actions-bar">
+    <div class="action-buttons">
       <button type="button" class="btn-outline" onclick="loadSampleData()">Load Sample Data</button>
-      <button type="button" class="btn-download" onclick="downloadPdfDirect()">⬇️ Download PDF (1-Page & Colors)</button>
-      <button type="button" class="btn-print" onclick="window.print()">🖨️ Browser Print</button>
+      <button type="button" class="btn-gold" onclick="downloadLuxuryPdf()">⬇️ Download E-Ticket PDF</button>
+      <button type="button" class="btn-navy" onclick="window.print()">🖨️ Browser Print</button>
     </div>
   </div>
 
-  <div class="main-grid">
-    <div class="editor-card">
-      <h2>Booking & Markup Controls</h2>
+  <div class="workspace-grid">
+    <!-- CONTROLS -->
+    <div class="control-panel">
+      <div class="panel-header">Passenger & Flight Details</div>
+      
       <div class="form-group">
         <label>Passenger Name</label>
         <input type="text" id="inpPaxName" value="MR. ADEBAYO CHUKWUEMEKA" oninput="updateTicket()">
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Passport Number</label>
@@ -285,6 +798,7 @@
           <input type="text" id="inpPnr" value="FZ789X" oninput="updateTicket()">
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Airline Name</label>
@@ -295,6 +809,7 @@
           <input type="text" id="inpFlightNo" value="QR 1408" oninput="updateTicket()">
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Travel Class</label>
@@ -310,6 +825,7 @@
           <input type="text" id="inpBaggage" value="2 Pieces (23kg each)" oninput="updateTicket()">
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Origin Airport (Code)</label>
@@ -320,6 +836,7 @@
           <input type="text" id="inpDestCode" value="LHR" oninput="updateTicket()">
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Origin City / Airport Name</label>
@@ -330,6 +847,7 @@
           <input type="text" id="inpDestCity" value="London Heathrow (Terminal 4)" oninput="updateTicket()">
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Departure Date & Time</label>
@@ -341,17 +859,21 @@
         </div>
       </div>
 
-      <div class="markup-calculator">
-        <h3>Mark-up & Pricing Calculator (Staff Only)</h3>
-        <p style="font-size: 11px; color: #475569; margin-bottom: 6px;">Only the <strong>Final Client Price</strong> appears on the ticket!</p>
+      <!-- CONFIDENTIAL MARKUP CALCULATOR -->
+      <div class="confidential-pricing-box">
+        <h3>🔒 Broker Margin Calculator (Staff Only)</h3>
+        <p style="font-size: 11px; color: #475569; margin-bottom: 8px;">Only the <strong>Total Billed to Client</strong> appears on their ticket.</p>
+        
         <div class="form-group">
           <label>Raw Cost from Wakanow / Aggregator</label>
           <input type="number" id="inpSupplierCost" value="1450000" oninput="calcMarkup()">
         </div>
+
         <div class="form-group">
           <label>Markup / Broker Fee</label>
           <input type="number" id="inpMarkup" value="35000" oninput="calcMarkup()">
         </div>
+
         <div class="calc-row">
           <span>Supplier Cost (Hidden):</span>
           <span id="dispSupplier">NGN 1,450,000</span>
@@ -367,155 +889,181 @@
       </div>
 
       <div class="form-group">
-        <label>Final Ticket Number (E-TKT)</label>
+        <label>E-Ticket Number (13 Digits)</label>
         <input type="text" id="inpTicketNo" value="157-9842104523" oninput="updateTicket()">
       </div>
+
       <div class="form-group">
-        <label>Custom Client Remarks / Advice</label>
+        <label>Custom Travel Advice</label>
         <input type="text" id="inpRemarks" value="Please ensure your passport has at least 6 months validity from departure date." oninput="updateTicket()">
       </div>
     </div>
 
-    <!-- TICKET DOCUMENT -->
-    <div class="preview-container">
-      <div class="ticket-paper" id="ticketDoc">
+    <!-- TICKET CANVAS -->
+    <div class="preview-canvas">
+      <div id="ticketDoc">
+        
+        <!-- HEADER -->
         <div class="ticket-header">
           <div class="brand-col">
             <h1>FYZZO VOYAGE</h1>
-            <p>Global Travel & Relocation Services</p>
+            <p>Global Travel & Relocation Concierge</p>
           </div>
           <div class="doc-type-badge">
             <h2>E-Ticket Receipt</h2>
-            <p>Official Passenger Itinerary</p>
+            <p>Official Passenger Travel Document</p>
           </div>
         </div>
 
         <div class="ticket-body">
+          <!-- STATUS -->
           <div class="status-ribbon">
-            <span>Status: <strong>CONFIRMED & ISSUED</strong></span>
-            <span>Issued by: <strong>FYZZO Voyage Ltd. Desk</strong></span>
+            <span class="status-pill">Confirmed & Issued</span>
+            <span>Issuing Authority: <strong>FYZZO Voyage Desk</strong></span>
           </div>
 
-          <div class="info-grid">
-            <div class="info-item">
+          <!-- META CARDS -->
+          <div class="meta-cards-row">
+            <div class="meta-card">
               <div class="lbl">Airline Booking Ref (PNR)</div>
               <div class="val pnr" id="outPnr">FZ789X</div>
             </div>
-            <div class="info-item">
+            <div class="meta-card">
               <div class="lbl">E-Ticket Number</div>
               <div class="val" id="outTicketNo">157-9842104523</div>
             </div>
-            <div class="info-item">
+            <div class="meta-card">
               <div class="lbl">Date of Issue</div>
-              <div class="val" id="outIssueDate">09 Oct 2026</div>
+              <div class="val" id="outIssueDate">10 Oct 2026</div>
             </div>
-            <div class="info-item">
+            <div class="meta-card">
               <div class="lbl">Issuing Office</div>
               <div class="val">FYZZO Global Desk</div>
             </div>
           </div>
 
-          <div class="section-title">Passenger Information</div>
-          <table class="pax-table">
-            <thead>
-              <tr>
-                <th>Passenger Name</th>
-                <th>Passport / ID</th>
-                <th>Ticket Type</th>
-                <th>Frequent Flyer</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong id="outPaxName">MR. ADEBAYO CHUKWUEMEKA</strong></td>
-                <td id="outPassport">A12345678</td>
-                <td>Adult (Confirmed)</td>
-                <td>--</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="section-title">Flight Itinerary & Schedule</div>
-          <div class="flight-segment-box">
-            <div class="segment-header">
-              <span id="outFlightInfo">Qatar Airways - QR 1408</span>
-              <span id="outCabinClass">Economy Class (Standard)</span>
+          <!-- PASSENGER -->
+          <div>
+            <div class="section-label">Passenger Information</div>
+            <div class="pax-box">
+              <table class="pax-table">
+                <thead>
+                  <tr>
+                    <th>Passenger Name</th>
+                    <th>Passport / ID</th>
+                    <th>Status</th>
+                    <th>Frequent Flyer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong id="outPaxName">MR. ADEBAYO CHUKWUEMEKA</strong></td>
+                    <td id="outPassport">A12345678</td>
+                    <td>Adult (Confirmed)</td>
+                    <td>--</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="segment-route-visual">
-              <div class="route-city">
-                <div class="code" id="outOriginCode">LOS</div>
-                <div class="city-name" id="outOriginCity">Lagos (Murtala Muhammed)</div>
-                <div class="datetime" id="outDepTime">18 Nov 2026, 13:45</div>
+          </div>
+
+          <!-- FLIGHT ROUTE BOARDING HERO -->
+          <div>
+            <div class="section-label">Flight Itinerary & Schedule</div>
+            <div class="flight-hero-card">
+              <div class="flight-hero-top">
+                <div class="airline-tag" id="outFlightInfo">Qatar Airways • QR 1408</div>
+                <div class="cabin-pill" id="outCabinClass">Economy Class (Standard)</div>
               </div>
 
-              <div class="flight-path">
-                <div class="flight-line-wrap">
-                  <div class="flight-dot"></div>
-                  <div class="flight-dashed"></div>
-                  <div class="flight-airplane">&#9992;</div>
-                  <div class="flight-dashed"></div>
-                  <div class="flight-dot"></div>
+              <div class="flight-route-hero">
+                <div class="route-node">
+                  <div class="airport-iata" id="outOriginCode">LOS</div>
+                  <div class="airport-city" id="outOriginCity">Lagos (Murtala Muhammed)</div>
+                  <div class="flight-time-badge" id="outDepTime">18 Nov 2026, 13:45</div>
                 </div>
-                <div class="flight-type-tag">Direct / Confirmed</div>
+
+                <div class="flight-visual-connector">
+                  <div class="flight-line-row">
+                    <div class="line-dot"></div>
+                    <div class="line-track"></div>
+                    <div class="airplane-icon">✈</div>
+                    <div class="line-track"></div>
+                    <div class="line-dot"></div>
+                  </div>
+                  <div class="flight-duration-tag">Direct • Confirmed</div>
+                </div>
+
+                <div class="route-node dest">
+                  <div class="airport-iata" id="outDestCode">LHR</div>
+                  <div class="airport-city" id="outDestCity">London Heathrow (Terminal 4)</div>
+                  <div class="flight-time-badge" id="outArrTime">18 Nov 2026, 20:15</div>
+                </div>
               </div>
 
-              <div class="route-city dest">
-                <div class="code" id="outDestCode">LHR</div>
-                <div class="city-name" id="outDestCity">London Heathrow (Terminal 4)</div>
-                <div class="datetime" id="outArrTime">18 Nov 2026, 20:15</div>
-              </div>
-            </div>
-            
-            <div class="segment-details-grid">
-              <div class="segment-detail-col">
-                <span>Check-in Baggage</span>
-                <strong id="outBaggage">2 Pieces (23kg each)</strong>
-              </div>
-              <div class="segment-detail-col">
-                <span>Cabin Hand Baggage</span>
-                <strong>1 Piece (7kg) + Laptop</strong>
-              </div>
-              <div class="segment-detail-col">
-                <span>Seat Selection</span>
-                <strong>Standard / At Check-in</strong>
-              </div>
-              <div class="segment-detail-col">
-                <span>Meal Service</span>
-                <strong>Included (Standard)</strong>
+              <div class="amenities-grid">
+                <div class="amenity-item">
+                  <span>Checked Baggage</span>
+                  <strong id="outBaggage">2 Pieces (23kg each)</strong>
+                </div>
+                <div class="amenity-item">
+                  <span>Cabin Hand Baggage</span>
+                  <strong>1 Piece (7kg) + Laptop</strong>
+                </div>
+                <div class="amenity-item">
+                  <span>Seat Assignment</span>
+                  <strong>Confirmed / Check-in</strong>
+                </div>
+                <div class="amenity-item">
+                  <span>In-flight Meal</span>
+                  <strong>Included (Standard)</strong>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="section-title">Payment & Total Fare Receipt</div>
-          <div class="billing-card">
-            <div class="billing-notes">
-              <strong>Payment Status: PAID IN FULL</strong><br>
-              This official document confirms that the ticket has been validated and issued in accordance with airline tariff rules. Price includes all applicable airport charges, government taxes, and FYZZO Voyage processing fees.
-            </div>
-            <div class="billing-amount-box">
-              <div class="lbl">Total Fare Billed</div>
-              <div class="amt" id="outTotalFare">NGN 1,485,000</div>
+          <!-- BILLING RECEIPT (Clean, Single Amount) -->
+          <div>
+            <div class="section-label">Fare & Payment Breakdown</div>
+            <div class="receipt-card">
+              <div class="receipt-notes">
+                <strong>Payment Status: PAID IN FULL</strong><br>
+                Official confirmation issued under IATA standard passenger regulations. Amount includes airfare, terminal charges, international fuel surcharges, applicable taxes, and FYZZO Voyage management service fees.
+              </div>
+              <div class="receipt-amount-wrap">
+                <div class="lbl">Total Fare Billed</div>
+                <div class="total-val" id="outTotalFare">NGN 1,485,000</div>
+              </div>
             </div>
           </div>
 
-          <div class="notices-box">
-            <strong>Crucial Travel Guidelines:</strong><br>
-            * Airport check-in counters open 3 to 4 hours prior to international departure and close 60 minutes before scheduled departure.<br>
-            * Please ensure you have valid entry visas or transit visas for your destination and transit countries.<br>
-            * <span id="outRemarks">Please ensure your passport has at least 6 months validity from departure date.</span>
+          <!-- ADVISORY & BARCODE -->
+          <div class="bottom-layout-row">
+            <div class="advisory-box">
+              <strong>⚠️ Crucial Travel Guidelines:</strong><br>
+              • Check-in counters open 3 to 4 hours before departure and close strictly 60 minutes before scheduled flight.<br>
+              • <span id="outRemarks">Please ensure your passport has at least 6 months validity from departure date.</span>
+            </div>
+            <div class="barcode-container">
+              <div class="mock-barcode"></div>
+              <div class="barcode-num" id="outBarcode">FZ-789X-TKT-157</div>
+            </div>
           </div>
+
         </div>
 
+        <!-- FOOTER -->
         <div class="ticket-footer">
-          <div class="footer-left">
+          <div class="footer-info">
             <strong>FYZZO VOYAGE LTD.</strong>
-            <span>Direct Desk: +234 (0) 900 000 0000 | Email: voyage@fyzzoglobal.com | Web: travel.fyzzoglobal.com</span><br>
-            <span>Lagos * Abuja * London * Global Concierge</span>
+            <span>Global Concierge: +234 (0) 900 000 0000 | Email: voyage@fyzzoglobal.com | travel.fyzzoglobal.com</span><br>
+            <span>Lagos • Abuja • London • Global Advisory Desk</span>
           </div>
           <div class="footer-stamp">
             VERIFIED & ISSUED<br>FYZZO VOYAGE
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -540,12 +1088,15 @@
   function updateTicket() {
     document.getElementById('outPaxName').innerText = document.getElementById('inpPaxName').value.toUpperCase();
     document.getElementById('outPassport').innerText = document.getElementById('inpPassport').value.toUpperCase();
-    document.getElementById('outPnr').innerText = document.getElementById('inpPnr').value.toUpperCase();
-    document.getElementById('outTicketNo').innerText = document.getElementById('inpTicketNo').value;
+    const pnr = document.getElementById('inpPnr').value.toUpperCase();
+    document.getElementById('outPnr').innerText = pnr;
+    const tktNo = document.getElementById('inpTicketNo').value;
+    document.getElementById('outTicketNo').innerText = tktNo;
+    document.getElementById('outBarcode').innerText = pnr + '-TKT-' + (tktNo.slice(-4) || '157');
     
     const airline = document.getElementById('inpAirline').value;
     const fltNo = document.getElementById('inpFlightNo').value;
-    document.getElementById('outFlightInfo').innerText = airline + ' - ' + fltNo;
+    document.getElementById('outFlightInfo').innerText = airline + ' • ' + fltNo;
     document.getElementById('outCabinClass').innerText = document.getElementById('inpClass').value;
     document.getElementById('outBaggage').innerText = document.getElementById('inpBaggage').value;
 
@@ -582,22 +1133,22 @@
     updateTicket();
   }
 
-  // DIRECT 1-PAGE COLOR PDF DOWNLOAD (Bypasses all browser print dialog limitations)
-  function downloadPdfDirect() {
+  // LUXURY 1-PAGE COLOR PDF EXPORT (Calibrated to fit A4 perfectly with breathing space)
+  function downloadLuxuryPdf() {
     const element = document.getElementById('ticketDoc');
-    const paxName = document.getElementById('inpPaxName').value.trim() || 'Passenger';
     const pnr = document.getElementById('inpPnr').value.trim() || 'Ticket';
-    const filename = 'FYZZO_Voyage_ETicket_' + pnr + '.pdf';
+    const filename = 'FYZZO_Voyage_Ticket_' + pnr + '.pdf';
 
     const opt = {
-      margin:       0,
+      margin:       [10, 10, 10, 10], // 10pt subtle edge margin
       filename:     filename,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
-      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
-    const btn = document.querySelector('.btn-download');
+    const btn = document.querySelector('.btn-gold');
     const originalText = btn.innerHTML;
     btn.innerHTML = '⏳ Generating PDF...';
     btn.disabled = true;
@@ -609,7 +1160,7 @@
       console.error(err);
       btn.innerHTML = originalText;
       btn.disabled = false;
-      alert('Generating PDF failed, falling back to print dialog.');
+      alert('PDF generation notice. Opening print fallback...');
       window.print();
     });
   }
