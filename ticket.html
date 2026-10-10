@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FYZZO Voyage — Official Flight E-Ticket & Itinerary Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0b1f3a;
+      --accent-gold: #c59b27;
+      --accent-blue: #1d4ed8;
+      --bg-light: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #059669;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; background: var(--bg-light); color: var(--text-main); padding: 24px; }
+    .container { max-width: 1250px; margin: 0 auto; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+    .header-bar h1 { font-size: 24px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+    .header-bar .badge { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .actions-bar { display: flex; gap: 12px; }
+    button { cursor: pointer; font-family: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #172554; }
+    .btn-gold { background: var(--accent-gold); color: white; }
+    .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
+    .btn-outline:hover { background: #f1f5f9; }
+    .main-grid { display: grid; grid-template-columns: 420px 1fr; gap: 28px; }
+    @media (max-width: 992px) { .main-grid { grid-template-columns: 1fr; } }
+    .editor-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid var(--border); height: fit-content; }
+    .editor-card h2 { font-size: 16px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    input, select { width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; font-family: inherit; color: var(--text-main); background: #fff; }
+    input:focus, select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15); }
+    .markup-calculator { background: #eff6ff; border: 1px dashed #93c5fd; padding: 12px; border-radius: 8px; margin-top: 10px; margin-bottom: 16px; }
+    .markup-calculator h3 { font-size: 13px; color: #1e40af; margin-bottom: 8px; font-weight: 700; }
+    .calc-row { display: flex; justify-content: space-between; font-size: 12px; color: #334155; margin-bottom: 4px; }
+    .calc-profit { font-weight: 800; color: var(--success); font-size: 14px; border-top: 1px solid #bfdbfe; padding-top: 6px; margin-top: 6px; }
+    .preview-container { background: #cbd5e1; padding: 24px; border-radius: 12px; overflow-x: auto; display: flex; justify-content: center; }
+    .ticket-paper { background: white; width: 790px; min-height: 980px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-radius: 4px; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+    .ticket-header { background: linear-gradient(135deg, #0b1f3a 0%, #1e3a8a 100%); color: white; padding: 28px 36px; display: flex; justify-content: space-between; align-items: center; position: relative; }
+    .ticket-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #c59b27, #f59e0b, #c59b27); }
+    .brand-col h1 { font-family: 'Space Grotesk', sans-serif; font-size: 26px; letter-spacing: 1px; font-weight: 700; color: #ffffff; margin: 0; }
+    .brand-col p { font-size: 11px; color: #93c5fd; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+    .doc-type-badge { text-align: right; }
+    .doc-type-badge h2 { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: #fef08a; text-transform: uppercase; }
+    .doc-type-badge p { font-size: 11px; color: #cbd5e1; }
+    .ticket-body { padding: 32px 36px; flex: 1; }
+    .status-ribbon { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 10px 16px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 13px; }
+    .status-ribbon span strong { color: #15803d; }
+    .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; background: #f8fafc; padding: 16px 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 24px; }
+    .info-item .lbl { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .info-item .val { font-size: 14px; font-weight: 700; color: var(--primary); }
+    .info-item .val.pnr { font-family: 'Space Grotesk', monospace; color: #2563eb; font-size: 16px; letter-spacing: 1px; }
+    .section-title { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-title::before { content: ''; display: inline-block; width: 4px; height: 14px; background: var(--accent-gold); border-radius: 2px; }
+    .flight-segment-box { border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+    .segment-header { background: #f1f5f9; padding: 10px 18px; font-size: 12px; font-weight: 700; color: #334155; display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
+    .segment-route-visual { padding: 24px 20px; display: flex; justify-content: space-between; align-items: center; background: white; }
+    .route-city { text-align: left; flex: 1; }
+    .route-city.dest { text-align: right; }
+    .route-city .code { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1; }
+    .route-city .city-name { font-size: 13px; font-weight: 600; color: #475569; margin-top: 4px; }
+    .route-city .datetime { font-size: 12px; color: #64748b; margin-top: 4px; }
+    .flight-path { flex: 1.2; display: flex; flex-direction: column; align-items: center; padding: 0 16px; }
+    .flight-line-wrap { width: 100%; display: flex; align-items: center; position: relative; margin-bottom: 6px; }
+    .flight-dot { width: 8px; height: 8px; background: var(--accent-gold); border-radius: 50%; }
+    .flight-dashed { flex: 1; height: 2px; border-top: 2px dashed #cbd5e1; margin: 0 6px; }
+    .flight-airplane { color: var(--primary); font-size: 18px; }
+    .flight-type-tag { font-size: 11px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 999px; }
+    .segment-details-grid { display: grid; grid-template-columns: repeat(4, 1fr); padding: 12px 18px; background: #fafafa; border-top: 1px solid #f1f5f9; font-size: 11px; }
+    .segment-detail-col strong { color: #334155; display: block; font-size: 12px; margin-top: 2px; }
+    .pax-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px; }
+    .pax-table th { background: #f1f5f9; text-align: left; padding: 8px 12px; color: #475569; font-weight: 700; border-bottom: 1px solid #e2e8f0; font-size: 11px; text-transform: uppercase; }
+    .pax-table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
+    .billing-card { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 16px 20px; border-radius: 8px; margin-bottom: 24px; }
+    .billing-notes { font-size: 11px; color: #64748b; max-width: 450px; line-height: 1.4; }
+    .billing-amount-box { text-align: right; }
+    .billing-amount-box .lbl { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+    .billing-amount-box .amt { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 800; color: var(--primary); }
+    .notices-box { border-left: 3px solid var(--accent-gold); background: #fffbeb; padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 11px; color: #92400e; line-height: 1.5; margin-bottom: 20px; }
+    .ticket-footer { border-top: 1px solid var(--border); padding: 20px 36px 28px; background: white; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; }
+    .footer-left strong { color: var(--primary); display: block; margin-bottom: 2px; font-size: 12px; }
+    .footer-stamp { border: 2px dashed #94a3b8; padding: 6px 14px; border-radius: 6px; text-align: center; color: var(--primary); font-weight: 800; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+    @media print {
+      body { padding: 0; background: white; }
+      .header-bar, .editor-card { display: none !important; }
+      .main-grid { display: block !important; }
+      .preview-container { padding: 0 !important; background: white !important; }
+      .ticket-paper { box-shadow: none !important; width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header-bar">
+    <div>
+      <h1>FYZZO Voyage Ticket & Mark-up Station <span class="badge">Travel Desk</span></h1>
+      <p style="color: #64748b; font-size: 13px; margin-top: 2px;">Generate clean, client-facing e-tickets with 100% FYZZO branding & confidential margins.</p>
+    </div>
+    <div class="actions-bar">
+      <button type="button" class="btn-outline" onclick="loadSampleData()">Load Sample Data</button>
+      <button type="button" class="btn-primary" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="editor-card">
+      <h2>Booking & Markup Controls</h2>
+      <div class="form-group">
+        <label>Passenger Name</label>
+        <input type="text" id="inpPaxName" value="MR. ADEBAYO CHUKWUEMEKA" oninput="updateTicket()">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Passport Number</label>
+          <input type="text" id="inpPassport" value="A12345678" oninput="updateTicket()">
+        </div>
+        <div class="form-group">
+          <label>Airline PNR / Ref</label>
+          <input type="text" id="inpPnr" value="FZ789X" oninput="updateTicket()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Airline Name</label>
+          <input type="text" id="inpAirline" value="Qatar Airways" oninput="updateTicket()">
+        </div>
+        <div class="form-group">
+          <label>Flight Number</label>
+          <input type="text" id="inpFlightNo" value="QR 1408" oninput="updateTicket()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Travel Class</label>
+          <select id="inpClass" onchange="updateTicket()">
+            <option value="Economy Class (Standard)">Economy Class</option>
+            <option value="Premium Economy">Premium Economy</option>
+            <option value="Business Class">Business Class</option>
+            <option value="First Class">First Class</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Baggage Allowance</label>
+          <input type="text" id="inpBaggage" value="2 Pieces (23kg each)" oninput="updateTicket()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Origin Airport (Code)</label>
+          <input type="text" id="inpOriginCode" value="LOS" oninput="updateTicket()">
+        </div>
+        <div class="form-group">
+          <label>Destination Airport (Code)</label>
+          <input type="text" id="inpDestCode" value="LHR" oninput="updateTicket()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Origin City / Airport Name</label>
+          <input type="text" id="inpOriginCity" value="Lagos (Murtala Muhammed)" oninput="updateTicket()">
+        </div>
+        <div class="form-group">
+          <label>Destination City / Airport</label>
+          <input type="text" id="inpDestCity" value="London Heathrow (Terminal 4)" oninput="updateTicket()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Departure Date & Time</label>
+          <input type="text" id="inpDepTime" value="18 Nov 2026, 13:45" oninput="updateTicket()">
+        </div>
+        <div class="form-group">
+          <label>Arrival Date & Time</label>
+          <input type="text" id="inpArrTime" value="18 Nov 2026, 20:15" oninput="updateTicket()">
+        </div>
+      </div>
+
+      <div class="markup-calculator">
+        <h3>Mark-up & Pricing Calculator (Staff Only)</h3>
+        <p style="font-size: 11px; color: #475569; margin-bottom: 8px;">Only the <strong>Final Client Price</strong> appears on the ticket!</p>
+        <div class="form-group">
+          <label>Raw Cost from Wakanow / Aggregator</label>
+          <input type="number" id="inpSupplierCost" value="1450000" oninput="calcMarkup()">
+        </div>
+        <div class="form-group">
+          <label>Markup / Broker Fee</label>
+          <input type="number" id="inpMarkup" value="35000" oninput="calcMarkup()">
+        </div>
+        <div class="calc-row">
+          <span>Supplier Cost (Hidden):</span>
+          <span id="dispSupplier">NGN 1,450,000</span>
+        </div>
+        <div class="calc-row">
+          <span>Your Markup (Hidden):</span>
+          <span id="dispMarkup">NGN 35,000</span>
+        </div>
+        <div class="calc-row calc-profit">
+          <span>Total Billed to Client:</span>
+          <span id="dispTotalClient">NGN 1,485,000</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Final Ticket Number (E-TKT)</label>
+        <input type="text" id="inpTicketNo" value="157-9842104523" oninput="updateTicket()">
+      </div>
+      <div class="form-group">
+        <label>Custom Client Remarks / Advice</label>
+        <input type="text" id="inpRemarks" value="Please ensure your passport has at least 6 months validity from departure date." oninput="updateTicket()">
+      </div>
+    </div>
+
+    <div class="preview-container">
+      <div class="ticket-paper" id="ticketDoc">
+        <div class="ticket-header">
+          <div class="brand-col">
+            <h1>FYZZO VOYAGE</h1>
+            <p>Global Travel & Relocation Services</p>
+          </div>
+          <div class="doc-type-badge">
+            <h2>E-Ticket Receipt</h2>
+            <p>Official Passenger Itinerary</p>
+          </div>
+        </div>
+
+        <div class="ticket-body">
+          <div class="status-ribbon">
+            <span>Status: <strong>CONFIRMED & ISSUED</strong></span>
+            <span>Issued by: <strong>FYZZO Voyage Ltd. Desk</strong></span>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="lbl">Airline Booking Ref (PNR)</div>
+              <div class="val pnr" id="outPnr">FZ789X</div>
+            </div>
+            <div class="info-item">
+              <div class="lbl">E-Ticket Number</div>
+              <div class="val" id="outTicketNo">157-9842104523</div>
+            </div>
+            <div class="info-item">
+              <div class="lbl">Date of Issue</div>
+              <div class="val" id="outIssueDate">09 Oct 2026</div>
+            </div>
+            <div class="info-item">
+              <div class="lbl">Issuing Office</div>
+              <div class="val">FYZZO Global Desk</div>
+            </div>
+          </div>
+
+          <div class="section-title">Passenger Information</div>
+          <table class="pax-table">
+            <thead>
+              <tr>
+                <th>Passenger Name</th>
+                <th>Passport / ID</th>
+                <th>Ticket Type</th>
+                <th>Frequent Flyer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong id="outPaxName">MR. ADEBAYO CHUKWUEMEKA</strong></td>
+                <td id="outPassport">A12345678</td>
+                <td>Adult (Confirmed)</td>
+                <td>--</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="section-title">Flight Itinerary & Schedule</div>
+          <div class="flight-segment-box">
+            <div class="segment-header">
+              <span id="outFlightInfo">Qatar Airways - QR 1408</span>
+              <span id="outCabinClass">Economy Class (Standard)</span>
+            </div>
+            <div class="segment-route-visual">
+              <div class="route-city">
+                <div class="code" id="outOriginCode">LOS</div>
+                <div class="city-name" id="outOriginCity">Lagos (Murtala Muhammed)</div>
+                <div class="datetime" id="outDepTime">18 Nov 2026, 13:45</div>
+              </div>
+
+              <div class="flight-path">
+                <div class="flight-line-wrap">
+                  <div class="flight-dot"></div>
+                  <div class="flight-dashed"></div>
+                  <div class="flight-airplane">&#9992;</div>
+                  <div class="flight-dashed"></div>
+                  <div class="flight-dot"></div>
+                </div>
+                <div class="flight-type-tag">Direct / Confirmed</div>
+              </div>
+
+              <div class="route-city dest">
+                <div class="code" id="outDestCode">LHR</div>
+                <div class="city-name" id="outDestCity">London Heathrow (Terminal 4)</div>
+                <div class="datetime" id="outArrTime">18 Nov 2026, 20:15</div>
+              </div>
+            </div>
+            
+            <div class="segment-details-grid">
+              <div class="segment-detail-col">
+                <span>Check-in Baggage</span>
+                <strong id="outBaggage">2 Pieces (23kg each)</strong>
+              </div>
+              <div class="segment-detail-col">
+                <span>Cabin Hand Baggage</span>
+                <strong>1 Piece (7kg) + Laptop</strong>
+              </div>
+              <div class="segment-detail-col">
+                <span>Seat Selection</span>
+                <strong>Standard / At Check-in</strong>
+              </div>
+              <div class="segment-detail-col">
+                <span>Meal Service</span>
+                <strong>Included (Standard)</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">Payment & Total Fare Receipt</div>
+          <div class="billing-card">
+            <div class="billing-notes">
+              <strong>Payment Status: PAID IN FULL</strong><br>
+              This official document confirms that the ticket has been validated and issued in accordance with airline tariff rules. Price includes all applicable airport charges, government taxes, and FYZZO Voyage processing fees.
+            </div>
+            <div class="billing-amount-box">
+              <div class="lbl">Total Fare Billed</div>
+              <div class="amt" id="outTotalFare">NGN 1,485,000</div>
+            </div>
+          </div>
+
+          <div class="notices-box">
+            <strong>Crucial Travel Guidelines:</strong><br>
+            * Airport check-in counters open 3 to 4 hours prior to international departure and close 60 minutes before scheduled departure.<br>
+            * Please ensure you have valid entry visas or transit visas for your destination and transit countries.<br>
+            * <span id="outRemarks">Please ensure your passport has at least 6 months validity from departure date.</span>
+          </div>
+        </div>
+
+        <div class="ticket-footer">
+          <div class="footer-left">
+            <strong>FYZZO VOYAGE LTD.</strong>
+            <span>Direct Desk: +234 (0) 900 000 0000 | Email: voyage@fyzzoglobal.com | Web: travel.fyzzoglobal.com</span><br>
+            <span>Lagos * Abuja * London * Global Concierge</span>
+          </div>
+          <div class="footer-stamp">
+            VERIFIED & ISSUED<br>FYZZO VOYAGE
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function formatMoney(num) {
+    return 'NGN ' + Number(num).toLocaleString();
+  }
+
+  function calcMarkup() {
+    const rawCost = parseFloat(document.getElementById('inpSupplierCost').value) || 0;
+    const markup = parseFloat(document.getElementById('inpMarkup').value) || 0;
+    const total = rawCost + markup;
+
+    document.getElementById('dispSupplier').innerText = formatMoney(rawCost);
+    document.getElementById('dispMarkup').innerText = formatMoney(markup);
+    document.getElementById('dispTotalClient').innerText = formatMoney(total);
+    document.getElementById('outTotalFare').innerText = formatMoney(total);
+  }
+
+  function updateTicket() {
+    document.getElementById('outPaxName').innerText = document.getElementById('inpPaxName').value.toUpperCase();
+    document.getElementById('outPassport').innerText = document.getElementById('inpPassport').value.toUpperCase();
+    document.getElementById('outPnr').innerText = document.getElementById('inpPnr').value.toUpperCase();
+    document.getElementById('outTicketNo').innerText = document.getElementById('inpTicketNo').value;
+    
+    const airline = document.getElementById('inpAirline').value;
+    const fltNo = document.getElementById('inpFlightNo').value;
+    document.getElementById('outFlightInfo').innerText = airline + ' - ' + fltNo;
+    document.getElementById('outCabinClass').innerText = document.getElementById('inpClass').value;
+    document.getElementById('outBaggage').innerText = document.getElementById('inpBaggage').value;
+
+    document.getElementById('outOriginCode').innerText = document.getElementById('inpOriginCode').value.toUpperCase();
+    document.getElementById('outDestCode').innerText = document.getElementById('inpDestCode').value.toUpperCase();
+    document.getElementById('outOriginCity').innerText = document.getElementById('inpOriginCity').value;
+    document.getElementById('outDestCity').innerText = document.getElementById('inpDestCity').value;
+
+    document.getElementById('outDepTime').innerText = document.getElementById('inpDepTime').value;
+    document.getElementById('outArrTime').innerText = document.getElementById('inpArrTime').value;
+    document.getElementById('outRemarks').innerText = document.getElementById('inpRemarks').value;
+    
+    calcMarkup();
+  }
+
+  function loadSampleData() {
+    document.getElementById('inpPaxName').value = 'MRS. CHIDINMA OBI';
+    document.getElementById('inpPassport').value = 'B98765432';
+    document.getElementById('inpPnr').value = 'BA892K';
+    document.getElementById('inpAirline').value = 'British Airways';
+    document.getElementById('inpFlightNo').value = 'BA 074';
+    document.getElementById('inpClass').value = 'Premium Economy';
+    document.getElementById('inpBaggage').value = '2 Pieces (23kg each)';
+    document.getElementById('inpOriginCode').value = 'LOS';
+    document.getElementById('inpDestCode').value = 'LHR';
+    document.getElementById('inpOriginCity').value = 'Lagos (Murtala Muhammed)';
+    document.getElementById('inpDestCity').value = 'London Heathrow (Terminal 5)';
+    document.getElementById('inpDepTime').value = '24 Dec 2026, 22:55';
+    document.getElementById('inpArrTime').value = '25 Dec 2026, 05:25';
+    document.getElementById('inpSupplierCost').value = '2100000';
+    document.getElementById('inpMarkup').value = '50000';
+    document.getElementById('inpTicketNo').value = '125-4512993810';
+    document.getElementById('inpRemarks').value = 'Transit passenger must verify visa requirements in London.';
+    updateTicket();
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    updateTicket();
+  });
+</script>
+</body>
+</html>
