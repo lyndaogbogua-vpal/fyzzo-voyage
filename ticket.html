@@ -34,7 +34,7 @@
     }
 
     .app-wrapper {
-      max-width: 1400px;
+      max-width: 1420px;
       margin: 0 auto;
     }
 
@@ -115,12 +115,12 @@
     /* WORKSPACE GRID */
     .workspace-grid {
       display: grid;
-      grid-template-columns: 450px 1fr;
+      grid-template-columns: 460px 1fr;
       gap: 30px;
       align-items: start;
     }
 
-    @media (max-width: 1040px) {
+    @media (max-width: 1060px) {
       .workspace-grid { grid-template-columns: 1fr; }
     }
 
@@ -134,12 +134,12 @@
     }
 
     .panel-header {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--primary);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       padding-bottom: 8px;
       border-bottom: 2px solid #f1f5f9;
       display: flex;
@@ -147,7 +147,7 @@
       align-items: center;
     }
 
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 11px; }
     .form-group label {
       display: block;
       font-size: 11px;
@@ -169,7 +169,7 @@
       padding: 9px 12px;
       border-radius: 7px;
       border: 1px solid #cbd5e1;
-      font-size: 13px;
+      font-size: 12.5px;
       font-family: inherit;
       color: var(--text-main);
       background: #fff;
@@ -181,7 +181,7 @@
       box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
     }
 
-    /* MULTI-PASSENGER CARDS */
+    /* DYNAMIC PASSENGER BUILDER */
     .pax-card-editor {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -215,24 +215,70 @@
       color: #0369a1;
       border: 1px dashed #7dd3fc;
       width: 100%;
-      padding: 9px;
+      padding: 8px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       text-align: center;
     }
     .btn-add-pax:hover { background: #bae6fd; }
 
-    /* SMART DUAL-MODE MARKUP CALCULATOR */
+    /* FLIGHT TYPE TOGGLE (DIRECT VS CONNECTING) */
+    .flight-type-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .type-pill {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .type-pill.active {
+      background: #0a192f;
+      color: #ffffff;
+      border-color: #0a192f;
+    }
+
+    .connecting-card-editor {
+      background: #fffbeb;
+      border: 1px solid #fde047;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      margin-bottom: 12px;
+    }
+
+    .connecting-card-editor h4 {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #92400e;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* MARKUP CALCULATOR */
     .smart-pricing-card {
       background: #eff6ff;
       border: 1.5px solid #93c5fd;
-      padding: 16px;
+      padding: 14px;
       border-radius: 10px;
-      margin-top: 14px;
-      margin-bottom: 16px;
+      margin-top: 12px;
+      margin-bottom: 14px;
     }
 
     .smart-pricing-card h3 {
@@ -242,20 +288,17 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .calc-mode-selector {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .mode-tab {
       flex: 1;
-      padding: 6px 10px;
+      padding: 6px 8px;
       border-radius: 6px;
       border: 1px solid #bfdbfe;
       background: white;
@@ -276,25 +319,25 @@
       background: white;
       border: 1px solid #bfdbfe;
       border-radius: 8px;
-      padding: 12px;
-      margin-top: 10px;
+      padding: 10px 12px;
+      margin-top: 8px;
     }
 
     .calc-row {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 11.5px;
       color: #475569;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .calc-profit {
       font-weight: 800;
       color: var(--success-green);
-      font-size: 15px;
+      font-size: 14px;
       border-top: 2px solid #bfdbfe;
-      padding-top: 8px;
-      margin-top: 8px;
+      padding-top: 6px;
+      margin-top: 6px;
     }
 
     /* PREVIEW CANVAS */
@@ -325,7 +368,7 @@
     .ticket-header {
       background: var(--primary-gradient);
       color: #ffffff;
-      padding: 28px 40px 22px;
+      padding: 26px 40px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -374,23 +417,23 @@
 
     /* BODY */
     .ticket-body {
-      padding: 24px 38px 20px;
+      padding: 22px 36px 18px;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .status-ribbon {
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
       color: #166534;
-      padding: 9px 16px;
-      border-radius: 8px;
+      padding: 8px 14px;
+      border-radius: 7px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12.5px;
+      font-size: 12px;
     }
 
     .status-pill {
@@ -405,37 +448,36 @@
 
     .status-pill::before {
       content: "";
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       background: #22c55e;
       border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
     }
 
     .meta-cards-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
 
     .meta-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 9px 12px;
+      border-radius: 7px;
     }
 
     .meta-card .lbl {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       color: #64748b;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .meta-card .val {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--primary);
     }
@@ -443,12 +485,12 @@
     .meta-card .val.pnr {
       font-family: 'Space Grotesk', monospace;
       color: #1d4ed8;
-      font-size: 16px;
+      font-size: 15px;
       letter-spacing: 1.5px;
     }
 
     .section-label {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--primary);
       text-transform: uppercase;
@@ -477,23 +519,23 @@
     .pax-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px;
+      font-size: 12px;
     }
 
     .pax-table th {
       background: #f1f5f9;
       text-align: left;
-      padding: 8px 14px;
+      padding: 7px 12px;
       color: #475569;
       font-weight: 700;
-      font-size: 10.5px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       border-bottom: 1px solid #e2e8f0;
     }
 
     .pax-table td {
-      padding: 10px 14px;
+      padding: 8px 12px;
       color: #1e293b;
       font-weight: 500;
       border-bottom: 1px solid #f8fafc;
@@ -502,10 +544,9 @@
     .pax-table td strong {
       font-weight: 700;
       color: var(--primary);
-      letter-spacing: 0.5px;
     }
 
-    /* FLIGHT HERO */
+    /* FLIGHT HERO ROUTE CARD */
     .flight-hero-card {
       border: 1px solid #cbd5e1;
       border-radius: 10px;
@@ -515,12 +556,12 @@
 
     .flight-hero-top {
       background: #f8fafc;
-      padding: 10px 18px;
+      padding: 9px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #e2e8f0;
-      font-size: 12.5px;
+      font-size: 12px;
     }
 
     .airline-tag {
@@ -532,19 +573,21 @@
     }
 
     .cabin-pill {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       background: #e2e8f0;
       color: #334155;
-      padding: 3px 10px;
+      padding: 3px 9px;
       border-radius: 999px;
     }
 
+    /* MAIN ROUTE VISUAL */
     .flight-route-hero {
-      padding: 18px 22px;
+      padding: 16px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
 
     .route-node { flex: 1; }
@@ -552,31 +595,31 @@
 
     .airport-iata {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       color: var(--primary);
       line-height: 1;
     }
 
     .airport-city {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       color: #334155;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .flight-time-badge {
-      font-size: 11.5px;
+      font-size: 11px;
       color: #64748b;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .flight-visual-connector {
-      flex: 1.2;
+      flex: 1.3;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 16px;
+      padding: 0 12px;
     }
 
     .flight-line-row {
@@ -587,31 +630,70 @@
       margin-bottom: 4px;
     }
 
-    .line-dot { width: 8px; height: 8px; background: #c59b27; border-radius: 50%; }
-    .line-track { flex: 1; height: 2px; border-top: 2px dashed #94a3b8; margin: 0 8px; }
-    .airplane-icon { font-size: 16px; color: var(--primary); }
+    .line-dot { width: 7px; height: 7px; background: #c59b27; border-radius: 50%; }
+    .line-track { flex: 1; height: 2px; border-top: 2px dashed #94a3b8; margin: 0 6px; }
+    .airplane-icon { font-size: 15px; color: var(--primary); }
+    
     .flight-duration-tag {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       color: #1d4ed8;
       background: #eff6ff;
       border: 1px solid #bfdbfe;
-      padding: 2px 9px;
+      padding: 2px 8px;
       border-radius: 999px;
     }
+
+    .flight-duration-tag.connecting-tag {
+      color: #92400e;
+      background: #fef3c7;
+      border-color: #fde047;
+    }
+
+    /* MULTI-LEG CONNECTING FLIGHT EXPANDED SCHEDULE */
+    .connecting-legs-wrap {
+      background: #fafaf9;
+      border-top: 1px solid #e2e8f0;
+      padding: 10px 16px;
+    }
+
+    .connecting-leg-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      padding: 4px 0;
+    }
+
+    .connecting-leg-row strong { color: var(--primary); }
+    
+    .layover-divider-bar {
+      background: #fffbeb;
+      border: 1px dashed #fde047;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      color: #92400e;
+      margin: 6px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .layover-divider-bar strong { color: #b45309; }
 
     .amenities-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      padding: 10px 18px;
+      padding: 9px 16px;
       background: #f8fafc;
       border-top: 1px solid #e2e8f0;
-      font-size: 11.5px;
+      font-size: 11px;
     }
 
     .amenity-item span {
       display: block;
-      font-size: 9.5px;
+      font-size: 9px;
       color: #64748b;
       text-transform: uppercase;
       font-weight: 700;
@@ -620,7 +702,7 @@
 
     .amenity-item strong {
       color: #1e293b;
-      font-size: 12px;
+      font-size: 11.5px;
     }
 
     /* BILLING CARD */
@@ -630,12 +712,12 @@
       align-items: center;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-radius: 8px;
     }
 
     .receipt-notes {
-      font-size: 11px;
+      font-size: 10.5px;
       color: #64748b;
       max-width: 480px;
       line-height: 1.4;
@@ -643,7 +725,7 @@
 
     .receipt-amount-wrap { text-align: right; }
     .receipt-amount-wrap .lbl {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 800;
       color: #64748b;
       text-transform: uppercase;
@@ -652,7 +734,7 @@
 
     .receipt-amount-wrap .total-val {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 800;
       color: var(--primary);
       margin-top: 2px;
@@ -662,16 +744,16 @@
     .bottom-layout-row {
       display: grid;
       grid-template-columns: 1fr 180px;
-      gap: 14px;
+      gap: 12px;
       align-items: center;
     }
 
     .advisory-box {
       border-left: 3px solid #c59b27;
       background: #fffbeb;
-      padding: 9px 12px;
+      padding: 8px 12px;
       border-radius: 0 6px 6px 0;
-      font-size: 10.5px;
+      font-size: 10px;
       color: #92400e;
       line-height: 1.4;
     }
@@ -685,7 +767,7 @@
     }
 
     .mock-barcode {
-      height: 24px;
+      height: 22px;
       background: repeating-linear-gradient(
         90deg,
         #1e293b,
@@ -703,21 +785,21 @@
 
     .barcode-num {
       font-family: monospace;
-      font-size: 8.5px;
+      font-size: 8px;
       color: #64748b;
       letter-spacing: 1px;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     /* FOOTER */
     .ticket-footer {
       border-top: 1px solid #e2e8f0;
-      padding: 16px 38px;
+      padding: 14px 36px;
       background: #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10.5px;
+      font-size: 10px;
       color: #64748b;
       margin-top: auto;
     }
@@ -725,7 +807,7 @@
     .footer-info strong {
       color: var(--primary);
       display: block;
-      font-size: 11.5px;
+      font-size: 11px;
       letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
@@ -737,7 +819,7 @@
       text-align: center;
       color: var(--primary);
       font-weight: 800;
-      font-size: 9.5px;
+      font-size: 9px;
       letter-spacing: 1px;
       text-transform: uppercase;
       background: #f8fafc;
@@ -772,13 +854,13 @@
   <div class="top-header">
     <div class="brand-title-wrap">
       <h1>FYZZO VOYAGE <span class="badge-desk">Luxury Travel Desk</span></h1>
-      <p>Multi-Passenger Group & Family Flight Itinerary / E-Ticket Station.</p>
+      <p>Direct & Connecting Flight Itinerary / E-Ticket Station with Multi-Passenger Support.</p>
     </div>
     <div class="action-buttons">
       <a href="receipt.html" style="text-decoration: none;">
         <button type="button" class="btn-outline">💳 Open Receipt & Invoice Desk</button>
       </a>
-      <button type="button" class="btn-outline" onclick="loadSampleFamilyData()">Load Sample (3 Pax)</button>
+      <button type="button" class="btn-outline" onclick="loadSampleConnectingQatar()">Load Connecting Sample (Qatar Via Doha)</button>
       <button type="button" class="btn-gold" onclick="downloadLuxuryPdf()">⬇️ Download E-Ticket PDF</button>
       <button type="button" class="btn-navy" onclick="window.print()">🖨️ Browser Print</button>
     </div>
@@ -787,19 +869,31 @@
   <div class="workspace-grid">
     <!-- CONTROLS -->
     <div class="control-panel">
+      <!-- 1. FLIGHT ROUTE TYPE SELECTOR -->
       <div class="panel-header">
+        <span>Route Configuration</span>
+      </div>
+      
+      <div class="flight-type-selector">
+        <div class="type-pill active" id="pillDirect" onclick="switchFlightType('direct')">
+          ✈ Direct Flight (Non-Stop)
+        </div>
+        <div class="type-pill" id="pillConnecting" onclick="switchFlightType('connecting')">
+          🔄 Connecting Flight (1+ Stop / Layover)
+        </div>
+      </div>
+
+      <!-- PASSENGERS -->
+      <div class="panel-header" style="margin-top: 14px;">
         <span>Passengers in Booking</span>
         <span id="paxCountBadge" style="font-size: 11px; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 10px;">1 Passenger</span>
       </div>
-
-      <!-- DYNAMIC PASSENGER CONTAINER -->
       <div id="paxEditorContainer"></div>
       <button type="button" class="btn-add-pax" onclick="addPassenger()">➕ Add Another Passenger</button>
 
-      <!-- SMART DUAL-MODE CALCULATOR -->
+      <!-- DUAL-MODE CALCULATOR -->
       <div class="smart-pricing-card">
         <h3>🔒 Broker Margin Calculator (Staff Only)</h3>
-        <p style="font-size: 11px; color: #475569; margin-bottom: 10px;">Choose how you want to calculate your markup:</p>
         
         <div class="calc-mode-selector">
           <div class="mode-tab active" id="tabPerPax" onclick="switchCalcMode('perpax')">
@@ -810,7 +904,6 @@
           </div>
         </div>
 
-        <!-- Mode A: Per-Passenger Calculation -->
         <div id="modePerPaxWrap">
           <div class="form-group">
             <label>Total Raw Cost Paid to Wakanow (All Pax Combined)</label>
@@ -822,7 +915,6 @@
           </div>
         </div>
 
-        <!-- Mode B: Direct Total Lump Sum -->
         <div id="modeLumpWrap" style="display: none;">
           <div class="form-group">
             <label>Total Raw Cost Paid to Wakanow</label>
@@ -830,11 +922,10 @@
           </div>
           <div class="form-group">
             <label>Total Group Markup / Service Fee</label>
-            <input type="number" id="inpMarkupLump" value="105000" oninput="calcMarkup()">
+            <input type="number" id="inpMarkupLump" value="35000" oninput="calcMarkup()">
           </div>
         </div>
 
-        <!-- Breakdown Details -->
         <div class="calc-breakdown-box">
           <div class="calc-row">
             <span>Number of Passengers:</span>
@@ -855,7 +946,8 @@
         </div>
       </div>
 
-      <div class="panel-header" style="margin-top: 14px;">Flight & Airline Information</div>
+      <!-- FLIGHT LEG 1 & MASTER DETAILS -->
+      <div class="panel-header">Master Flight & Leg 1 Details</div>
       <div class="form-row">
         <div class="form-group">
           <label>Airline Booking Ref (PNR)</label>
@@ -869,7 +961,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Flight Number</label>
+          <label id="lblFlightNo1">Flight Number (Leg 1)</label>
           <input type="text" id="inpFlightNo" value="QR 1408" oninput="updateTicket()">
         </div>
         <div class="form-group">
@@ -884,28 +976,28 @@
       </div>
 
       <div class="form-group">
-        <label>Baggage Allowance (Per Passenger)</label>
+        <label>Baggage Allowance</label>
         <input type="text" id="inpBaggage" value="2 Pieces (23kg each)" oninput="updateTicket()">
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Origin Code (e.g. LOS)</label>
+          <label>Origin Airport (Code)</label>
           <input type="text" id="inpOriginCode" value="LOS" oninput="updateTicket()">
         </div>
         <div class="form-group">
-          <label>Destination Code (e.g. LHR)</label>
+          <label>Final Destination (Code)</label>
           <input type="text" id="inpDestCode" value="LHR" oninput="updateTicket()">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Origin City & Airport</label>
+          <label>Origin City / Airport</label>
           <input type="text" id="inpOriginCity" value="Lagos (Murtala Muhammed)" oninput="updateTicket()">
         </div>
         <div class="form-group">
-          <label>Destination City & Airport</label>
+          <label>Final Destination City / Airport</label>
           <input type="text" id="inpDestCity" value="London Heathrow (Terminal 4)" oninput="updateTicket()">
         </div>
       </div>
@@ -916,13 +1008,45 @@
           <input type="text" id="inpDepTime" value="18 Nov 2026, 13:45" oninput="updateTicket()">
         </div>
         <div class="form-group">
-          <label>Arrival Date & Time</label>
+          <label>Final Arrival Date & Time</label>
           <input type="text" id="inpArrTime" value="18 Nov 2026, 20:15" oninput="updateTicket()">
         </div>
       </div>
 
+      <!-- CONNECTING LEG 2 CONFIG (Visible when Connecting Flight is active) -->
+      <div id="connectingSettingsBox" class="connecting-card-editor" style="display: none;">
+        <h4>🔄 Transit & Connecting Flight (Leg 2)</h4>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Transit Airport Code</label>
+            <input type="text" id="inpTransitCode" value="DOH" oninput="updateTicket()">
+          </div>
+          <div class="form-group">
+            <label>Layover Duration</label>
+            <input type="text" id="inpLayoverDuration" value="2h 45m Layover" oninput="updateTicket()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Transit City & Airport Name</label>
+          <input type="text" id="inpTransitCity" value="Doha (Hamad Intl Airport)" oninput="updateTicket()">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Connecting Flight Number (Leg 2)</label>
+            <input type="text" id="inpFlightNo2" value="QR 003" oninput="updateTicket()">
+          </div>
+          <div class="form-group">
+            <label>Transit Dep Time (Leg 2)</label>
+            <input type="text" id="inpLeg2DepTime" value="19 Nov 2026, 01:30" oninput="updateTicket()">
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
-        <label>Custom Travel Advice / Notes</label>
+        <label>Custom Travel Advice / Visa Notice</label>
         <input type="text" id="inpRemarks" value="Please ensure all passports have at least 6 months validity from departure date." oninput="updateTicket()">
       </div>
     </div>
@@ -957,8 +1081,8 @@
               <div class="val" id="outPaxCountDisplay">1 Passenger</div>
             </div>
             <div class="meta-card">
-              <div class="lbl">Date of Issue</div>
-              <div class="val" id="outIssueDate">10 Oct 2026</div>
+              <div class="lbl">Route Type</div>
+              <div class="val" id="outRouteTypeMeta" style="color: #0369a1;">Direct Flight</div>
             </div>
             <div class="meta-card">
               <div class="lbl">Issuing Office</div>
@@ -966,7 +1090,7 @@
             </div>
           </div>
 
-          <!-- PASSENGER LIST TABLE -->
+          <!-- PASSENGERS -->
           <div>
             <div class="section-label">Passenger Information & E-Ticket Numbers</div>
             <div class="pax-box">
@@ -989,13 +1113,14 @@
 
           <!-- FLIGHT HERO -->
           <div>
-            <div class="section-label">Flight Itinerary & Schedule</div>
+            <div class="section-label">Flight Itinerary & Routing</div>
             <div class="flight-hero-card">
               <div class="flight-hero-top">
                 <div class="airline-tag" id="outFlightInfo">Qatar Airways • QR 1408</div>
                 <div class="cabin-pill" id="outCabinClass">Economy Class (Standard)</div>
               </div>
 
+              <!-- MAIN ROUTE HERO -->
               <div class="flight-route-hero">
                 <div class="route-node">
                   <div class="airport-iata" id="outOriginCode">LOS</div>
@@ -1007,11 +1132,13 @@
                   <div class="flight-line-row">
                     <div class="line-dot"></div>
                     <div class="line-track"></div>
+                    <div id="outTransitDot" style="display: none; width: 9px; height: 9px; background: #ea580c; border-radius: 50%;" title="Transit Layover"></div>
+                    <div id="outTransitTrack" style="display: none; flex: 1; height: 2px; border-top: 2px dashed #94a3b8; margin: 0 6px;"></div>
                     <div class="airplane-icon">✈</div>
                     <div class="line-track"></div>
                     <div class="line-dot"></div>
                   </div>
-                  <div class="flight-duration-tag">Direct • Confirmed</div>
+                  <div class="flight-duration-tag" id="outDurationBadge">Direct • Confirmed</div>
                 </div>
 
                 <div class="route-node dest">
@@ -1021,13 +1148,37 @@
                 </div>
               </div>
 
+              <!-- MULTI-LEG CONNECTING BREAKDOWN (Visible when connecting flight is enabled) -->
+              <div class="connecting-legs-wrap" id="outConnectingLegsBox" style="display: none;">
+                <div class="connecting-leg-row">
+                  <div>
+                    <span style="font-size: 9.5px; color: #64748b; font-weight: 700;">FLIGHT 1:</span>
+                    <strong id="outLeg1Airline">Qatar Airways (QR 1408)</strong> • <span id="outLeg1Route">LOS → DOH</span>
+                  </div>
+                  <span id="outLeg1Timing" style="color: #475569;">Dep: 18 Nov 13:45 | Arr: 18 Nov 22:45</span>
+                </div>
+
+                <div class="layover-divider-bar">
+                  <span>⏱️ <strong>Transit Layover:</strong> <span id="outLayoverCity">Doha (Hamad Intl)</span></span>
+                  <strong id="outLayoverDuration">2h 45m Layover</strong>
+                </div>
+
+                <div class="connecting-leg-row">
+                  <div>
+                    <span style="font-size: 9.5px; color: #64748b; font-weight: 700;">FLIGHT 2:</span>
+                    <strong id="outLeg2Airline">Qatar Airways (QR 003)</strong> • <span id="outLeg2Route">DOH → LHR</span>
+                  </div>
+                  <span id="outLeg2Timing" style="color: #475569;">Dep: 19 Nov 01:30 | Arr: 19 Nov 06:15</span>
+                </div>
+              </div>
+
               <div class="amenities-grid">
                 <div class="amenity-item">
                   <span>Checked Baggage</span>
                   <strong id="outBaggage">2 Pieces (23kg each)</strong>
                 </div>
                 <div class="amenity-item">
-                  <span>Cabin Hand Baggage</span>
+                  <span>Cabin Baggage</span>
                   <strong>1 Piece (7kg) + Laptop</strong>
                 </div>
                 <div class="amenity-item">
@@ -1035,8 +1186,8 @@
                   <strong>Confirmed / Check-in</strong>
                 </div>
                 <div class="amenity-item">
-                  <span>In-flight Meal</span>
-                  <strong>Included (Standard)</strong>
+                  <span>Baggage Transit</span>
+                  <strong id="outBaggageTransit">Checked Through</strong>
                 </div>
               </div>
             </div>
@@ -1048,7 +1199,7 @@
             <div class="receipt-card">
               <div class="receipt-notes">
                 <strong>Payment Status: PAID IN FULL</strong><br>
-                Official booking voucher covering all passengers listed on this booking reference. Amount includes all combined airline base fares, international fuel surcharges, airport departures taxes, and FYZZO Voyage concierge processing fees.
+                Official booking voucher covering all passengers listed on this booking reference. Amount includes all combined airline base fares, international fuel surcharges, airport departure taxes, and FYZZO Voyage concierge processing fees.
               </div>
               <div class="receipt-amount-wrap">
                 <div class="lbl">Total Fare Billed</div>
@@ -1090,10 +1241,22 @@
 </div>
 
 <script>
-  let currentCalcMode = 'perpax'; // 'perpax' or 'lump'
+  let currentFlightType = 'direct'; // 'direct' or 'connecting'
+  let currentCalcMode = 'perpax';
   let passengers = [
     { name: 'MR. ADEBAYO CHUKWUEMEKA', passport: 'A12345678', type: 'Adult', tktNo: '157-9842104521' }
   ];
+
+  function switchFlightType(type) {
+    currentFlightType = type;
+    document.getElementById('pillDirect').className = type === 'direct' ? 'type-pill active' : 'type-pill';
+    document.getElementById('pillConnecting').className = type === 'connecting' ? 'type-pill active' : 'type-pill';
+
+    document.getElementById('connectingSettingsBox').style.display = type === 'connecting' ? 'block' : 'none';
+    document.getElementById('lblFlightNo1').innerText = type === 'connecting' ? 'Flight Number (Leg 1)' : 'Flight Number';
+
+    updateTicket();
+  }
 
   function switchCalcMode(mode) {
     currentCalcMode = mode;
@@ -1226,40 +1389,96 @@
     
     const airline = document.getElementById('inpAirline').value;
     const fltNo = document.getElementById('inpFlightNo').value;
-    document.getElementById('outFlightInfo').innerText = airline + ' • ' + fltNo;
     document.getElementById('outCabinClass').innerText = document.getElementById('inpClass').value;
     document.getElementById('outBaggage').innerText = document.getElementById('inpBaggage').value;
 
-    document.getElementById('outOriginCode').innerText = document.getElementById('inpOriginCode').value.toUpperCase();
-    document.getElementById('outDestCode').innerText = document.getElementById('inpDestCode').value.toUpperCase();
+    const origCode = document.getElementById('inpOriginCode').value.toUpperCase();
+    const destCode = document.getElementById('inpDestCode').value.toUpperCase();
+    document.getElementById('outOriginCode').innerText = origCode;
+    document.getElementById('outDestCode').innerText = destCode;
     document.getElementById('outOriginCity').innerText = document.getElementById('inpOriginCity').value;
     document.getElementById('outDestCity').innerText = document.getElementById('inpDestCity').value;
 
     document.getElementById('outDepTime').innerText = document.getElementById('inpDepTime').value;
     document.getElementById('outArrTime').innerText = document.getElementById('inpArrTime').value;
     document.getElementById('outRemarks').innerText = document.getElementById('inpRemarks').value;
-    
+
+    // Direct vs Connecting Visual Adjustments
+    const badge = document.getElementById('outDurationBadge');
+    const transitDot = document.getElementById('outTransitDot');
+    const transitTrack = document.getElementById('outTransitTrack');
+    const connectingLegsBox = document.getElementById('outConnectingLegsBox');
+    const routeTypeMeta = document.getElementById('outRouteTypeMeta');
+
+    if (currentFlightType === 'connecting') {
+      const transitCode = document.getElementById('inpTransitCode').value.toUpperCase();
+      const layoverDur = document.getElementById('inpLayoverDuration').value;
+      const flt2 = document.getElementById('inpFlightNo2').value;
+
+      document.getElementById('outFlightInfo').innerText = `${airline} • ${fltNo} / ${flt2}`;
+      routeTypeMeta.innerText = `Connecting (${transitCode})`;
+      routeTypeMeta.style.color = '#c2410c';
+
+      badge.innerText = `1 Stop (${transitCode}) • ${layoverDur}`;
+      badge.className = 'flight-duration-tag connecting-tag';
+
+      transitDot.style.display = 'block';
+      transitTrack.style.display = 'block';
+      connectingLegsBox.style.display = 'block';
+
+      document.getElementById('outLeg1Airline').innerText = `${airline} (${fltNo})`;
+      document.getElementById('outLeg1Route').innerText = `${origCode} → ${transitCode}`;
+      document.getElementById('outLeg1Timing').innerText = `Dep: ${document.getElementById('inpDepTime').value}`;
+
+      document.getElementById('outLayoverCity').innerText = document.getElementById('inpTransitCity').value;
+      document.getElementById('outLayoverDuration').innerText = layoverDur;
+
+      document.getElementById('outLeg2Airline').innerText = `${airline} (${flt2})`;
+      document.getElementById('outLeg2Route').innerText = `${transitCode} → ${destCode}`;
+      document.getElementById('outLeg2Timing').innerText = `Dep: ${document.getElementById('inpLeg2DepTime').value} | Final Arr: ${document.getElementById('inpArrTime').value}`;
+
+      document.getElementById('outBaggageTransit').innerText = 'Checked to ' + destCode;
+    } else {
+      document.getElementById('outFlightInfo').innerText = `${airline} • ${fltNo}`;
+      routeTypeMeta.innerText = 'Direct Flight';
+      routeTypeMeta.style.color = '#0369a1';
+
+      badge.innerText = 'Direct • Confirmed';
+      badge.className = 'flight-duration-tag';
+
+      transitDot.style.display = 'none';
+      transitTrack.style.display = 'none';
+      connectingLegsBox.style.display = 'none';
+      document.getElementById('outBaggageTransit').innerText = 'Standard Check-in';
+    }
+
     calcMarkup();
   }
 
-  function loadSampleFamilyData() {
-    passengers = [
-      { name: 'MR. ADEBAYO CHUKWUEMEKA', passport: 'A12345678', type: 'Adult', tktNo: '157-9842104521' },
-      { name: 'MRS. NGOZI CHUKWUEMEKA', passport: 'A23456789', type: 'Adult', tktNo: '157-9842104522' },
-      { name: 'MASTER CHUKWUDI CHUKWUEMEKA', passport: 'A34567890', type: 'Child', tktNo: '157-9842104523' }
-    ];
-    document.getElementById('inpRawCostPerPaxMode').value = '2500000';
-    document.getElementById('inpMarkupPerHead').value = '35000'; // ₦35k per person
-    document.getElementById('inpRawCostLump').value = '2500000';
-    document.getElementById('inpMarkupLump').value = '105000';
-    renderPaxEditors();
+  function loadSampleConnectingQatar() {
+    switchFlightType('connecting');
+    document.getElementById('inpAirline').value = 'Qatar Airways';
+    document.getElementById('inpFlightNo').value = 'QR 1408';
+    document.getElementById('inpOriginCode').value = 'LOS';
+    document.getElementById('inpTransitCode').value = 'DOH';
+    document.getElementById('inpDestCode').value = 'LHR';
+    document.getElementById('inpOriginCity').value = 'Lagos (Murtala Muhammed)';
+    document.getElementById('inpTransitCity').value = 'Doha (Hamad Intl Airport)';
+    document.getElementById('inpDestCity').value = 'London Heathrow (Terminal 4)';
+    document.getElementById('inpLayoverDuration').value = '2h 45m Layover';
+    document.getElementById('inpFlightNo2').value = 'QR 003';
+    document.getElementById('inpDepTime').value = '18 Nov 2026, 13:45';
+    document.getElementById('inpLeg2DepTime').value = '19 Nov 2026, 01:30';
+    document.getElementById('inpArrTime').value = '19 Nov 2026, 06:15';
+    document.getElementById('inpRawCostPerPaxMode').value = '1850000';
+    document.getElementById('inpMarkupPerHead').value = '45000';
     updateTicket();
   }
 
   function downloadLuxuryPdf() {
     const element = document.getElementById('ticketDoc');
     const pnr = document.getElementById('inpPnr').value.trim() || 'Ticket';
-    const filename = 'FYZZO_Voyage_Group_Ticket_' + pnr + '.pdf';
+    const filename = 'FYZZO_Voyage_Ticket_' + pnr + '.pdf';
 
     const opt = {
       margin:       [10, 10, 10, 10],
