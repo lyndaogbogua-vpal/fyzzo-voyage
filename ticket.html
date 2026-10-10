@@ -82,6 +82,7 @@
     .action-buttons {
       display: flex;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     button {
@@ -90,7 +91,7 @@
       font-weight: 700;
       font-size: 13px;
       border-radius: 8px;
-      padding: 10px 20px;
+      padding: 10px 18px;
       border: none;
       transition: all 0.25s ease;
       display: inline-flex;
@@ -105,11 +106,7 @@
       border: 1px solid #b8860b;
     }
 
-    .btn-gold:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(184, 134, 11, 0.45);
-    }
-
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(184, 134, 11, 0.45); }
     .btn-navy { background: var(--primary); color: white; }
     .btn-navy:hover { background: #102a4e; }
     .btn-outline { background: white; border: 1px solid #cbd5e1; color: #334155; }
@@ -118,7 +115,7 @@
     /* WORKSPACE GRID */
     .workspace-grid {
       display: grid;
-      grid-template-columns: 440px 1fr;
+      grid-template-columns: 450px 1fr;
       gap: 30px;
       align-items: start;
     }
@@ -184,14 +181,13 @@
       box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
     }
 
-    /* MULTI-PASSENGER MANAGER */
+    /* MULTI-PASSENGER CARDS */
     .pax-card-editor {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
       padding: 12px;
       margin-bottom: 10px;
-      position: relative;
     }
 
     .pax-card-header {
@@ -219,32 +215,69 @@
       color: #0369a1;
       border: 1px dashed #7dd3fc;
       width: 100%;
-      padding: 8px;
+      padding: 9px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       text-align: center;
     }
     .btn-add-pax:hover { background: #bae6fd; }
 
-    .confidential-pricing-box {
-      background: #f8fafc;
-      border: 1.5px dashed #93c5fd;
-      padding: 14px;
+    /* SMART DUAL-MODE MARKUP CALCULATOR */
+    .smart-pricing-card {
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      padding: 16px;
       border-radius: 10px;
-      margin-top: 12px;
-      margin-bottom: 14px;
+      margin-top: 14px;
+      margin-bottom: 16px;
     }
 
-    .confidential-pricing-box h3 {
+    .smart-pricing-card h3 {
       font-size: 12px;
       color: #1e40af;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .calc-mode-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .mode-tab {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: white;
+      font-size: 11px;
+      font-weight: 700;
+      color: #3b82f6;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mode-tab.active {
+      background: #1d4ed8;
+      color: white;
+      border-color: #1d4ed8;
+    }
+
+    .calc-breakdown-box {
+      background: white;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
     }
 
     .calc-row {
@@ -252,14 +285,14 @@
       justify-content: space-between;
       font-size: 12px;
       color: #475569;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .calc-profit {
       font-weight: 800;
       color: var(--success-green);
-      font-size: 14px;
-      border-top: 1px solid #bfdbfe;
+      font-size: 15px;
+      border-top: 2px solid #bfdbfe;
       padding-top: 8px;
       margin-top: 8px;
     }
@@ -472,7 +505,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* FLIGHT HERO CARD */
+    /* FLIGHT HERO */
     .flight-hero-card {
       border: 1px solid #cbd5e1;
       border-radius: 10px;
@@ -742,7 +775,10 @@
       <p>Multi-Passenger Group & Family Flight Itinerary / E-Ticket Station.</p>
     </div>
     <div class="action-buttons">
-      <button type="button" class="btn-outline" onclick="loadSampleFamilyData()">Load Family (3 Pax)</button>
+      <a href="receipt.html" style="text-decoration: none;">
+        <button type="button" class="btn-outline">💳 Open Receipt & Invoice Desk</button>
+      </a>
+      <button type="button" class="btn-outline" onclick="loadSampleFamilyData()">Load Sample (3 Pax)</button>
       <button type="button" class="btn-gold" onclick="downloadLuxuryPdf()">⬇️ Download E-Ticket PDF</button>
       <button type="button" class="btn-navy" onclick="window.print()">🖨️ Browser Print</button>
     </div>
@@ -759,6 +795,65 @@
       <!-- DYNAMIC PASSENGER CONTAINER -->
       <div id="paxEditorContainer"></div>
       <button type="button" class="btn-add-pax" onclick="addPassenger()">➕ Add Another Passenger</button>
+
+      <!-- SMART DUAL-MODE CALCULATOR -->
+      <div class="smart-pricing-card">
+        <h3>🔒 Broker Margin Calculator (Staff Only)</h3>
+        <p style="font-size: 11px; color: #475569; margin-bottom: 10px;">Choose how you want to calculate your markup:</p>
+        
+        <div class="calc-mode-selector">
+          <div class="mode-tab active" id="tabPerPax" onclick="switchCalcMode('perpax')">
+            Per-Passenger Markup
+          </div>
+          <div class="mode-tab" id="tabTotalLump" onclick="switchCalcMode('lump')">
+            Total Group Lump Sum
+          </div>
+        </div>
+
+        <!-- Mode A: Per-Passenger Calculation -->
+        <div id="modePerPaxWrap">
+          <div class="form-group">
+            <label>Total Raw Cost Paid to Wakanow (All Pax Combined)</label>
+            <input type="number" id="inpRawCostPerPaxMode" value="2500000" oninput="calcMarkup()">
+          </div>
+          <div class="form-group">
+            <label>Markup Fee Per Passenger (₦)</label>
+            <input type="number" id="inpMarkupPerHead" value="35000" oninput="calcMarkup()">
+          </div>
+        </div>
+
+        <!-- Mode B: Direct Total Lump Sum -->
+        <div id="modeLumpWrap" style="display: none;">
+          <div class="form-group">
+            <label>Total Raw Cost Paid to Wakanow</label>
+            <input type="number" id="inpRawCostLump" value="2500000" oninput="calcMarkup()">
+          </div>
+          <div class="form-group">
+            <label>Total Group Markup / Service Fee</label>
+            <input type="number" id="inpMarkupLump" value="105000" oninput="calcMarkup()">
+          </div>
+        </div>
+
+        <!-- Breakdown Details -->
+        <div class="calc-breakdown-box">
+          <div class="calc-row">
+            <span>Number of Passengers:</span>
+            <strong id="dispCalcPaxCount">1 Pax</strong>
+          </div>
+          <div class="calc-row">
+            <span>Raw Supplier Cost:</span>
+            <span id="dispSupplier">NGN 2,500,000</span>
+          </div>
+          <div class="calc-row">
+            <span id="dispMarkupLabel">Total Markup (Hidden):</span>
+            <span id="dispMarkup">NGN 35,000</span>
+          </div>
+          <div class="calc-row calc-profit">
+            <span>Total Billed to Client:</span>
+            <span id="dispTotalClient">NGN 2,535,000</span>
+          </div>
+        </div>
+      </div>
 
       <div class="panel-header" style="margin-top: 14px;">Flight & Airline Information</div>
       <div class="form-row">
@@ -826,35 +921,6 @@
         </div>
       </div>
 
-      <!-- CONFIDENTIAL MARKUP CALCULATOR -->
-      <div class="confidential-pricing-box">
-        <h3>🔒 Group Broker Margin Calculator</h3>
-        <p style="font-size: 11px; color: #475569; margin-bottom: 8px;">Only the <strong>Total Billed to Client</strong> appears on the ticket.</p>
-        
-        <div class="form-group">
-          <label>Total Raw Cost from Aggregator (All Pax Combined)</label>
-          <input type="number" id="inpSupplierCost" value="1450000" oninput="calcMarkup()">
-        </div>
-
-        <div class="form-group">
-          <label>Total Broker Markup / Service Fee</label>
-          <input type="number" id="inpMarkup" value="35000" oninput="calcMarkup()">
-        </div>
-
-        <div class="calc-row">
-          <span>Supplier Cost (Hidden):</span>
-          <span id="dispSupplier">NGN 1,450,000</span>
-        </div>
-        <div class="calc-row">
-          <span>Your Markup (Hidden):</span>
-          <span id="dispMarkup">NGN 35,000</span>
-        </div>
-        <div class="calc-row calc-profit">
-          <span>Total Billed to Client:</span>
-          <span id="dispTotalClient">NGN 1,485,000</span>
-        </div>
-      </div>
-
       <div class="form-group">
         <label>Custom Travel Advice / Notes</label>
         <input type="text" id="inpRemarks" value="Please ensure all passports have at least 6 months validity from departure date." oninput="updateTicket()">
@@ -888,7 +954,7 @@
             </div>
             <div class="meta-card">
               <div class="lbl">Total Passengers</div>
-              <div class="val" id="outPaxCountDisplay">1 Passenger (Adult)</div>
+              <div class="val" id="outPaxCountDisplay">1 Passenger</div>
             </div>
             <div class="meta-card">
               <div class="lbl">Date of Issue</div>
@@ -907,7 +973,7 @@
               <table class="pax-table">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th style="width: 35px;">#</th>
                     <th>Passenger Full Name</th>
                     <th>Passport Number</th>
                     <th>Type</th>
@@ -986,7 +1052,7 @@
               </div>
               <div class="receipt-amount-wrap">
                 <div class="lbl">Total Fare Billed</div>
-                <div class="total-val" id="outTotalFare">NGN 1,485,000</div>
+                <div class="total-val" id="outTotalFare">NGN 2,535,000</div>
               </div>
             </div>
           </div>
@@ -1024,9 +1090,21 @@
 </div>
 
 <script>
+  let currentCalcMode = 'perpax'; // 'perpax' or 'lump'
   let passengers = [
     { name: 'MR. ADEBAYO CHUKWUEMEKA', passport: 'A12345678', type: 'Adult', tktNo: '157-9842104521' }
   ];
+
+  function switchCalcMode(mode) {
+    currentCalcMode = mode;
+    document.getElementById('tabPerPax').className = mode === 'perpax' ? 'mode-tab active' : 'mode-tab';
+    document.getElementById('tabTotalLump').className = mode === 'lump' ? 'mode-tab active' : 'mode-tab';
+
+    document.getElementById('modePerPaxWrap').style.display = mode === 'perpax' ? 'block' : 'none';
+    document.getElementById('modeLumpWrap').style.display = mode === 'lump' ? 'block' : 'none';
+
+    calcMarkup();
+  }
 
   function renderPaxEditors() {
     const container = document.getElementById('paxEditorContainer');
@@ -1069,26 +1147,26 @@
     const countText = passengers.length + (passengers.length === 1 ? ' Passenger' : ' Passengers');
     document.getElementById('paxCountBadge').innerText = countText;
     document.getElementById('outPaxCountDisplay').innerText = countText;
+    document.getElementById('dispCalcPaxCount').innerText = passengers.length + ' Pax';
 
     renderPaxTable();
+    calcMarkup();
   }
 
   function addPassenger() {
     passengers.push({
-      name: 'MRS. CHIDINMA CHUKWUEMEKA',
-      passport: 'A87654321',
+      name: 'PASSENGER #' + (passengers.length + 1),
+      passport: 'A' + Math.floor(10000000 + Math.random() * 90000000),
       type: 'Adult',
       tktNo: '157-984210452' + (passengers.length + 1)
     });
     renderPaxEditors();
-    calcMarkup();
   }
 
   function removePassenger(index) {
     if (passengers.length > 1) {
       passengers.splice(index, 1);
       renderPaxEditors();
-      calcMarkup();
     }
   }
 
@@ -1118,14 +1196,27 @@
   }
 
   function calcMarkup() {
-    const rawCost = parseFloat(document.getElementById('inpSupplierCost').value) || 0;
-    const markup = parseFloat(document.getElementById('inpMarkup').value) || 0;
-    const total = rawCost + markup;
+    const paxCount = passengers.length || 1;
+    let rawCost = 0;
+    let totalMarkup = 0;
+
+    if (currentCalcMode === 'perpax') {
+      rawCost = parseFloat(document.getElementById('inpRawCostPerPaxMode').value) || 0;
+      const markupPerHead = parseFloat(document.getElementById('inpMarkupPerHead').value) || 0;
+      totalMarkup = markupPerHead * paxCount;
+      document.getElementById('dispMarkupLabel').innerText = `Total Markup (₦${markupPerHead.toLocaleString()} × ${paxCount} pax):`;
+    } else {
+      rawCost = parseFloat(document.getElementById('inpRawCostLump').value) || 0;
+      totalMarkup = parseFloat(document.getElementById('inpMarkupLump').value) || 0;
+      document.getElementById('dispMarkupLabel').innerText = 'Total Group Markup (Hidden):';
+    }
+
+    const totalClient = rawCost + totalMarkup;
 
     document.getElementById('dispSupplier').innerText = formatMoney(rawCost);
-    document.getElementById('dispMarkup').innerText = formatMoney(markup);
-    document.getElementById('dispTotalClient').innerText = formatMoney(total);
-    document.getElementById('outTotalFare').innerText = formatMoney(total);
+    document.getElementById('dispMarkup').innerText = formatMoney(totalMarkup);
+    document.getElementById('dispTotalClient').innerText = formatMoney(totalClient);
+    document.getElementById('outTotalFare').innerText = formatMoney(totalClient);
   }
 
   function updateTicket() {
@@ -1157,8 +1248,10 @@
       { name: 'MRS. NGOZI CHUKWUEMEKA', passport: 'A23456789', type: 'Adult', tktNo: '157-9842104522' },
       { name: 'MASTER CHUKWUDI CHUKWUEMEKA', passport: 'A34567890', type: 'Child', tktNo: '157-9842104523' }
     ];
-    document.getElementById('inpSupplierCost').value = '4350000';
-    document.getElementById('inpMarkup').value = '105000'; // ₦35,000 x 3 passengers
+    document.getElementById('inpRawCostPerPaxMode').value = '2500000';
+    document.getElementById('inpMarkupPerHead').value = '35000'; // ₦35k per person
+    document.getElementById('inpRawCostLump').value = '2500000';
+    document.getElementById('inpMarkupLump').value = '105000';
     renderPaxEditors();
     updateTicket();
   }
