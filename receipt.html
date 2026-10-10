@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FYZZO Voyage — Official Invoice & Payment Receipt Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #0a192f;
+      --primary-gradient: linear-gradient(135deg, #071529 0%, #102a4e 100%);
+      --gold-main: #c59b27;
+      --gold-gradient: linear-gradient(90deg, #b8860b 0%, #d4af37 50%, #b8860b 100%);
+      --accent-blue: #1d4ed8;
+      --bg-slate: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-subtle: #e2e8f0;
+      --success-green: #059669;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: #eaeff5;
+      color: var(--text-main);
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* TOP HEADER */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #cbd5e1;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-title-wrap h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .badge-desk {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0a192f;
+      color: #d4af37;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .top-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 10px 18px;
+      border: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-gold {
+      background: var(--gold-gradient);
+      color: #071529;
+      box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35);
+      border: 1px solid #b8860b;
+    }
+
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(184, 134, 11, 0.45); }
+    .btn-navy { background: var(--primary); color: white; }
+    .btn-navy:hover { background: #102a4e; }
+    .btn-outline { background: white; border: 1px solid #cbd5e1; color: #334155; }
+    .btn-outline:hover { background: #f8fafc; }
+
+    /* WORKSPACE GRID */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 1040px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+    }
+
+    /* CONTROL PANEL */
+    .control-panel {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .panel-header {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 7px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-main);
+      background: #fff;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    }
+
+    /* DYNAMIC ITEMS BUILDER */
+    .item-card-editor {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .item-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .btn-remove-item {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 3px 8px;
+      font-size: 11px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-add-item {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px dashed #7dd3fc;
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .btn-add-item:hover { background: #bae6fd; }
+
+    /* PRESET SELECTOR */
+    .preset-selector {
+      background: #fffbeb;
+      border: 1px solid #fef08a;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: #854d0e;
+    }
+
+    /* PREVIEW CANVAS */
+    .preview-canvas {
+      display: flex;
+      justify-content: center;
+      background: #cbd5e1;
+      padding: 24px;
+      border-radius: 14px;
+      overflow-x: auto;
+    }
+
+    /* THE LUXURY A4 INVOICE/RECEIPT DOCUMENT */
+    #receiptDoc {
+      width: 800px;
+      background: #ffffff;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.15);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      color: #0f172a;
+      box-sizing: border-box;
+    }
+
+    /* HEADER */
+    .receipt-header {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      padding: 28px 40px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .receipt-header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .brand-col h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      letter-spacing: 2px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .brand-col p {
+      font-size: 11px;
+      color: #93c5fd;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .doc-type-badge { text-align: right; }
+    .doc-type-badge h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #fef08a;
+      text-transform: uppercase;
+    }
+    .doc-type-badge p { font-size: 11px; color: #94a3b8; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* BODY */
+    .receipt-body {
+      padding: 24px 38px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .status-ribbon {
+      border: 1px solid #bbf7d0;
+      padding: 9px 16px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+    }
+
+    .status-paid { background: #f0fdf4; border-color: #86efac; color: #166534; }
+    .status-unpaid { background: #fffbeb; border-color: #fde047; color: #854d0e; }
+    .status-partial { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .meta-cards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    .meta-card .lbl {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .meta-card .val {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .meta-card .val.ref {
+      font-family: 'Space Grotesk', monospace;
+      color: #1d4ed8;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    /* CLIENT & BILLING INFO DUAL ROW */
+    .client-billing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .info-card-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .info-card-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-card-title::before {
+      content: "";
+      width: 4px;
+      height: 11px;
+      background: #c59b27;
+      border-radius: 2px;
+    }
+
+    .info-line {
+      font-size: 12.5px;
+      color: #334155;
+      margin-bottom: 3px;
+    }
+    .info-line strong { color: var(--primary); font-weight: 700; }
+
+    /* LINE ITEMS TABLE */
+    .section-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 4px;
+      height: 12px;
+      background: #c59b27;
+      border-radius: 2px;
+    }
+
+    .items-table-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .items-table th {
+      background: #f1f5f9;
+      text-align: left;
+      padding: 9px 14px;
+      color: #475569;
+      font-weight: 700;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .items-table td {
+      padding: 11px 14px;
+      color: #1e293b;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .items-table td strong {
+      color: var(--primary);
+      display: block;
+      font-weight: 700;
+    }
+
+    .items-table td span.item-desc {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* SUMMARY TOTALS & BANK DETAILS */
+    .bottom-totals-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .bank-details-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 11.5px;
+      color: #475569;
+    }
+
+    .bank-details-box strong { color: var(--primary); }
+    .bank-details-box .bank-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .totals-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .total-row.grand-total {
+      border-top: 2px solid #0a192f;
+      padding-top: 8px;
+      margin-top: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .total-row.paid-row {
+      color: #15803d;
+      font-weight: 700;
+    }
+
+    .total-row.balance-row {
+      color: #b91c1c;
+      font-weight: 800;
+    }
+
+    /* ADVISORY & SECURITY STAMP */
+    .advisory-security-row {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .advisory-box {
+      border-left: 3px solid #c59b27;
+      background: #fffbeb;
+      padding: 9px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 10.5px;
+      color: #92400e;
+      line-height: 1.45;
+    }
+
+    .receipt-security-stamp {
+      background: #f8fafc;
+      border: 2px dashed #94a3b8;
+      border-radius: 6px;
+      padding: 6px 12px;
+      text-align: center;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 9.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* FOOTER */
+    .receipt-footer {
+      border-top: 1px solid #e2e8f0;
+      padding: 16px 38px;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10.5px;
+      color: #64748b;
+      margin-top: auto;
+    }
+
+    .footer-info strong {
+      color: var(--primary);
+      display: block;
+      font-size: 11.5px;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    @page { size: A4 portrait; margin: 0; }
+
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      body { margin: 0 !important; padding: 0 !important; background: #ffffff !important; }
+      .top-header, .control-panel { display: none !important; }
+      .workspace-grid { display: block !important; }
+      .preview-canvas { padding: 0 !important; background: transparent !important; }
+      #receiptDoc {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+  <div class="top-header">
+    <div class="brand-title-wrap">
+      <h1>FYZZO VOYAGE <span class="badge-desk">Finance & Billing Desk</span></h1>
+      <p>Instant Client Invoice & Official Payment Receipt Generator.</p>
+    </div>
+    <div class="action-buttons">
+      <a href="ticket.html" style="text-decoration: none;">
+        <button type="button" class="btn-outline">✈️ Open Flight Ticket Generator</button>
+      </a>
+      <button type="button" class="btn-gold" onclick="downloadReceiptPdf()">⬇️ Download Receipt PDF</button>
+      <button type="button" class="btn-navy" onclick="window.print()">🖨️ Browser Print</button>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <!-- CONTROLS -->
+    <div class="control-panel">
+      <div class="panel-header">
+        <span>Document Settings</span>
+        <select id="inpDocType" style="width: auto; padding: 4px 8px; font-weight: 700;" onchange="updateReceipt()">
+          <option value="PAYMENT RECEIPT">PAYMENT RECEIPT</option>
+          <option value="COMMERCIAL INVOICE">COMMERCIAL INVOICE</option>
+          <option value="PROFORMA INVOICE">PROFORMA INVOICE</option>
+        </select>
+      </div>
+
+      <!-- SERVICE PRESET LOADER -->
+      <div class="preset-selector">
+        <strong>⚡ Quick Load Service Package:</strong>
+        <select id="selPreset" style="margin-top: 6px; font-weight: 600;" onchange="loadServicePreset()">
+          <option value="">-- Choose a Service Catalog Preset --</option>
+          <option value="visa_uk">UK Visitor Visa Advisory (₦300,000)</option>
+          <option value="visa_can">Canada Visitor Visa Advisory (₦300,000)</option>
+          <option value="visa_us">US B1/B2 Visa Consultation (₦250,000)</option>
+          <option value="visa_schengen">Schengen Visa Processing (₦350,000)</option>
+          <option value="study_standard">Study Abroad (Admission + Visa) (₦650,000)</option>
+          <option value="study_scholar">Premium Scholar Package (₦850,000)</option>
+          <option value="holiday_dubai">Bespoke Holiday Package (Dubai/Europe) (₦150,000)</option>
+          <option value="flight_group">Group Flight Booking Service (₦75,000)</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Invoice / Receipt #</label>
+          <input type="text" id="inpDocNo" value="FZ-REC-2026-084" oninput="updateReceipt()">
+        </div>
+        <div class="form-group">
+          <label>Date of Issue</label>
+          <input type="text" id="inpIssueDate" value="10 Oct 2026" oninput="updateReceipt()">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Payment Status</label>
+          <select id="inpPaymentStatus" onchange="updateReceipt()">
+            <option value="PAID IN FULL">PAID IN FULL</option>
+            <option value="PARTIAL PAYMENT">PARTIAL PAYMENT</option>
+            <option value="PAYMENT PENDING">PAYMENT PENDING (DUE)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="inpPaymentMethod" onchange="updateReceipt()">
+            <option value="Direct Bank Transfer (Instant)">Direct Bank Transfer</option>
+            <option value="Debit Card / Online POS">Debit Card / Online</option>
+            <option value="Corporate Cheque / Wire">Corporate Wire</option>
+            <option value="Cash Deposit">Cash Deposit</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel-header" style="margin-top: 10px;">Client Information</div>
+      <div class="form-group">
+        <label>Client Full Name / Company</label>
+        <input type="text" id="inpClientName" value="MR. ADEBAYO CHUKWUEMEKA" oninput="updateReceipt()">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Client Phone</label>
+          <input type="text" id="inpClientPhone" value="+234 803 123 4567" oninput="updateReceipt()">
+        </div>
+        <div class="form-group">
+          <label>Client Email</label>
+          <input type="text" id="inpClientEmail" value="adebayo.c@example.com" oninput="updateReceipt()">
+        </div>
+      </div>
+
+      <!-- SERVICE ITEMS BUILDER -->
+      <div class="panel-header" style="margin-top: 10px;">
+        <span>Billed Services & Fees</span>
+      </div>
+      <div id="itemsEditorContainer"></div>
+      <button type="button" class="btn-add-item" onclick="addItem()">➕ Add Another Service Item</button>
+
+      <!-- FINANCIAL TOTALS & PAYMENTS -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Amount Already Paid (₦)</label>
+          <input type="number" id="inpAmountPaid" value="300000" oninput="calcTotals()">
+        </div>
+        <div class="form-group">
+          <label>Currency</label>
+          <select id="inpCurrency" onchange="calcTotals()">
+            <option value="NGN">NGN (₦)</option>
+            <option value="USD">USD ($)</option>
+            <option value="GBP">GBP (£)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Official Bank Account Notes</label>
+        <textarea id="inpBankDetails" rows="2" oninput="updateReceipt()">Bank: Zenith Bank PLC | Acc Name: FYZZO VOYAGE GLOBAL LTD | Acc No: 1223456789</textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Custom Terms / Deliverables Note</label>
+        <input type="text" id="inpTerms" value="Professional service fees are strictly non-refundable once portal filing or advisory drafting commences." oninput="updateReceipt()">
+      </div>
+    </div>
+
+    <!-- PREVIEW CANVAS -->
+    <div class="preview-canvas">
+      <div id="receiptDoc">
+        
+        <!-- HEADER -->
+        <div class="receipt-header">
+          <div class="brand-col">
+            <h1>FYZZO VOYAGE</h1>
+            <p>Global Travel & Relocation Concierge</p>
+          </div>
+          <div class="doc-type-badge">
+            <h2 id="outDocTitle">PAYMENT RECEIPT</h2>
+            <p id="outDocSubtitle">Official Financial Transaction Record</p>
+          </div>
+        </div>
+
+        <div class="receipt-body">
+          <!-- STATUS RIBBON -->
+          <div class="status-ribbon status-paid" id="outStatusRibbon">
+            <span class="status-pill" id="outStatusPill">PAID IN FULL</span>
+            <span>Transaction Verified by: <strong>FYZZO Accounts Desk</strong></span>
+          </div>
+
+          <!-- META CARDS -->
+          <div class="meta-cards-row">
+            <div class="meta-card">
+              <div class="lbl">Reference Number</div>
+              <div class="val ref" id="outDocNo">FZ-REC-2026-084</div>
+            </div>
+            <div class="meta-card">
+              <div class="lbl">Issue Date</div>
+              <div class="val" id="outIssueDate">10 Oct 2026</div>
+            </div>
+            <div class="meta-card">
+              <div class="lbl">Payment Method</div>
+              <div class="val" id="outPaymentMethod">Bank Transfer</div>
+            </div>
+            <div class="meta-card">
+              <div class="lbl">Issuing Office</div>
+              <div class="val">FYZZO Global Desk</div>
+            </div>
+          </div>
+
+          <!-- CLIENT & BILLING DUAL BOX -->
+          <div class="client-billing-grid">
+            <div class="info-card-box">
+              <div class="info-card-title">Billed To (Client / Organization)</div>
+              <div class="info-line"><strong id="outClientName">MR. ADEBAYO CHUKWUEMEKA</strong></div>
+              <div class="info-line">Phone: <span id="outClientPhone">+234 803 123 4567</span></div>
+              <div class="info-line">Email: <span id="outClientEmail">adebayo.c@example.com</span></div>
+            </div>
+            <div class="info-card-box">
+              <div class="info-card-title">Service Provider</div>
+              <div class="info-line"><strong>FYZZO VOYAGE LTD.</strong></div>
+              <div class="info-line">Travel, Visas, Admissions & Relocations</div>
+              <div class="info-line">Email: finance@fyzzoglobal.com | +234 900 000 0000</div>
+            </div>
+          </div>
+
+          <!-- LINE ITEMS TABLE -->
+          <div>
+            <div class="section-label">Itemized Services & Professional Fees</div>
+            <div class="items-table-box">
+              <table class="items-table">
+                <thead>
+                  <tr>
+                    <th style="width: 35px;">#</th>
+                    <th>Service Description & Deliverables</th>
+                    <th style="width: 60px; text-align: center;">Qty</th>
+                    <th style="width: 140px; text-align: right;">Rate</th>
+                    <th style="width: 140px; text-align: right;">Amount</th>
+                  </tr>
+                </thead>
+                <tbody id="outItemsTableBody">
+                  <!-- Dynamic items -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- BOTTOM TOTALS & BANK ACCOUNTS -->
+          <div class="bottom-totals-grid">
+            <div class="bank-details-box">
+              <div class="bank-title">Official Settlement Account</div>
+              <div id="outBankDetails">Bank: Zenith Bank PLC | Acc Name: FYZZO VOYAGE GLOBAL LTD | Acc No: 1223456789</div>
+              <div style="margin-top: 8px; font-size: 10.5px; color: #64748b;">
+                Please quote reference number <strong id="outRefQuote">FZ-REC-2026-084</strong> for all reconciliation queries.
+              </div>
+            </div>
+
+            <div class="totals-box">
+              <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="outSubtotal">NGN 300,000</span>
+              </div>
+              <div class="total-row grand-total">
+                <span>Total Amount:</span>
+                <span id="outGrandTotal">NGN 300,000</span>
+              </div>
+              <div class="total-row paid-row">
+                <span>Amount Paid:</span>
+                <span id="outAmountPaid">NGN 300,000</span>
+              </div>
+              <div class="total-row balance-row" id="outBalanceRow" style="display: none;">
+                <span>Balance Due:</span>
+                <span id="outBalanceDue">NGN 0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADVISORY & SECURITY STAMP -->
+          <div class="advisory-security-row">
+            <div class="advisory-box">
+              <strong>Official Receipt Notice:</strong><br>
+              • <span id="outTerms">Professional service fees are strictly non-refundable once portal filing or advisory drafting commences.</span><br>
+              • All bookings and advisory services are governed by FYZZO Voyage standard terms of engagement.
+            </div>
+            <div class="receipt-security-stamp">
+              PAYMENT VERIFIED<br>FYZZO FINANCE
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="receipt-footer">
+          <div class="footer-info">
+            <strong>FYZZO VOYAGE LTD.</strong>
+            <span>Global Concierge: +234 (0) 900 000 0000 | Email: voyage@fyzzoglobal.com | travel.fyzzoglobal.com</span><br>
+            <span>Lagos • Abuja • London • Global Advisory Desk</span>
+          </div>
+          <div style="font-size: 10px; color: #94a3b8; text-align: right;">
+            Computer-generated official receipt.<br>Valid without physical signature.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let items = [
+    { title: 'UK Tourist / Visitor Visa Advisory', desc: 'Profile assessment, document review, application filing & cover letter drafting', qty: 1, rate: 300000 }
+  ];
+
+  function renderItems() {
+    const container = document.getElementById('itemsEditorContainer');
+    container.innerHTML = '';
+
+    items.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'item-card-editor';
+      card.innerHTML = `
+        <div class="item-card-header">
+          <span>Service #${index + 1}</span>
+          ${items.length > 1 ? `<button type="button" class="btn-remove-item" onclick="removeItem(${index})">Remove</button>` : ''}
+        </div>
+        <div class="form-group">
+          <label>Service Title</label>
+          <input type="text" value="${item.title}" oninput="updateItemField(${index}, 'title', this.value)">
+        </div>
+        <div class="form-group">
+          <label>Deliverables / Description</label>
+          <input type="text" value="${item.desc}" oninput="updateItemField(${index}, 'desc', this.value)">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" value="${item.qty}" min="1" oninput="updateItemField(${index}, 'qty', this.value)">
+          </div>
+          <div class="form-group">
+            <label>Rate / Fee (₦)</label>
+            <input type="number" value="${item.rate}" oninput="updateItemField(${index}, 'rate', this.value)">
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    renderItemsTable();
+    calcTotals();
+  }
+
+  function addItem() {
+    items.push({
+      title: 'Flight Ticket Reservation / Booking Assistance',
+      desc: 'Flight routing, PNR generation, and seat allocation handling',
+      qty: 1,
+      rate: 35000
+    });
+    renderItems();
+  }
+
+  function removeItem(index) {
+    if (items.length > 1) {
+      items.splice(index, 1);
+      renderItems();
+    }
+  }
+
+  function updateItemField(index, field, val) {
+    items[index][field] = field === 'qty' || field === 'rate' ? parseFloat(val) || 0 : val;
+    renderItemsTable();
+    calcTotals();
+  }
+
+  function formatCurr(val) {
+    const curr = document.getElementById('inpCurrency').value || 'NGN';
+    return curr + ' ' + Number(val).toLocaleString();
+  }
+
+  function renderItemsTable() {
+    const tbody = document.getElementById('outItemsTableBody');
+    tbody.innerHTML = '';
+
+    items.forEach((item, idx) => {
+      const row = document.createElement('tr');
+      const total = (item.qty || 1) * (item.rate || 0);
+      row.innerHTML = `
+        <td style="color: #64748b; font-weight: 700;">${idx + 1}</td>
+        <td>
+          <strong>${item.title || 'Service'}</strong>
+          <span class="item-desc">${item.desc || ''}</span>
+        </td>
+        <td style="text-align: center; font-weight: 700;">${item.qty || 1}</td>
+        <td style="text-align: right; font-weight: 600;">${formatCurr(item.rate || 0)}</td>
+        <td style="text-align: right; font-weight: 800; color: #0a192f;">${formatCurr(total)}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  function calcTotals() {
+    let subtotal = 0;
+    items.forEach(item => {
+      subtotal += (item.qty || 1) * (item.rate || 0);
+    });
+
+    const paid = parseFloat(document.getElementById('inpAmountPaid').value) || 0;
+    const balance = Math.max(0, subtotal - paid);
+
+    document.getElementById('outSubtotal').innerText = formatCurr(subtotal);
+    document.getElementById('outGrandTotal').innerText = formatCurr(subtotal);
+    document.getElementById('outAmountPaid').innerText = formatCurr(paid);
+    document.getElementById('outBalanceDue').innerText = formatCurr(balance);
+
+    const balanceRow = document.getElementById('outBalanceRow');
+    if (balance > 0) {
+      balanceRow.style.display = 'flex';
+    } else {
+      balanceRow.style.display = 'none';
+    }
+
+    renderItemsTable();
+  }
+
+  function updateReceipt() {
+    const docType = document.getElementById('inpDocType').value;
+    document.getElementById('outDocTitle').innerText = docType;
+    if (docType === 'PAYMENT RECEIPT') {
+      document.getElementById('outDocSubtitle').innerText = 'Official Financial Transaction Record';
+    } else {
+      document.getElementById('outDocSubtitle').innerText = 'Official Commercial Billing Statement';
+    }
+
+    const docNo = document.getElementById('inpDocNo').value;
+    document.getElementById('outDocNo').innerText = docNo;
+    document.getElementById('outRefQuote').innerText = docNo;
+
+    document.getElementById('outIssueDate').innerText = document.getElementById('inpIssueDate').value;
+    document.getElementById('outPaymentMethod').innerText = document.getElementById('inpPaymentMethod').value;
+
+    const status = document.getElementById('inpPaymentStatus').value;
+    const ribbon = document.getElementById('outStatusRibbon');
+    const pill = document.getElementById('outStatusPill');
+
+    ribbon.className = 'status-ribbon';
+    if (status === 'PAID IN FULL') {
+      ribbon.classList.add('status-paid');
+    } else if (status === 'PARTIAL PAYMENT') {
+      ribbon.classList.add('status-partial');
+    } else {
+      ribbon.classList.add('status-unpaid');
+    }
+    pill.innerText = status;
+
+    document.getElementById('outClientName').innerText = document.getElementById('inpClientName').value.toUpperCase();
+    document.getElementById('outClientPhone').innerText = document.getElementById('inpClientPhone').value;
+    document.getElementById('outClientEmail').innerText = document.getElementById('inpClientEmail').value;
+
+    document.getElementById('outBankDetails').innerText = document.getElementById('inpBankDetails').value;
+    document.getElementById('outTerms').innerText = document.getElementById('inpTerms').value;
+
+    calcTotals();
+  }
+
+  function loadServicePreset() {
+    const sel = document.getElementById('selPreset').value;
+    if (!sel) return;
+
+    if (sel === 'visa_uk') {
+      items = [{ title: 'UK Tourist / Visitor Visa Advisory & Application', desc: 'Comprehensive profile assessment, document checklist, portal filing, appointment booking & custom cover letter', qty: 1, rate: 300000 }];
+      document.getElementById('inpAmountPaid').value = '300000';
+    } else if (sel === 'visa_can') {
+      items = [{ title: 'Canada Visitor Visa Advisory & Processing', desc: 'Portal setup, itinerary compilation, financial review & submission guidance', qty: 1, rate: 300000 }];
+      document.getElementById('inpAmountPaid').value = '300000';
+    } else if (sel === 'visa_us') {
+      items = [{ title: 'US B1/B2 Visitor Visa Advisory', desc: 'DS-160 filing, CGI portal appointment scheduling, cheat-sheet & mock interview prep', qty: 1, rate: 250000 }];
+      document.getElementById('inpAmountPaid').value = '250000';
+    } else if (sel === 'visa_schengen') {
+      items = [{ title: 'Schengen Visa Comprehensive Advisory', desc: 'Multi-country itinerary planning, verifiable dummy flight/hotel booking & biometric scheduling', qty: 1, rate: 350000 }];
+      document.getElementById('inpAmountPaid').value = '350000';
+    } else if (sel === 'study_standard') {
+      items = [
+        { title: 'Standard Study Voyage Package', desc: 'Full University admission processing (up to 3 institutions) + Complete Student Visa filing', qty: 1, rate: 650000 }
+      ];
+      document.getElementById('inpAmountPaid').value = '650000';
+    } else if (sel === 'study_scholar') {
+      items = [
+        { title: 'Premium Scholar Relocation Package', desc: 'Admissions, student visa, pre-departure orientation, temporary housing assist & priority desk', qty: 1, rate: 850000 }
+      ];
+      document.getElementById('inpAmountPaid').value = '850000';
+    } else if (sel === 'holiday_dubai') {
+      items = [
+        { title: 'Bespoke International Holiday Planning', desc: 'Custom 5-day tour itinerary, hotel bookings, airport transfers, and activity vouchers', qty: 1, rate: 150000 }
+      ];
+      document.getElementById('inpAmountPaid').value = '150000';
+    } else if (sel === 'flight_group') {
+      items = [
+        { title: 'Group / Corporate Flight Concierge Fee', desc: 'Multi-passenger booking coordination, seat locking, baggage management & 24/7 travel desk', qty: 1, rate: 75000 }
+      ];
+      document.getElementById('inpAmountPaid').value = '75000';
+    }
+
+    renderItems();
+    updateReceipt();
+  }
+
+  function downloadReceiptPdf() {
+    const element = document.getElementById('receiptDoc');
+    const docNo = document.getElementById('inpDocNo').value.trim() || 'Receipt';
+    const filename = 'FYZZO_Voyage_' + docNo + '.pdf';
+
+    const opt = {
+      margin:       [10, 10, 10, 10],
+      filename:     filename,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    const btn = document.querySelector('.btn-gold');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Generating PDF...';
+    btn.disabled = true;
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }).catch(err => {
+      console.error(err);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      alert('PDF generation notice. Opening print fallback...');
+      window.print();
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    renderItems();
+    updateReceipt();
+  });
+</script>
+</body>
+</html>
