@@ -628,8 +628,9 @@
     </div>
     <div class="action-buttons">
       <a href="ticket.html" style="text-decoration: none;">
-        <button type="button" class="btn-outline">✈️ Open Flight Ticket Generator</button>
+        <button type="button" class="btn-outline">✈️ Open Flight Ticket Desk</button>
       </a>
+      <button type="button" class="btn-gold" onclick="shareReceiptWhatsApp()">💬 Share on WhatsApp</button>
       <button type="button" class="btn-gold" onclick="downloadReceiptPdf()">⬇️ Download Receipt PDF</button>
       <button type="button" class="btn-navy" onclick="window.print()">🖨️ Browser Print</button>
     </div>
@@ -649,17 +650,18 @@
 
       <!-- SERVICE PRESET LOADER -->
       <div class="preset-selector">
-        <strong>⚡ Quick Load Service Package:</strong>
+        <strong>⚡ Quick Load Service Catalog:</strong>
         <select id="selPreset" style="margin-top: 6px; font-weight: 600;" onchange="loadServicePreset()">
-          <option value="">-- Choose a Service Catalog Preset --</option>
-          <option value="visa_uk">UK Visitor Visa Advisory (₦300,000)</option>
-          <option value="visa_can">Canada Visitor Visa Advisory (₦300,000)</option>
-          <option value="visa_us">US B1/B2 Visa Consultation (₦250,000)</option>
-          <option value="visa_schengen">Schengen Visa Processing (₦350,000)</option>
-          <option value="study_standard">Study Abroad (Admission + Visa) (₦650,000)</option>
-          <option value="study_scholar">Premium Scholar Package (₦850,000)</option>
-          <option value="holiday_dubai">Bespoke Holiday Package (Dubai/Europe) (₦150,000)</option>
-          <option value="flight_group">Group Flight Booking Service (₦75,000)</option>
+          <option value="">-- Choose a Fyzzo Service Preset --</option>
+          <option value="study_suite">Study Abroad Guidance Suite (₦500,000)</option>
+          <option value="visa_support">Visit & Family Visa Support (₦380,000)</option>
+          <option value="visa_refusal">Visa Refusal Review & Roadmap (₦380,000)</option>
+          <option value="proof_of_work">Proof of Work / Employment & Study Gap Documentation (₦200,000)</option>
+          <option value="pof_review">Proof of Funds (POF) Readiness Review (₦100,000)</option>
+          <option value="sop_guidance">Statement of Purpose / Personal Statement Guidance (₦100,000)</option>
+          <option value="mock_interview">1-on-1 Mock Visa Interview Coaching (₦100,000)</option>
+          <option value="cover_letter">Cover Letter / Travel Explanation Drafting (₦60,000)</option>
+          <option value="flight_hotel_sourcing">Flight & Accommodation Sourcing (₦15,000)</option>
         </select>
       </div>
 
@@ -750,9 +752,10 @@
         
         <!-- HEADER -->
         <div class="receipt-header">
-          <div class="brand-col">
-            <h1>FYZZO VOYAGE</h1>
-            <p>Global Travel & Relocation Concierge</p>
+          <div class="brand-col" style="display: flex; align-items: center; gap: 14px;">
+            <div style="background: #ffffff; padding: 6px 14px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: inline-flex; align-items: center;">
+              <img src="assets/fyzzo_voyage_logo.png" alt="FYZZO VOYAGE" style="height: 48px; width: auto; max-width: 210px; object-fit: contain; display: block;">
+            </div>
           </div>
           <div class="doc-type-badge">
             <h2 id="outDocTitle">PAYMENT RECEIPT</h2>
@@ -1045,42 +1048,61 @@
     const sel = document.getElementById('selPreset').value;
     if (!sel) return;
 
-    if (sel === 'visa_uk') {
-      items = [{ title: 'UK Tourist / Visitor Visa Advisory & Application', desc: 'Comprehensive profile assessment, document checklist, portal filing, appointment booking & custom cover letter', qty: 1, rate: 300000 }];
-      document.getElementById('inpAmountPaid').value = '300000';
-    } else if (sel === 'visa_can') {
-      items = [{ title: 'Canada Visitor Visa Advisory & Processing', desc: 'Portal setup, itinerary compilation, financial review & submission guidance', qty: 1, rate: 300000 }];
-      document.getElementById('inpAmountPaid').value = '300000';
-    } else if (sel === 'visa_us') {
-      items = [{ title: 'US B1/B2 Visitor Visa Advisory', desc: 'DS-160 filing, CGI portal appointment scheduling, cheat-sheet & mock interview prep', qty: 1, rate: 250000 }];
-      document.getElementById('inpAmountPaid').value = '250000';
-    } else if (sel === 'visa_schengen') {
-      items = [{ title: 'Schengen Visa Comprehensive Advisory', desc: 'Multi-country itinerary planning, verifiable dummy flight/hotel booking & biometric scheduling', qty: 1, rate: 350000 }];
-      document.getElementById('inpAmountPaid').value = '350000';
-    } else if (sel === 'study_standard') {
-      items = [
-        { title: 'Standard Study Voyage Package', desc: 'Full University admission processing (up to 3 institutions) + Complete Student Visa filing', qty: 1, rate: 650000 }
-      ];
-      document.getElementById('inpAmountPaid').value = '650000';
-    } else if (sel === 'study_scholar') {
-      items = [
-        { title: 'Premium Scholar Relocation Package', desc: 'Admissions, student visa, pre-departure orientation, temporary housing assist & priority desk', qty: 1, rate: 850000 }
-      ];
-      document.getElementById('inpAmountPaid').value = '850000';
-    } else if (sel === 'holiday_dubai') {
-      items = [
-        { title: 'Bespoke International Holiday Planning', desc: 'Custom 5-day tour itinerary, hotel bookings, airport transfers, and activity vouchers', qty: 1, rate: 150000 }
-      ];
-      document.getElementById('inpAmountPaid').value = '150000';
-    } else if (sel === 'flight_group') {
-      items = [
-        { title: 'Group / Corporate Flight Concierge Fee', desc: 'Multi-passenger booking coordination, seat locking, baggage management & 24/7 travel desk', qty: 1, rate: 75000 }
-      ];
-      document.getElementById('inpAmountPaid').value = '75000';
+    if (sel === 'study_suite') {
+      items = [{ title: 'Study Abroad Guidance Suite', desc: 'University shortlisting (up to 3 applications), admissions filing, document vetting & student visa guidance', qty: 1, rate: 500000 }];
+      document.getElementById('inpAmountPaid').value = '500000';
+    } else if (sel === 'visa_support') {
+      items = [{ title: 'Visit & Family Visa Support', desc: 'Category eligibility assessment, full application form review, invitation vetting & customized document checklist', qty: 1, rate: 380000 }];
+      document.getElementById('inpAmountPaid').value = '380000';
+    } else if (sel === 'visa_refusal') {
+      items = [{ title: 'Visa Refusal Review & Remediation Roadmap', desc: 'Forensic audit of refusal notice, root-cause assessment, evidentiary gap resolution & structured reapplication strategy', qty: 1, rate: 380000 }];
+      document.getElementById('inpAmountPaid').value = '380000';
+    } else if (sel === 'proof_of_work') {
+      items = [{ title: 'Proof of Work / Employment & Study Gap Documentation', desc: 'Verification of work records, reference letters, tax / pension evidence & study gap chronological harmonization', qty: 1, rate: 200000 }];
+      document.getElementById('inpAmountPaid').value = '200000';
+    } else if (sel === 'pof_review') {
+      items = [{ title: 'Proof of Funds (POF) Readiness Review', desc: '28-day statutory timeline holding check, approved financial institution audit & official currency rate verification', qty: 1, rate: 100000 }];
+      document.getElementById('inpAmountPaid').value = '100000';
+    } else if (sel === 'sop_guidance') {
+      items = [{ title: 'Statement of Purpose / Personal Statement Guidance', desc: 'Academic narrative structuring, career trajectory alignment & comprehensive editorial review', qty: 1, rate: 100000 }];
+      document.getElementById('inpAmountPaid').value = '100000';
+    } else if (sel === 'mock_interview') {
+      items = [{ title: '1-on-1 Mock Visa Interview Coaching', desc: 'Simulated consular questioning, credibility coaching & question-by-question review session', qty: 1, rate: 100000 }];
+      document.getElementById('inpAmountPaid').value = '100000';
+    } else if (sel === 'cover_letter') {
+      items = [{ title: 'Cover Letter / Travel Explanation Drafting', desc: 'Strategic travel justification, sponsorship explanation & itinerary harmonization drafting', qty: 1, rate: 60000 }];
+      document.getElementById('inpAmountPaid').value = '60000';
+    } else if (sel === 'flight_hotel_sourcing') {
+      items = [{ title: 'Flight & Accommodation Sourcing', desc: 'Route optimization, student baggage allowance verification & flexible accommodation itinerary sourcing', qty: 1, rate: 15000 }];
+      document.getElementById('inpAmountPaid').value = '15000';
     }
 
     renderItems();
     updateReceipt();
+  }
+
+  function shareReceiptWhatsApp() {
+    const clientName = document.getElementById('inpClientName').value.trim() || 'Valued Client';
+    const docNo = document.getElementById('inpDocNo').value.trim() || 'Receipt';
+    const docType = document.getElementById('inpDocType').value || 'PAYMENT RECEIPT';
+    const total = document.getElementById('outGrandTotal').innerText || '₦0';
+    const status = document.getElementById('inpPaymentStatus').value || 'PAID IN FULL';
+    const clientPhone = document.getElementById('inpClientPhone').value.replace(/[^0-9]/g, '');
+
+    let msg = `Hello ${clientName},\n\n`;
+    msg += `Your official FYZZO VOYAGE ${docType} has been issued.\n\n`;
+    msg += `📄 Reference No: ${docNo}\n`;
+    msg += `💰 Total Amount: ${total}\n`;
+    msg += `✅ Status: ${status}\n\n`;
+    msg += `Services Covered:\n`;
+    items.forEach((it, i) => {
+      msg += `• ${it.title} (${formatCurr(it.rate * it.qty)})\n`;
+    });
+    msg += `\nThank you for choosing Fyzzo Voyage.\nStudy. Travel. Relocate. With Confidence.\nhttps://lyndaogbogua-vpal.github.io/fyzzo-voyage/`;
+
+    const encodedMsg = encodeURIComponent(msg);
+    const waUrl = clientPhone ? `https://wa.me/${clientPhone}?text=${encodedMsg}` : `https://wa.me/2348062499796?text=${encodedMsg}`;
+    window.open(waUrl, '_blank');
   }
 
   function downloadReceiptPdf() {
