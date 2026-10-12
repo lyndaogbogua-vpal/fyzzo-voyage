@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Booking Quote & Disbursement Voucher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --navy-dark: #0f172a;
+      --blue-accent: #2563eb;
+      --blue-light: #eff6ff;
+      --green-status: #059669;
+      --green-light: #ecfdf5;
+      --gray-bg: #f8fafc;
+      --border-color: #e2e8f0;
+      --text-muted: #64748b;
+      --text-main: #1e293b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: #f1f5f9;
+      color: var(--text-main);
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #cbd5e1;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .top-bar h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-clean {
+      font-size: 11px;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 10px 18px;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary { background: #0f172a; color: white; }
+    .btn-primary:hover { background: #1e293b; }
+    .btn-download { background: #2563eb; color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+    .btn-download:hover { background: #1d4ed8; }
+    .btn-outline { background: white; border: 1px solid #cbd5e1; color: #334155; }
+    .btn-outline:hover { background: #f8fafc; }
+
+    /* WORKSPACE GRID */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 1060px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+    }
+
+    /* CONTROL PANEL */
+    .control-panel {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+
+    .panel-header {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--navy-dark);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group { margin-bottom: 11px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 12.5px;
+      font-family: inherit;
+      color: var(--text-main);
+      background: #fff;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--blue-accent);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+
+    /* VIEW MODE SWITCHER (CLIENT QUOTE VS ACCOUNTS DISBURSEMENT) */
+    .view-switcher-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .view-switcher-box label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .view-options {
+      display: flex;
+      gap: 8px;
+    }
+
+    .view-pill {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: white;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .view-pill.active {
+      background: #0f172a;
+      color: white;
+      border-color: #0f172a;
+    }
+
+    /* MARKUP CALCULATOR */
+    .pricing-card {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .pricing-card h3 {
+      font-size: 12px;
+      color: #1e40af;
+      margin-bottom: 8px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .calc-breakdown {
+      background: white;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+
+    .calc-total {
+      font-weight: 800;
+      color: #059669;
+      font-size: 14px;
+      border-top: 1.5px solid #bfdbfe;
+      padding-top: 6px;
+      margin-top: 6px;
+    }
+
+    /* PREVIEW CONTAINER */
+    .preview-canvas {
+      display: flex;
+      justify-content: center;
+      background: #cbd5e1;
+      padding: 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    /* THE OTA SCREENSHOT REPLICA (EXACT REPLICA OF USER SCREENSHOT) */
+    #otaDoc {
+      width: 790px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border-radius: 14px;
+      padding: 24px 28px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    /* TOP OVERVIEW SUMMARY ROW (Depart / Return Mini Bar) */
+    .overview-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .overview-leg-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 18px 12px;
+    }
+
+    .overview-leg-card.single-leg {
+      grid-column: 1 / -1;
+    }
+
+    .leg-meta-header {
+      font-size: 12px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .leg-meta-header strong {
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    .flight-timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .timeline-node {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timeline-time {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+    }
+
+    .timeline-code {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .timeline-mid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    .timeline-dur {
+      font-size: 10px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+
+    .timeline-bar-wrap {
+      width: 100%;
+      height: 2px;
+      background: #e2e8f0;
+      position: relative;
+      margin-bottom: 3px;
+    }
+
+    .timeline-bar-wrap::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: -3px;
+      width: 8px;
+      height: 8px;
+      background: #94a3b8;
+      border-radius: 50%;
+    }
+
+    .timeline-bar-wrap::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -3px;
+      width: 8px;
+      height: 8px;
+      background: #94a3b8;
+      border-radius: 50%;
+    }
+
+    .timeline-direct-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: #059669;
+    }
+
+    .baggage-pill-row {
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      border-radius: 6px;
+      padding: 6px 12px;
+      display: flex;
+      gap: 16px;
+      font-size: 11px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    /* REFUNDABLE SUB-BAR */
+    .refund-subbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+      font-size: 12px;
+      color: #c2410c;
+      font-weight: 600;
+    }
+
+    .link-hide-details {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* TAB SELECTOR (Flight Details / Fare Rules) */
+    .tab-nav {
+      display: flex;
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 4px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #2563eb;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    /* DETAILED FLIGHT CARDS (OUTBOUND & INBOUND) */
+    .detailed-cards-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .detailed-cards-row.single-col {
+      grid-template-columns: 1fr;
+    }
+
+    .flight-detail-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px 22px;
+      background: #ffffff;
+    }
+
+    .box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .box-header h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .badge-bound {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* AIRLINE INFO ROW */
+    .airline-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .airline-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      background: #f8fafc;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+    }
+
+    .airline-name-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .airline-name-col strong {
+      font-size: 13px;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .airline-name-col span {
+      font-size: 11px;
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    /* DETAILED SCHEDULE NODE ROW */
+    .schedule-node-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .node-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .node-col.dest {
+      text-align: right;
+    }
+
+    .node-time {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+    }
+
+    .node-city {
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 4px;
+    }
+
+    .node-airport {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    .node-connector {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 12px;
+    }
+
+    .node-connector .dur-text {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+
+    .node-connector .track-line {
+      width: 100%;
+      height: 2px;
+      background: #e2e8f0;
+      margin-bottom: 3px;
+    }
+
+    .node-connector .tag-stop {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #f43f5e;
+      padding-bottom: 1px;
+    }
+
+    /* DATE PILLS ROW */
+    .date-pills-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .date-pill {
+      background: #eff6ff;
+      color: #2563eb;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* BOTTOM BAGGAGE & CABIN ROW */
+    .flight-specs-grid {
+      border-top: 1px solid #f1f5f9;
+      padding-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-size: 11px;
+    }
+
+    .spec-group span {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .spec-group strong {
+      color: #0f172a;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    /* FINANCIAL VOUCHER SECTION (CUSTOMIZABLE CLIENT QUOTE VS ACCOUNTS DISBURSEMENT) */
+    .financial-voucher-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 4px;
+    }
+
+    .voucher-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .voucher-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #0f172a;
+    }
+
+    .voucher-details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      font-size: 12px;
+    }
+
+    .v-item .lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .v-item .val {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .v-item .val.disburse {
+      color: #2563eb;
+    }
+
+    .v-item .val.markup {
+      color: #059669;
+    }
+
+    .v-item .val.client-total {
+      font-size: 18px;
+      color: #0f172a;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* FOOTER NOTICE */
+    .ota-footer-note {
+      font-size: 10.5px;
+      color: #64748b;
+      text-align: center;
+      margin-top: 4px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 8px;
+    }
+
+    /* PRINT RULES */
+    @page { size: A4 portrait; margin: 0; }
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      body { margin: 0 !important; padding: 0 !important; background: white !important; }
+      .top-bar, .control-panel { display: none !important; }
+      .workspace-grid { display: block !important; }
+      .preview-canvas { padding: 0 !important; background: transparent !important; }
+      #otaDoc {
+        width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div>
+      <h1>Flight Booking Quote & Disbursement Voucher <span class="badge-clean">Clean OTA Style</span></h1>
+      <p style="font-size: 13px; color: #64748b; margin-top: 2px;">Generate clean booking screenshots & accounts disbursement vouchers without aggregator logos.</p>
+    </div>
+    <div class="top-actions">
+      <a href="ticket.html" style="text-decoration: none;">
+        <button type="button" class="btn-outline">✈️ E-Ticket Generator</button>
+      </a>
+      <a href="receipt.html" style="text-decoration: none;">
+        <button type="button" class="btn-outline">💳 Receipts Desk</button>
+      </a>
+      <button type="button" class="btn-download" onclick="downloadCleanPdf()">⬇️ Download Voucher PDF</button>
+      <button type="button" class="btn-primary" onclick="window.print()">🖨️ Print Document</button>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <!-- CONTROLS PANEL -->
+    <div class="control-panel">
+      <!-- 1. VIEW MODE SWITCHER -->
+      <div class="view-switcher-box">
+        <label>Document Target Mode</label>
+        <div class="view-options">
+          <div class="view-pill active" id="pillClient" onclick="switchViewMode('client')">
+            📤 Client Flight Quote (Markup Hidden)
+          </div>
+          <div class="view-pill" id="pillAccounts" onclick="switchViewMode('accounts')">
+            🏦 Internal Accounts Voucher (Disburse vs Markup)
+          </div>
+        </div>
+      </div>
+
+      <!-- TRIP TYPE -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Trip Routing</label>
+          <select id="inpTripType" onchange="toggleTripType()">
+            <option value="return">Round Trip (Depart + Return)</option>
+            <option value="oneway">One Way (Depart Only)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Number of Passengers</label>
+          <input type="number" id="inpPaxCount" value="1" min="1" oninput="calcPricing()">
+        </div>
+      </div>
+
+      <!-- OUTBOUND LEG CONTROLS -->
+      <div class="panel-header">Outbound Flight (Depart)</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Airline Name</label>
+          <input type="text" id="inpAirline1" value="Aero" oninput="updateDocument()">
+        </div>
+        <div class="form-group">
+          <label>Flight Number</label>
+          <input type="text" id="inpFlightNo1" value="Flight no N2121" oninput="updateDocument()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Origin (Code)</label>
+          <input type="text" id="inpOrigCode1" value="LOS" oninput="updateDocument()">
+        </div>
+        <div class="form-group">
+          <label>Destination (Code)</label>
+          <input type="text" id="inpDestCode1" value="ABV" oninput="updateDocument()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Origin City Name</label>
+          <input type="text" id="inpOrigCity1" value="Lagos" oninput="updateDocument()">
+        </div>
+        <div class="form-group">
+          <label>Destination City Name</label>
+          <input type="text" id="inpDestCity1" value="Abuja" oninput="updateDocument()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Dep Time & Arr Time</label>
+          <input type="text" id="inpDepTime1" value="06:45" oninput="updateDocument()">
+        </div>
+        <div class="form-group">
+          <label>Arr Time</label>
+          <input type="text" id="inpArrTime1" value="08:00" oninput="updateDocument()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Travel Date & Day</label>
+          <input type="text" id="inpDate1" value="Tue 13 Oct" oninput="updateDocument()">
+        </div>
+        <div class="form-group">
+          <label>Flight Duration</label>
+          <input type="text" id="inpDuration1" value="1h 15m" oninput="updateDocument()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Checked Baggage</label>
+          <input type="text" id="inpBaggage1" value="1 × 20KG" oninput="updateDocument()">
+        </div>
+        <div class="form-group">
+          <label>Cabin Baggage</label>
+          <input type="text" id="inpCabin1" value="1 × 7kg cabin" oninput="updateDocument()">
+        </div>
+      </div>
+
+      <!-- INBOUND LEG CONTROLS (RETURN) -->
+      <div id="inboundControlsSection">
+        <div class="panel-header" style="margin-top: 14px;">Inbound Flight (Return)</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Airline Name</label>
+            <input type="text" id="inpAirline2" value="Aero" oninput="updateDocument()">
+          </div>
+          <div class="form-group">
+            <label>Flight Number</label>
+            <input type="text" id="inpFlightNo2" value="Flight no N2126" oninput="updateDocument()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Origin (Code)</label>
+            <input type="text" id="inpOrigCode2" value="ABV" oninput="updateDocument()">
+          </div>
+          <div class="form-group">
+            <label>Destination (Code)</label>
+            <input type="text" id="inpDestCode2" value="LOS" oninput="updateDocument()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Origin City Name</label>
+            <input type="text" id="inpOrigCity2" value="Abuja" oninput="updateDocument()">
+          </div>
+          <div class="form-group">
+            <label>Destination City Name</label>
+            <input type="text" id="inpDestCity2" value="Lagos" oninput="updateDocument()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Dep Time</label>
+            <input type="text" id="inpDepTime2" value="15:35" oninput="updateDocument()">
+          </div>
+          <div class="form-group">
+            <label>Arr Time</label>
+            <input type="text" id="inpArrTime2" value="16:50" oninput="updateDocument()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Travel Date & Day</label>
+            <input type="text" id="inpDate2" value="Wed 14 Oct" oninput="updateDocument()">
+          </div>
+          <div class="form-group">
+            <label>Flight Duration</label>
+            <input type="text" id="inpDuration2" value="1h 15m" oninput="updateDocument()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Checked Baggage</label>
+            <input type="text" id="inpBaggage2" value="1 × 20KG" oninput="updateDocument()">
+          </div>
+          <div class="form-group">
+            <label>Cabin Baggage</label>
+            <input type="text" id="inpCabin2" value="1 × 7kg cabin" oninput="updateDocument()">
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICING & DISBURSEMENT CALCULATOR -->
+      <div class="pricing-card">
+        <h3>🔒 Pricing & Disbursement Controls</h3>
+        <div class="form-group">
+          <label>Raw Net Cost from Supplier / Portal (₦)</label>
+          <input type="number" id="inpSupplierCost" value="230000" oninput="calcPricing()">
+        </div>
+        <div class="form-group">
+          <label>Our Broker Markup / Service Fee (₦)</label>
+          <input type="number" id="inpMarkup" value="15000" oninput="calcPricing()">
+        </div>
+
+        <div class="calc-breakdown">
+          <div class="calc-row">
+            <span>Amount to Disburse to Supplier:</span>
+            <strong id="dispDisburse" style="color: #2563eb;">NGN 230,000</strong>
+          </div>
+          <div class="calc-row">
+            <span>Retained Broker Profit:</span>
+            <strong id="dispMarkup" style="color: #059669;">NGN 15,000</strong>
+          </div>
+          <div class="calc-row calc-total">
+            <span>Total Client Payable:</span>
+            <span id="dispTotalClient">NGN 245,000</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Booking Reference / Hold PNR</label>
+        <input type="text" id="inpBookingRef" value="AER-HOLD-8492" oninput="updateDocument()">
+      </div>
+    </div>
+
+    <!-- PREVIEW DOCUMENT (THE EXACT SCREENSHOT REPLICA) -->
+    <div class="preview-canvas">
+      <div id="otaDoc">
+        
+        <!-- 1. TOP OVERVIEW SUMMARY ROW (Depart / Return Summary Cards) -->
+        <div class="overview-row" id="outOverviewRow">
+          <!-- Outbound Top Mini Card -->
+          <div class="overview-leg-card" id="outMiniCard1">
+            <div class="leg-meta-header">
+              Depart <span id="outMiniTime1">06:45</span> • <span id="outMiniAirline1">Aero</span>
+            </div>
+            <div class="flight-timeline">
+              <div class="timeline-node">
+                <span class="timeline-time" id="outMiniDep1">06:45</span>
+                <span class="timeline-code" id="outMiniOrigCode1">LOS</span>
+              </div>
+              <div class="timeline-mid">
+                <span class="timeline-dur" id="outMiniDur1">1h 15m</span>
+                <div class="timeline-bar-wrap"></div>
+                <span class="timeline-direct-tag">Direct</span>
+              </div>
+              <div class="timeline-node" style="text-align: right;">
+                <span class="timeline-time" id="outMiniArr1">08:00</span>
+                <span class="timeline-code" id="outMiniDestCode1">ABV</span>
+              </div>
+            </div>
+            <div class="baggage-pill-row">
+              <span id="outMiniCabin1">🛍 1 × 7kg cabin</span>
+              <span id="outMiniChecked1">🧳 1 × 20KG checked</span>
+            </div>
+          </div>
+
+          <!-- Inbound Top Mini Card (Return) -->
+          <div class="overview-leg-card" id="outMiniCard2">
+            <div class="leg-meta-header">
+              Return <span id="outMiniTime2">15:35</span> • <span id="outMiniAirline2">Aero</span>
+            </div>
+            <div class="flight-timeline">
+              <div class="timeline-node">
+                <span class="timeline-time" id="outMiniDep2">15:35</span>
+                <span class="timeline-code" id="outMiniOrigCode2">ABV</span>
+              </div>
+              <div class="timeline-mid">
+                <span class="timeline-dur" id="outMiniDur2">1h 15m</span>
+                <div class="timeline-bar-wrap"></div>
+                <span class="timeline-direct-tag">Direct</span>
+              </div>
+              <div class="timeline-node" style="text-align: right;">
+                <span class="timeline-time" id="outMiniArr2">16:50</span>
+                <span class="timeline-code" id="outMiniDestCode2">LOS</span>
+              </div>
+            </div>
+            <div class="baggage-pill-row">
+              <span id="outMiniCabin2">🛍 1 × 7kg cabin</span>
+              <span id="outMiniChecked2">🧳 1 × 20KG checked</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. REFUND NOTICE SUB-BAR -->
+        <div class="refund-subbar">
+          <span>Non-Refundable (Non-Refundable for No-Show)</span>
+          <span class="link-hide-details">Flight Details</span>
+        </div>
+
+        <!-- 3. TAB PILLS -->
+        <div class="tab-nav">
+          <div class="tab-btn active">Flight Details</div>
+          <div class="tab-btn">Fare Rules</div>
+        </div>
+
+        <!-- 4. DETAILED FLIGHT CARDS (Exact match to screenshot bottom half) -->
+        <div class="detailed-cards-row" id="outDetailedCardsRow">
+          <!-- Outbound Card -->
+          <div class="flight-detail-box" id="outDetailCard1">
+            <div class="box-header">
+              <h2 id="outBoxRoute1">Lagos to Abuja, Tue 13 Oct</h2>
+              <span class="badge-bound">Outbound</span>
+            </div>
+
+            <div class="airline-brand-row">
+              <div class="airline-avatar" id="outAvatar1">Aero</div>
+              <div class="airline-name-col">
+                <strong id="outBrandName1">Aero</strong>
+                <span id="outFlightCode1">Flight no N2121</span>
+              </div>
+            </div>
+
+            <div class="schedule-node-row">
+              <div class="node-col">
+                <span class="node-time" id="outNodeDepTime1">06:45</span>
+                <span class="node-city" id="outNodeCity1">Lagos</span>
+                <span class="node-airport" id="outNodeAirport1">Lagos (LOS)</span>
+              </div>
+
+              <div class="node-connector">
+                <span class="dur-text" id="outNodeDur1">1h 15m</span>
+                <div class="track-line"></div>
+                <span class="tag-stop">Non stop</span>
+              </div>
+
+              <div class="node-col dest">
+                <span class="node-time" id="outNodeArrTime1">08:00</span>
+                <span class="node-city" id="outNodeDestCity1">Abuja</span>
+                <span class="node-airport" id="outNodeDestAirport1">Abuja (ABV)</span>
+              </div>
+            </div>
+
+            <div class="date-pills-row">
+              <span class="date-pill" id="outDatePill1a">Tue 13 Oct</span>
+              <span class="date-pill" id="outDatePill1b">Tue 13 Oct</span>
+            </div>
+
+            <div class="flight-specs-grid">
+              <div class="spec-group">
+                <span>BAGGAGE</span>
+                <strong id="outSpecBaggage1">🧳 1 × 20KG</strong>
+              </div>
+              <div class="spec-group">
+                <span>AIRLINE</span>
+                <strong id="outSpecAirline1">Aero - N2121 - Economy Class O</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inbound Card (Return) -->
+          <div class="flight-detail-box" id="outDetailCard2">
+            <div class="box-header">
+              <h2 id="outBoxRoute2">Abuja to Lagos, Wed 14 Oct</h2>
+              <span class="badge-bound">Inbound</span>
+            </div>
+
+            <div class="airline-brand-row">
+              <div class="airline-avatar" id="outAvatar2">Aero</div>
+              <div class="airline-name-col">
+                <strong id="outBrandName2">Aero</strong>
+                <span id="outFlightCode2">Flight no N2126</span>
+              </div>
+            </div>
+
+            <div class="schedule-node-row">
+              <div class="node-col">
+                <span class="node-time" id="outNodeDepTime2">15:35</span>
+                <span class="node-city" id="outNodeCity2">Abuja</span>
+                <span class="node-airport" id="outNodeAirport2">Abuja (ABV)</span>
+              </div>
+
+              <div class="node-connector">
+                <span class="dur-text" id="outNodeDur2">1h 15m</span>
+                <div class="track-line"></div>
+                <span class="tag-stop">Non stop</span>
+              </div>
+
+              <div class="node-col dest">
+                <span class="node-time" id="outNodeArrTime2">16:50</span>
+                <span class="node-city" id="outNodeDestCity2">Lagos</span>
+                <span class="node-airport" id="outNodeDestAirport2">Lagos (LOS)</span>
+              </div>
+            </div>
+
+            <div class="date-pills-row">
+              <span class="date-pill" id="outDatePill2a">Wed 14 Oct</span>
+              <span class="date-pill" id="outDatePill2b">Wed 14 Oct</span>
+            </div>
+
+            <div class="flight-specs-grid">
+              <div class="spec-group">
+                <span>BAGGAGE</span>
+                <strong id="outSpecBaggage2">🧳 1 × 20KG</strong>
+              </div>
+              <div class="spec-group">
+                <span>AIRLINE</span>
+                <strong id="outSpecAirline2">Aero - N2126 - Economy Class R</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. FINANCIAL SECTION (ADAPTS ACCORDING TO VIEW MODE) -->
+        <div class="financial-voucher-box">
+          <div class="voucher-header">
+            <span class="voucher-title" id="outVoucherTitle">Flight Fare Quotation</span>
+            <span id="outRefTag" style="font-size: 11px; color: #64748b; font-weight: 700;">Ref: AER-HOLD-8492</span>
+          </div>
+
+          <div class="voucher-details-grid" id="outVoucherGrid">
+            <!-- Populated dynamically based on Client vs Accounts mode -->
+          </div>
+        </div>
+
+        <div class="ota-footer-note">
+          Fare verified from live global distribution reservation • Valid for immediate issuance prior to seat release
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let viewMode = 'client'; // 'client' or 'accounts'
+  let tripType = 'return'; // 'return' or 'oneway'
+
+  function switchViewMode(mode) {
+    viewMode = mode;
+    document.getElementById('pillClient').className = mode === 'client' ? 'view-pill active' : 'view-pill';
+    document.getElementById('pillAccounts').className = mode === 'accounts' ? 'view-pill active' : 'view-pill';
+    calcPricing();
+  }
+
+  function toggleTripType() {
+    tripType = document.getElementById('inpTripType').value;
+    const isReturn = tripType === 'return';
+
+    document.getElementById('inboundControlsSection').style.display = isReturn ? 'block' : 'none';
+    document.getElementById('outMiniCard2').style.display = isReturn ? 'block' : 'none';
+    document.getElementById('outDetailCard2').style.display = isReturn ? 'block' : 'none';
+
+    if (!isReturn) {
+      document.getElementById('outMiniCard1').classList.add('single-leg');
+      document.getElementById('outDetailedCardsRow').classList.add('single-col');
+    } else {
+      document.getElementById('outMiniCard1').classList.remove('single-leg');
+      document.getElementById('outDetailedCardsRow').classList.remove('single-col');
+    }
+
+    updateDocument();
+  }
+
+  function formatMoney(num) {
+    return 'NGN ' + Number(num).toLocaleString();
+  }
+
+  function calcPricing() {
+    const cost = parseFloat(document.getElementById('inpSupplierCost').value) || 0;
+    const markup = parseFloat(document.getElementById('inpMarkup').value) || 0;
+    const pax = parseInt(document.getElementById('inpPaxCount').value) || 1;
+    const totalClient = cost + markup;
+
+    document.getElementById('dispDisburse').innerText = formatMoney(cost);
+    document.getElementById('dispMarkup').innerText = formatMoney(markup);
+    document.getElementById('dispTotalClient').innerText = formatMoney(totalClient);
+
+    const vGrid = document.getElementById('outVoucherGrid');
+    const vTitle = document.getElementById('outVoucherTitle');
+
+    if (viewMode === 'client') {
+      // 100% CLEAN CLIENT QUOTE (NO WHOLESALE COST OR MARKUP SHOWN)
+      vTitle.innerText = 'Official Flight Fare Quotation';
+      vGrid.innerHTML = `
+        <div class="v-item">
+          <div class="lbl">Passenger(s)</div>
+          <div class="val">${pax} Passenger${pax > 1 ? 's' : ''}</div>
+        </div>
+        <div class="v-item">
+          <div class="lbl">Ticket Status</div>
+          <div class="val" style="color: #059669;">Reserved / Confirmed Hold</div>
+        </div>
+        <div class="v-item" style="text-align: right;">
+          <div class="lbl">Total Fare Payable</div>
+          <div class="val client-total">${formatMoney(totalClient)}</div>
+        </div>
+      `;
+    } else {
+      // ACCOUNTS DISBURSEMENT VOUCHER (FOR ACCOUNTS DEPT TO RELEASE MONEY)
+      vTitle.innerText = 'Internal Accounts Disbursement & Settlement Voucher';
+      vGrid.innerHTML = `
+        <div class="v-item">
+          <div class="lbl">Supplier Cost (Disburse Amount)</div>
+          <div class="val disburse">${formatMoney(cost)}</div>
+        </div>
+        <div class="v-item">
+          <div class="lbl">Our Broker Markup (Retained Profit)</div>
+          <div class="val markup">${formatMoney(markup)}</div>
+        </div>
+        <div class="v-item" style="text-align: right;">
+          <div class="lbl">Total Received From Client</div>
+          <div class="val client-total">${formatMoney(totalClient)}</div>
+        </div>
+      `;
+    }
+  }
+
+  function updateDocument() {
+    // Outbound Data
+    const air1 = document.getElementById('inpAirline1').value;
+    const flt1 = document.getElementById('inpFlightNo1').value;
+    const origCode1 = document.getElementById('inpOrigCode1').value.toUpperCase();
+    const destCode1 = document.getElementById('inpDestCode1').value.toUpperCase();
+    const origCity1 = document.getElementById('inpOrigCity1').value;
+    const destCity1 = document.getElementById('inpDestCity1').value;
+    const depTime1 = document.getElementById('inpDepTime1').value;
+    const arrTime1 = document.getElementById('inpArrTime1').value;
+    const date1 = document.getElementById('inpDate1').value;
+    const dur1 = document.getElementById('inpDuration1').value;
+    const bag1 = document.getElementById('inpBaggage1').value;
+    const cab1 = document.getElementById('inpCabin1').value;
+
+    // Mini Top Outbound
+    document.getElementById('outMiniTime1').innerText = depTime1;
+    document.getElementById('outMiniAirline1').innerText = air1;
+    document.getElementById('outMiniDep1').innerText = depTime1;
+    document.getElementById('outMiniArr1').innerText = arrTime1;
+    document.getElementById('outMiniOrigCode1').innerText = origCode1;
+    document.getElementById('outMiniDestCode1').innerText = destCode1;
+    document.getElementById('outMiniDur1').innerText = dur1;
+    document.getElementById('outMiniCabin1').innerText = '🛍 ' + cab1;
+    document.getElementById('outMiniChecked1').innerText = '🧳 ' + bag1;
+
+    // Detail Outbound
+    document.getElementById('outBoxRoute1').innerText = `${origCity1} to ${destCity1}, ${date1}`;
+    document.getElementById('outAvatar1').innerText = air1.substring(0, 4);
+    document.getElementById('outBrandName1').innerText = air1;
+    document.getElementById('outFlightCode1').innerText = flt1;
+    document.getElementById('outNodeDepTime1').innerText = depTime1;
+    document.getElementById('outNodeArrTime1').innerText = arrTime1;
+    document.getElementById('outNodeCity1').innerText = origCity1;
+    document.getElementById('outNodeDestCity1').innerText = destCity1;
+    document.getElementById('outNodeAirport1').innerText = `${origCity1} (${origCode1})`;
+    document.getElementById('outNodeDestAirport1').innerText = `${destCity1} (${destCode1})`;
+    document.getElementById('outNodeDur1').innerText = dur1;
+    document.getElementById('outDatePill1a').innerText = date1;
+    document.getElementById('outDatePill1b').innerText = date1;
+    document.getElementById('outSpecBaggage1').innerText = '🧳 ' + bag1;
+    document.getElementById('outSpecAirline1').innerText = `${air1} - ${flt1} - Economy Class`;
+
+    // Inbound Data
+    if (tripType === 'return') {
+      const air2 = document.getElementById('inpAirline2').value;
+      const flt2 = document.getElementById('inpFlightNo2').value;
+      const origCode2 = document.getElementById('inpOrigCode2').value.toUpperCase();
+      const destCode2 = document.getElementById('inpDestCode2').value.toUpperCase();
+      const origCity2 = document.getElementById('inpOrigCity2').value;
+      const destCity2 = document.getElementById('inpDestCity2').value;
+      const depTime2 = document.getElementById('inpDepTime2').value;
+      const arrTime2 = document.getElementById('inpArrTime2').value;
+      const date2 = document.getElementById('inpDate2').value;
+      const dur2 = document.getElementById('inpDuration2').value;
+      const bag2 = document.getElementById('inpBaggage2').value;
+      const cab2 = document.getElementById('inpCabin2').value;
+
+      document.getElementById('outMiniTime2').innerText = depTime2;
+      document.getElementById('outMiniAirline2').innerText = air2;
+      document.getElementById('outMiniDep2').innerText = depTime2;
+      document.getElementById('outMiniArr2').innerText = arrTime2;
+      document.getElementById('outMiniOrigCode2').innerText = origCode2;
+      document.getElementById('outMiniDestCode2').innerText = destCode2;
+      document.getElementById('outMiniDur2').innerText = dur2;
+      document.getElementById('outMiniCabin2').innerText = '🛍 ' + cab2;
+      document.getElementById('outMiniChecked2').innerText = '🧳 ' + bag2;
+
+      document.getElementById('outBoxRoute2').innerText = `${origCity2} to ${destCity2}, ${date2}`;
+      document.getElementById('outAvatar2').innerText = air2.substring(0, 4);
+      document.getElementById('outBrandName2').innerText = air2;
+      document.getElementById('outFlightCode2').innerText = flt2;
+      document.getElementById('outNodeDepTime2').innerText = depTime2;
+      document.getElementById('outNodeArrTime2').innerText = arrTime2;
+      document.getElementById('outNodeCity2').innerText = origCity2;
+      document.getElementById('outNodeDestCity2').innerText = destCity2;
+      document.getElementById('outNodeAirport2').innerText = `${origCity2} (${origCode2})`;
+      document.getElementById('outNodeDestAirport2').innerText = `${destCity2} (${destCode2})`;
+      document.getElementById('outNodeDur2').innerText = dur2;
+      document.getElementById('outDatePill2a').innerText = date2;
+      document.getElementById('outDatePill2b').innerText = date2;
+      document.getElementById('outSpecBaggage2').innerText = '🧳 ' + bag2;
+      document.getElementById('outSpecAirline2').innerText = `${air2} - ${flt2} - Economy Class`;
+    }
+
+    document.getElementById('outRefTag').innerText = 'Ref: ' + document.getElementById('inpBookingRef').value;
+    calcPricing();
+  }
+
+  function downloadCleanPdf() {
+    const element = document.getElementById('otaDoc');
+    const filename = (viewMode === 'client' ? 'Flight_Quotation_' : 'Accounts_Disbursement_') + Date.now() + '.pdf';
+
+    const opt = {
+      margin:       [10, 10, 10, 10],
+      filename:     filename,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    };
+
+    const btn = document.querySelector('.btn-download');
+    const origText = btn.innerHTML;
+    btn.innerHTML = '⏳ Generating PDF...';
+    btn.disabled = true;
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      btn.innerHTML = origText;
+      btn.disabled = false;
+    }).catch(err => {
+      console.error(err);
+      btn.innerHTML = origText;
+      btn.disabled = false;
+      window.print();
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    updateDocument();
+  });
+</script>
+</body>
+</html>
