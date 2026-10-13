@@ -18,7 +18,85 @@ const CONFIG = {
     emailAlternative: "fyzzovoyage@gmail.com",
     instagram: "@voyagebyfyzzo",
     adminPin: "fyzzo2026",
-    currentIntake: "January 2027 Intake",
+    
+    // Automatic Dynamic Intake Cycle (§32)
+    // Automatically recalculates primary intake, secondary intake, and years in real-time:
+    // • Oct 1 to Jan 31: Targets January Intake (Priority) of the upcoming/current academic year
+    // • Feb 1 to May 31: Targets May/Spring Intake & upcoming September Intake
+    // • Jun 1 to Sep 30: Targets September/Fall Main Intake & upcoming January Intake
+    getIntakeSchedule: function(customDate) {
+        const now = customDate || new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth(); // 0 = Jan, 11 = Dec
+
+        let primaryTerm = "January";
+        let primaryYear = currentYear;
+        let secondaryTerm = "May / September";
+        let secondaryYear = currentYear;
+        let priorityBadge = "JANUARY " + currentYear + " INTAKE";
+        let planningCallout = "";
+        let announcementHtml = "";
+        let matchmakerText = "";
+
+        if (currentMonth >= 9) { // October (9), November (10), December (11)
+            primaryTerm = "January";
+            primaryYear = currentYear + 1;
+            secondaryTerm = "May / September";
+            secondaryYear = currentYear + 1;
+            priorityBadge = "JANUARY " + primaryYear + " INTAKE";
+            planningCallout = "Planning for the January " + primaryYear + " or September " + primaryYear + " Intake?";
+            announcementHtml = "<strong>" + priorityBadge + ":</strong> UK, Canada & Europe admissions guidance open. Prepare your application and financial documentation with clarity. <a href=\"#contact\">Start Your Journey &rarr;</a>";
+            matchmakerText = "United Kingdom — January " + primaryYear + " Fast-Track & Graduate Route";
+        } else if (currentMonth === 0) { // January (0)
+            primaryTerm = "January";
+            primaryYear = currentYear;
+            secondaryTerm = "May / September";
+            secondaryYear = currentYear;
+            priorityBadge = "JANUARY " + primaryYear + " INTAKE (FINAL CALLS)";
+            planningCallout = "Planning for the January " + primaryYear + " or May/September " + primaryYear + " Intake?";
+            announcementHtml = "<strong>" + priorityBadge + ":</strong> Final admissions & visa slots closing. Fast-track your visa readiness now. <a href=\"#contact\">Start Your Journey &rarr;</a>";
+            matchmakerText = "United Kingdom — January " + primaryYear + " Fast-Track & Graduate Route";
+        } else if (currentMonth >= 1 && currentMonth <= 4) { // February (1) to May (4)
+            primaryTerm = "May";
+            primaryYear = currentYear;
+            secondaryTerm = "September";
+            secondaryYear = currentYear;
+            priorityBadge = "MAY / SPRING " + primaryYear + " INTAKE";
+            planningCallout = "Planning for the May " + primaryYear + " or September " + primaryYear + " Intake?";
+            announcementHtml = "<strong>" + priorityBadge + ":</strong> UK, Canada & Europe Spring admissions open. Fast-track your CAS, admissions, and visa files. <a href=\"#contact\">Start Your Journey &rarr;</a>";
+            matchmakerText = "United Kingdom — May / September " + primaryYear + " Fast-Track & Graduate Route";
+        } else { // June (5) to September (8)
+            primaryTerm = "September";
+            primaryYear = currentYear;
+            secondaryTerm = "January";
+            secondaryYear = currentYear + 1;
+            priorityBadge = "SEPTEMBER " + primaryYear + " MAIN INTAKE";
+            planningCallout = "Planning for the September " + primaryYear + " or January " + secondaryYear + " Intake?";
+            announcementHtml = "<strong>" + priorityBadge + ":</strong> Main Autumn admissions open. Secure your university offer and 28-day Proof of Funds. <a href=\"#contact\">Start Your Journey &rarr;</a>";
+            matchmakerText = "United Kingdom — September " + primaryYear + " Fast-Track & Graduate Route";
+        }
+
+        const primaryTitle = primaryTerm + " " + primaryYear + " Intake";
+        const secondaryTitle = secondaryTerm + " " + secondaryYear + " Intake";
+
+        return {
+            primaryTerm: primaryTerm,
+            primaryYear: primaryYear,
+            secondaryTerm: secondaryTerm,
+            secondaryYear: secondaryYear,
+            primaryTitle: primaryTitle,
+            secondaryTitle: secondaryTitle,
+            priorityBadge: priorityBadge,
+            planningCallout: planningCallout,
+            announcementHtml: announcementHtml,
+            matchmakerText: matchmakerText
+        };
+    },
+    
+    // Dynamically evaluated current intake string
+    get currentIntake() {
+        return this.getIntakeSchedule().primaryTitle;
+    },
     
     // Statutory UK Student Visa Maintenance Requirements (§12, §13)
     ukVisa: {
@@ -535,11 +613,12 @@ function calculateQuizEligibility(answers) {
             'Statutory 3-month funds seasoning in approved financial institutions'
         ];
     } else {
-        recCountry = 'United Kingdom — January 2027 Fast-Track & Graduate Route';
+        const schedule = CONFIG.getIntakeSchedule();
+        recCountry = schedule.matchmakerText;
         matchScore = 95;
         summary = 'Most streamlined admissions and visa turnaround with WAEC English waiver and 2-year Graduate Route.';
         whyPoints = [
-            'Admissions currently open for January 2027 intake with rapid offer issuances',
+            'Admissions currently open for ' + schedule.primaryTitle + ' with rapid offer issuances',
             'WAEC English C6+ accepted by numerous partner universities without IELTS',
             '2-year post-study Graduate Route visa to work or start a business',
             'Digital UKVI eVisa approval with no physical passport vignette wait'
@@ -881,8 +960,9 @@ function processFyvoyMessage(userInput) {
     const lower = userInput.toLowerCase();
 
     setTimeout(() => {
-        if (lower.includes('january') || lower.includes('study') || lower.includes('admission') || lower.includes('university') || lower.includes('school')) {
-            appendFyvoyMessage('bot', `Great question, ${fyvoyState.userName}! For the **January 2027 Intake**, we provide:\n\n1. **University Selection Guidance:** Identifying suitable courses across UK, Canada, Ireland and Europe.\n2. **Statement of Purpose (SOP) Guidance:** Structuring a compelling academic intent letter.\n3. **CAS / I-20 Support & Tracking:** Working alongside your institution.\n4. **Student Visa Preparation:** Comprehensive document audits.\n\nOur full Study Abroad Advisory Suite is **₦500,000**. Would you like to start your application plan?`);
+        if (lower.includes('january') || lower.includes('may') || lower.includes('september') || lower.includes('intake') || lower.includes('study') || lower.includes('admission') || lower.includes('university') || lower.includes('school')) {
+            const sched = CONFIG.getIntakeSchedule();
+            appendFyvoyMessage('bot', `Great question, ${fyvoyState.userName}! For the **${sched.primaryTitle}** (and upcoming **${sched.secondaryTitle}**), we provide:\n\n1. **University Selection Guidance:** Identifying suitable courses across UK, Canada, Ireland and Europe.\n2. **Statement of Purpose (SOP) Guidance:** Structuring a compelling academic intent letter.\n3. **CAS / I-20 Support & Tracking:** Working alongside your institution.\n4. **Student Visa Preparation:** Comprehensive document audits.\n\nOur full Study Abroad Advisory Suite is **₦500,000**. Would you like to start your application plan?`);
         } 
         else if (lower.includes('pof') || lower.includes('fund') || lower.includes('bank') || lower.includes('maintenance') || lower.includes('financial') || lower.includes('calculator')) {
             appendFyvoyMessage('bot', `Under official UK Student Visa guidelines:\n\n• **Inside London:** £1,529/mo (Standard) or £1,570/mo (Updated rules) for max 9 months\n• **Outside London:** £1,171/mo (Standard) or £1,203/mo (Updated rules) for max 9 months\n+ any outstanding Year 1 tuition fee, held for the statutory 28-day financial evidence requirement.\n\n💡 *Fyzzo Voyage provides Proof of Funds Readiness Reviews (₦100,000) to ensure your genuine bank statements meet every compliance rule.*`);
@@ -936,9 +1016,70 @@ function getInitials(name) {
 }
 
 // ==========================================================================
+// 8.5. AUTOMATIC INTAKE CYCLER ENGINE (§32)
+// Automatically updates announcement bar, headings, dropdowns, and calculator options
+// based on current calendar date without requiring manual code changes
+// ==========================================================================
+function initDynamicIntakes() {
+    const sched = CONFIG.getIntakeSchedule();
+
+    // 1. Update Top Announcement Bar
+    const announcementEl = document.getElementById('topAnnouncementText');
+    if (announcementEl) {
+        announcementEl.innerHTML = sched.announcementHtml;
+    }
+
+    // 2. Update Study Abroad Division Planning Callout Heading
+    const actionHeading = document.getElementById('studyAbroadActionHeading');
+    if (actionHeading) {
+        actionHeading.textContent = sched.planningCallout;
+    }
+
+    // 3. Update Contact/Intake Form Preferred Timeline Dropdown
+    const preferredDateSelect = document.getElementById('preferredDate');
+    if (preferredDateSelect) {
+        const currentValue = preferredDateSelect.value;
+        preferredDateSelect.innerHTML = `
+            <option value="" disabled ${!currentValue ? 'selected' : ''}>Select Intake / Travel Timeline</option>
+            <option value="${sched.primaryTitle} (Priority)">${sched.primaryTitle} (Priority)</option>
+            <option value="${sched.secondaryTitle}">${sched.secondaryTitle}</option>
+            <option value="Within 1 - 3 Months">Within 1 – 3 Months</option>
+            <option value="Within 3 - 6 Months">Within 3 – 6 Months</option>
+            <option value="Just Exploring Options">Just Exploring Options</option>
+        `;
+    }
+
+    // 4. Update Lead Magnet Modal Destination Dropdown
+    const lmDestinationSelect = document.getElementById('lmDestination');
+    if (lmDestinationSelect) {
+        const ukOption = lmDestinationSelect.querySelector('option[value^="UK Student Visa"]');
+        if (ukOption) {
+            ukOption.value = `UK Student Visa (${sched.primaryTerm} ${sched.primaryYear})`;
+            ukOption.textContent = `🇬🇧 United Kingdom (${sched.primaryTitle})`;
+        }
+    }
+
+    // 5. Update any elements marked with data-dynamic-intake attribute
+    document.querySelectorAll('[data-dynamic-intake="primary"]').forEach(el => {
+        el.textContent = sched.primaryTitle;
+    });
+    document.querySelectorAll('[data-dynamic-intake="priority-badge"]').forEach(el => {
+        el.textContent = sched.priorityBadge;
+    });
+    document.querySelectorAll('[data-dynamic-intake="secondary"]').forEach(el => {
+        el.textContent = sched.secondaryTitle;
+    });
+
+    console.log(`[Fyzzo Dynamic Intake Engine] Active Intake: ${sched.primaryTitle} | Upcoming: ${sched.secondaryTitle}`);
+}
+
+// ==========================================================================
 // 9. INITIALIZATION ON DOM LOAD
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Initialize Automatic Dynamic Intake Cycle
+    initDynamicIntakes();
+
     // 1. Mobile toggle listener
     const toggleBtn = document.getElementById('mobileToggle');
     const closeBtn = document.getElementById('drawerClose');
