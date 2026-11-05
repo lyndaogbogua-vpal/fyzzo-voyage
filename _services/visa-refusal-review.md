@@ -17,6 +17,17 @@ included:
   - "A written roadmap: what to fix, what evidence to add, and when to reapply"
   - "An honest view if you should wait before reapplying"
   - "A call to go through the roadmap with you and answer your questions"
+topics:
+  - id: refusal-review
+    icon: "🔍"
+    title: "How our Visa Refusal Review works"
+    intro: "We read your refusal letter as the officer wrote it, reason by reason, and compare it with what you actually submitted. Then you get a written roadmap before you spend money on a new application."
+    points:
+      - "Step 1: You send us the refusal letter (and GCMS notes for Canada) and what you submitted"
+      - "Step 2: We list every refusal reason and the evidence that was missing or inconsistent"
+      - "Step 3: We check if you can ask for an administrative review or appeal, and the deadline"
+      - "Step 4: You get a written plan: what to fix, what to add, and when it makes sense to reapply"
+    tip: "Always declare a previous refusal on new applications. Hiding it can lead to a ban of up to 10 years from the UK."
 excluded: "New government visa fees, and the full reapplication service (available separately)."
 faqs:
   - q: "How soon can I reapply?"

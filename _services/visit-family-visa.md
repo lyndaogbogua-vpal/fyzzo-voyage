@@ -19,6 +19,36 @@ included:
   - "Invitation letter guidance for family visits, graduations and events"
   - "Help booking your biometrics appointment"
   - "Travel tips for your first trip, if you'd like them"
+topics:
+  - id: visit-visa
+    icon: "🌍"
+    title: "Visit Visa Support (Tourism & Short Stays)"
+    intro: "For holidays, sightseeing, short courses and conferences. For the UK, a Standard Visitor visa costs £135 for 6 months, with long-term 2, 5 and 10-year options, and decisions usually take about 3 weeks after biometrics. We also support Schengen (Europe), Canada, the USA and others."
+    points:
+      - "Choosing the right visa and the right length (6 months or long-term)"
+      - "A realistic trip plan and budget, with your proof of funds checked against it"
+      - "Evidence of your job or business and your ties to home"
+      - "A cover letter that explains your trip clearly and honestly"
+    tip: "Officers look for a trip that makes sense for your income. A clear plan and steady bank history matter more than one big balance."
+  - id: family-visit
+    icon: "👨‍👩‍👧"
+    title: "Family Visit Visa Support"
+    intro: "Visiting a child who studies or works abroad, attending a graduation, a wedding or a naming ceremony, or bringing the whole family on holiday. We prepare each family member's application so they tell one consistent story."
+    points:
+      - "Invitation letter guidance, with your host's status, address and relationship to you"
+      - "Evidence of the event: graduation letter, wedding invitation, birth certificate"
+      - "Who pays for what, if your host is supporting your trip"
+      - "Children's documents: birth certificates and parental consent letters"
+    tip: "Fees for families are quoted on request, because family size and documents vary."
+  - id: business-visa
+    icon: "💼"
+    title: "Business Travel Visa Support"
+    intro: "For meetings, conferences, trade fairs and training. Business visitors cannot work for a foreign company or be paid by it, so the purpose must be clear."
+    points:
+      - "Invitation letters from the company or event you are visiting"
+      - "Your employer's letter confirming your role, salary and who funds the trip"
+      - "CAC registration, tax records and company bank statements if you own the business"
+      - "A clear explanation of what you will and won't do on the trip"
 excluded: "Government visa fees, visa centre (TLScontact / VFS) charges and optional extras, flights, hotels and travel insurance."
 faqs:
   - q: "Which countries do you handle?"

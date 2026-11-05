@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css?v=20261106">
     <link rel="stylesheet" href="../blog/blog.css?v=20261106">
-    <link rel="stylesheet" href="services.css?v=20261106">
+    <link rel="stylesheet" href="services.css?v=20261106e">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -66,6 +66,37 @@
             <div class="article-body svc-body">
 {{ content }}
             </div>
+
+            {%- if page.topics %}
+            {%- if page.topics.size > 1 %}
+            <nav class="svc-toc" aria-label="On this page">
+                <strong>In this service:</strong>
+                {%- for t in page.topics %}
+                <a href="#{{ t.id }}">{{ t.icon }} {{ t.title | escape }}</a>
+                {%- endfor %}
+            </nav>
+            {%- endif %}
+            {%- for t in page.topics %}
+            <section class="svc-topic" id="{{ t.id }}">
+                <h2><span class="svc-topic-icon" aria-hidden="true">{{ t.icon }}</span> {{ t.title | escape }}</h2>
+                <p>{{ t.intro | escape }}</p>
+                {%- if t.points %}
+                <ul class="svc-checks">
+                    {%- for p in t.points %}
+                    <li>{{ p | escape }}</li>
+                    {%- endfor %}
+                </ul>
+                {%- endif %}
+                {%- if t.tip %}
+                <p class="svc-tip">💡 <strong>Good to know:</strong> {{ t.tip | escape }}</p>
+                {%- endif %}
+                <div class="svc-topic-actions">
+                    <a href="../?service={{ page.form_service | url_encode }}#contact" class="btn btn-gold">Get help with this &rarr;</a>
+                    <a href="https://wa.me/2348062499796?text={{ 'Hello Fyzzo Voyage, I would like help with ' | append: t.title | append: '.' | url_encode }}" class="btn btn-whatsapp" target="_blank" rel="noopener">💬 Ask on WhatsApp</a>
+                </div>
+            </section>
+            {%- endfor %}
+            {%- endif %}
 
             {%- if page.included %}
             <section class="svc-block">

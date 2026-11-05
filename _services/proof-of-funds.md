@@ -17,6 +17,27 @@ included:
   - "Sponsor letters, relationship evidence and birth certificate guidance"
   - "A plan for large or unusual deposits, with the documents to explain them"
   - "A naira exchange-rate buffer, so a weak naira doesn't push you below the limit"
+topics:
+  - id: student-funds
+    icon: "💳"
+    title: "Financial Documentation for Student Visas"
+    intro: "For a UK Student visa you show your unpaid first-year tuition plus living costs for up to 9 months: £1,529 to £1,570 a month in London, or £1,171 to £1,203 a month elsewhere (the higher figures apply from 30 November 2026). We always recommend planning with the higher figure plus about 10% for naira exchange-rate changes."
+    points:
+      - "The 28-day rule: the money must be held for 28 days in a row, ending within 31 days of your application"
+      - "Accepted accounts: your own, or your parent's or legal guardian's with their consent letter and your birth certificate"
+      - "What the statement must show: your name, the bank's details, the balance on every day of the 28 days"
+      - "Official financial sponsors (government or employer) and the letter they must provide"
+    tip: "Ask Fyvoy (bottom right of our homepage) how much you should show. It gives a range for you, single or with family."
+  - id: visit-funds
+    icon: "🏦"
+    title: "Proof of Funds for Visit Visas"
+    intro: "There is no fixed minimum for a visit visa. The officer checks that you can comfortably afford the trip, that the money is genuinely yours, and that it fits your income."
+    points:
+      - "6 months of bank statements with regular salary or business income"
+      - "Payslips, an employment letter, or CAC and tax records that match the credits"
+      - "Explanations, with documents, for any large or unusual deposits"
+      - "A sponsor's statements and letter, if someone else is paying"
+    tip: "Money moved into your account just before applying, with no clear source, is one of the most common reasons for refusal."
 excluded: "We never supply, lend or 'arrange' funds or bank statements. Anyone who offers to is putting your application at risk."
 faqs:
   - q: "How much do I need for a UK Student visa?"

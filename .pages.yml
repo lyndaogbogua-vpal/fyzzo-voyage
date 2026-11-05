@@ -117,6 +117,17 @@ content:
           - { name: name, label: Name, type: string }
           - { name: text, label: Description, type: text }
           - { name: price, label: Price, type: string }
+      - name: topics
+        label: "Learn-more sections (each homepage card links to one by its ID)"
+        type: object
+        list: true
+        fields:
+          - { name: id, label: "ID (lowercase-with-dashes; don't change it, homepage links use it)", type: string }
+          - { name: icon, label: Emoji, type: string }
+          - { name: title, label: Title, type: string }
+          - { name: intro, label: Explanation, type: text }
+          - { name: points, label: Key points, type: string, list: true }
+          - { name: tip, label: "Good to know (optional)", type: text }
       - { name: excluded, label: Not included, type: text }
       - name: faqs
         label: Common questions

@@ -17,6 +17,35 @@ included:
   - "Accommodation options that fit your budget, from trusted booking channels"
   - "Airport pickup and transfer arrangements"
   - "Visa support for the trip, if you need it"
+topics:
+  - id: flight-booking
+    icon: "✈️"
+    title: "Flight Booking Assistance"
+    intro: "We compare routes and fares for you, and explain the details that matter, such as baggage, layovers and change fees, so the cheapest ticket doesn't become the most expensive."
+    points:
+      - "Direct and connecting options from Lagos and Abuja"
+      - "Baggage allowance, especially for students moving abroad with luggage"
+      - "Transit visa checks for connections through other countries"
+      - "Flexible fares if your visa decision isn't back yet"
+    tip: "Don't buy non-refundable tickets before your visa is approved. A flight reservation is usually enough for the application."
+  - id: accommodation
+    icon: "🏨"
+    title: "Accommodation Options"
+    intro: "Hotels, serviced apartments and student rooms that fit your budget and are close to where you need to be."
+    points:
+      - "Options near your campus, your family's home or the city centre"
+      - "Trusted booking channels only, to avoid fake listings and rental scams"
+      - "Short stays for visits, and first-weeks stays for new students and movers"
+      - "Free-cancellation options while your visa is pending"
+  - id: airport-transfers
+    icon: "🚐"
+    title: "Airport Transfers"
+    intro: "A trusted pickup waiting for you when you land, so you're not dragging luggage onto trains after a long flight."
+    points:
+      - "Pickup from major airports such as Heathrow, Gatwick and Manchester"
+      - "A driver who tracks your flight if it lands early or late"
+      - "Space for student luggage"
+      - "Drop-off at your campus, accommodation or family's address"
 excluded: "Flight tickets, hotel or apartment costs, tours, travel insurance and visa fees."
 faqs:
   - q: "Which countries can Nigerians visit without a visa?"
