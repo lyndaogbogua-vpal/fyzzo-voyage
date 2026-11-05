@@ -162,8 +162,20 @@ const CONFIG = {
 };
 
 // Sends one form submission to the Fyzzo inbox. Resolves to true when delivered.
+// Basic spam protection for every website form:
+//  - a hidden "_honey" field that people never see but bots fill in -> silently dropped
+//  - the same message can't be sent twice in 30 seconds, and no more than 5 messages per visit
+const FYZZO_SEND_GUARD = { last: {}, count: 0 };
 function sendLead(subject, fields) {
-    const payload = Object.assign({ _subject: subject, _template: 'table', _captcha: 'false' }, fields);
+    const trapped = Array.prototype.some.call(document.querySelectorAll('.hp-field'), function(i) { return i.value; });
+    if (trapped) return Promise.resolve(true);
+    const key = subject + '|' + JSON.stringify(fields).slice(0, 300);
+    const now = Date.now();
+    if (FYZZO_SEND_GUARD.last[key] && now - FYZZO_SEND_GUARD.last[key] < 30000) return Promise.resolve(true);
+    if (FYZZO_SEND_GUARD.count >= 5) return Promise.resolve(false);
+    FYZZO_SEND_GUARD.last[key] = now;
+    FYZZO_SEND_GUARD.count++;
+    const payload = Object.assign({ _subject: subject, _template: 'table', _captcha: 'false', _honey: '' }, fields);
     return fetch(CONFIG.leadEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },

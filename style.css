@@ -3429,3 +3429,6 @@ a.service-pill-card p { flex: 1; }
     [class*="grid"] > * { min-width: 0; }
     h1, h2, h3, p, li { overflow-wrap: break-word; }
 }
+
+/* Spam trap: invisible to people, bots fill it in */
+.hp-field { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
