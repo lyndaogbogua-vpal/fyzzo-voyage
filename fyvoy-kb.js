@@ -146,7 +146,7 @@ const FYVOY_KB = [
     {
         id: 'dependants',
         title: 'Can I bring my spouse and children on a Student visa?',
-        keywords: ['dependant', 'dependent', 'dependants', 'spouse', 'husband', 'wife', 'children', 'kids', 'bring my family', 'family with me', 'bring family'],
+        keywords: ['dependant', 'dependent', 'dependants', 'spouse', 'husband', 'wife', 'children', 'kids', 'bring my family', 'family with me', 'bring family', 'bring my wife', 'bring my husband', 'bring my spouse', 'bring my children', 'bring my kids', 'bring my partner', 'come with my wife', 'come with my husband', 'wife on student visa', 'husband on student visa', 'family on student visa', 'can my wife come', 'can my husband come'],
         answer: 'Usually **no**. Since January 2024, most international students cannot bring dependants. You can only bring your partner or children if you are:\n• A **government-sponsored** student on a course longer than 6 months, **or**\n• Studying a **PhD/doctorate or research-based higher degree** (RQF level 8 / research master\'s)\n\nTaught master\'s students (e.g. MSc, MBA) cannot bring dependants. Families planning to move together often look at **work routes** instead; an advisor can map your options.',
         services: ['study', 'arrival'],
         next: ['work-visa', 'student-work']
@@ -457,7 +457,7 @@ const FYVOY_KB = [
     {
         id: 'prices',
         title: 'How much are Fyzzo Voyage\'s services?',
-        keywords: ['price', 'prices', 'cost of your service', 'your fee', 'fees', 'how much do you charge', 'charges', 'package', 'packages', 'rate', 'payment plan'],
+        keywords: ['price', 'prices', 'cost of your service', 'cost of your services', 'your services cost', 'how much are your services', 'how much are your', 'how much is your service', 'how much do you collect', 'your fee', 'your fees', 'service fee', 'service charge', 'consultation fee', 'fees', 'how much do you charge', 'charges', 'package', 'packages', 'rate', 'your rates', 'payment plan', 'family price', 'price for my family', 'family package'],
         answer: 'Our professional fees (government visa fees, IHS, tuition and flights are paid separately to the providers):\n• **Study Abroad Guidance Suite:** ₦500,000, the full journey from university choice to student visa\n• **Visit & Family Visa Support:** ₦380,000 for a single traveller. Families are quoted on request, because family size and documents vary\n• **Visa Refusal Review & Roadmap:** ₦380,000\n• **Employment & Study Gap Documentation:** ₦200,000\n• **Proof of Funds Readiness Review:** ₦100,000\n• **SOP / Personal Statement Guidance:** ₦100,000\n• **1-on-1 Visa Interview Coaching:** ₦100,000\n• **Cover Letter / Travel Explanation:** ₦60,000\n• **Comprehensive Document Audit:** ₦55,000\n• **Flight & Accommodation Search:** ₦15,000\n• **Relocation & arrival support:** tailored to your move\n\nYour first chat with us is free. [See every service in detail](services/).',
         services: [],
         next: ['about-fyzzo', 'student-visa', 'visit-visa']
