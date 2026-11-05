@@ -1,0 +1,207 @@
+/* Fyzzo Voyage service pages — builds on ../style.css and ../blog/blog.css */
+
+.svc-hero {
+    background: linear-gradient(180deg, rgba(7, 22, 44, 0.80), rgba(11, 37, 69, 0.94)),
+                var(--svc-img, none) center 35% / cover no-repeat;
+    background-color: #0B2545;
+    color: #FFFFFF;
+    padding: 56px 20px 60px;
+}
+.svc-hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.svc-hero .article-back { display: inline-block; margin-bottom: 18px; }
+.svc-hero .section-kicker { color: var(--gold, #C99738); display: block; }
+.svc-hero h1 {
+    color: #FFFFFF;
+    font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+    font-weight: 800;
+    line-height: 1.18;
+    margin: 8px 0 14px;
+    max-width: 820px;
+}
+.svc-hero p {
+    color: #CBD5E1;
+    font-size: 1.08rem;
+    max-width: 700px;
+    margin: 0 0 26px;
+}
+.svc-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.svc-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 40px;
+    align-items: start;
+}
+.svc-body { padding: 0; max-width: none; }
+.svc-block { margin: 34px 0; }
+.svc-block h2 {
+    font-size: 1.4rem;
+    color: var(--navy-primary, #0B2545);
+    margin: 0 0 14px;
+}
+.svc-checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.svc-checks li {
+    position: relative;
+    padding: 12px 14px 12px 44px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 12px;
+    color: #1E293B;
+}
+.svc-checks li::before {
+    content: "✓";
+    position: absolute;
+    left: 14px;
+    top: 11px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gold, #C99738);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.75rem;
+    display: grid;
+    place-items: center;
+}
+.svc-modules {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.svc-module {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.svc-module h3 { font-size: 1.02rem; color: var(--navy-primary, #0B2545); margin: 0; }
+.svc-module p { font-size: 0.92rem; color: #475569; margin: 0; flex: 1; }
+.svc-module-price { font-weight: 800; color: #8A6416; margin-top: 6px; }
+
+.svc-steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.svc-steps li {
+    counter-increment: s;
+    position: relative;
+    padding: 4px 0 4px 50px;
+    color: #1E293B;
+    min-height: 36px;
+}
+.svc-steps li::before {
+    content: counter(s);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--navy-primary, #0B2545);
+    color: #FFFFFF;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+}
+.svc-note {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-left: 5px solid #94A3B8;
+    border-radius: 12px;
+    padding: 18px 20px;
+}
+.svc-note h2 { font-size: 1.05rem; margin-bottom: 6px; }
+.svc-note p { margin: 0; color: #475569; font-size: 0.95rem; }
+.svc-faq {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    padding: 0 18px;
+}
+.svc-faq summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--navy-primary, #0B2545);
+    padding: 15px 0;
+    list-style-position: outside;
+}
+.svc-faq p { margin: 0 0 16px; color: #475569; }
+
+.svc-aside { position: sticky; top: 90px; display: grid; gap: 18px; }
+.svc-price-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-top: 5px solid var(--gold, #C99738);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+}
+.svc-price-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #64748B; font-weight: 700; }
+.svc-price { display: block; font-size: 1.7rem; color: var(--navy-primary, #0B2545); margin: 4px 0 8px; line-height: 1.2; }
+.svc-price-card p { font-size: 0.88rem; color: #475569; margin: 0 0 16px; }
+.svc-price-card .btn + .btn { margin-top: 10px; }
+.svc-other {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 16px;
+    padding: 18px 22px;
+}
+.svc-other h3 { font-size: 1rem; color: var(--navy-primary, #0B2545); margin: 0 0 10px; }
+.svc-other ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.svc-other a { color: var(--navy-primary, #0B2545); font-weight: 600; font-size: 0.92rem; }
+.svc-other a:hover { color: var(--gold, #C99738); }
+
+.svc-cta { max-width: 1100px; margin: 20px auto 24px; padding: 0 20px; }
+.svc-cta .article-cta-box .btn + .btn { margin-left: 8px; }
+
+/* Services overview page */
+.svc-grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 50px 20px 30px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+.svc-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    color: var(--navy-primary, #0B2545);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.svc-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1); color: var(--navy-primary, #0B2545); }
+.svc-card img { width: 100%; height: 170px; object-fit: cover; display: block; }
+.svc-card-body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.svc-card h2 { font-size: 1.15rem; margin: 0; }
+.svc-card p { font-size: 0.9rem; color: #475569; margin: 0; flex: 1; }
+.svc-card-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 8px; font-size: 0.88rem; }
+.svc-card-foot .post-read { margin: 0; }
+.svc-card-price { font-weight: 700; color: #8A6416; }
+
+@media (max-width: 960px) {
+    .svc-layout { grid-template-columns: 1fr; gap: 10px; }
+    .svc-aside { position: static; }
+    .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+    .svc-hero { padding: 40px 16px 44px; }
+    .svc-hero-actions .btn { width: 100%; text-align: center; }
+    .svc-layout { padding: 28px 16px 0; }
+    .svc-modules { grid-template-columns: 1fr; }
+    .svc-grid { grid-template-columns: 1fr; padding: 34px 16px 20px; }
+    .svc-cta { padding: 0 16px; }
+    .svc-cta .article-cta-box .btn { display: block; width: 100%; }
+    .svc-cta .article-cta-box .btn + .btn { margin: 10px 0 0; }
+}

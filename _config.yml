@@ -1,0 +1,37 @@
+# Jekyll settings for GitHub Pages.
+# Only the blog uses Jekyll. Every other page on the site is plain HTML and is copied as-is.
+title: Fyzzo Voyage
+url: https://lyndaogbogua-vpal.github.io
+baseurl: /fyzzo-voyage
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  auto_ids: true
+
+# Blog articles live in _articles/ (written in Pages CMS) and are published at /blog/<name>.html
+collections:
+  articles:
+    output: true
+    permalink: /blog/:name.html
+  # Service pages live in _services/ (editable in Pages CMS) and are published at /services/<name>.html
+  services:
+    output: true
+    permalink: /services/:name.html
+
+defaults:
+  - scope:
+      path: ""
+      type: services
+    values:
+      layout: service
+  - scope:
+      path: ""
+      type: articles
+    values:
+      layout: article
+      cta: study
+
+exclude:
+  - _maintenance
+  - README.md

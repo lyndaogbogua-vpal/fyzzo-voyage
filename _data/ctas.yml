@@ -1,0 +1,38 @@
+# The sales box shown at the end of each blog article.
+# In Pages CMS, pick one of these in the "Call to action" box for each article.
+study:
+  title: Planning to study abroad?
+  text: Our Study Abroad Guidance Suite covers university selection, your SOP, CAS tracking, proof of funds and full student visa preparation.
+  button: Start Your Journey
+  link: ../#contact
+  whatsapp: Hello Fyzzo Voyage, I read your blog and would like help with studying abroad.
+funds:
+  title: Want someone to check your statements before you apply?
+  text: Our Proof of Funds Readiness Review checks your balances, dates, sponsor documents and exchange-rate risk against the current rules.
+  button: Book a Review
+  link: ../#contact
+  whatsapp: Hello Fyzzo Voyage, I would like a Proof of Funds Readiness Review.
+visa:
+  title: Applying for a visit or family visa?
+  text: We prepare your document checklist, cover letter and application, and review your ties and finances before you submit.
+  button: Get Visa Support
+  link: ../#contact
+  whatsapp: Hello Fyzzo Voyage, I read your blog and need help with a visit visa.
+refusal:
+  title: Had a refusal? Let's look at it properly.
+  text: Send us your refusal letter and we will tell you honestly what went wrong and what needs to change.
+  button: See Refusal Review
+  link: ../#pricing
+  whatsapp: Hello Fyzzo Voyage, I had a visa refused and would like a refusal review.
+arrival:
+  title: Travelling to the UK soon?
+  text: Our Arrival Support covers your UKVI account, pre-departure checklist, airport pickup and your first weeks abroad.
+  button: See Arrival Support
+  link: ../#relocation
+  whatsapp: Hello Fyzzo Voyage, I need help with my arrival and settling in.
+travel:
+  title: Need flights or accommodation?
+  text: Our Travel Desk compares routes, student baggage allowances and safe accommodation options for you.
+  button: Plan My Trip
+  link: ../#travel
+  whatsapp: Hello Fyzzo Voyage, I need help with flights and accommodation.

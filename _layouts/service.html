@@ -1,0 +1,181 @@
+{%- assign services = site.services | sort: "order" -%}
+{%- assign wa = "Hello Fyzzo Voyage, I would like to know more about your " | append: page.title | append: " service." -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | escape }} | Fyzzo Voyage</title>
+    <meta name="description" content="{{ page.summary | strip_html | escape }}">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ page.title | escape }} | Fyzzo Voyage">
+    <meta property="og:description" content="{{ page.summary | strip_html | escape }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    {%- if page.image %}
+    <meta property="og:image" content="{{ page.image }}">
+    {%- endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="../assets/fyzzo_voyage_logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css?v=20261106">
+    <link rel="stylesheet" href="../blog/blog.css?v=20261106">
+    <link rel="stylesheet" href="services.css?v=20261106">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": {{ page.title | jsonify }},
+      "description": {{ page.summary | strip_html | jsonify }},
+      "provider": { "@type": "Organization", "name": "Fyzzo Voyage", "url": "{{ '/' | absolute_url }}" },
+      "areaServed": "Nigeria"
+    }
+    </script>
+</head>
+<body>
+    <header class="blog-header">
+        <div class="blog-header-inner">
+            <a href="../" aria-label="Fyzzo Voyage home"><img src="../assets/fyzzo_voyage_logo.png" alt="Fyzzo Voyage" class="brand-logo"></a>
+            <nav class="blog-nav">
+                <a href="../">Home</a>
+                <a href="./" class="active">Services</a>
+                <a href="../blog/">Blog</a>
+                <a href="../?service={{ page.form_service | url_encode }}#contact">Contact</a>
+            </nav>
+            <a href="https://wa.me/2348062499796?text={{ wa | url_encode }}" class="btn btn-whatsapp" target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+    </header>
+
+    <section class="svc-hero"{% if page.image %} style="--svc-img: url('{{ page.image }}')"{% endif %}>
+        <div class="svc-hero-inner">
+            <a class="article-back" href="./">&larr; All services</a>
+            <span class="section-kicker">{{ page.kicker | default: 'FYZZO VOYAGE SERVICE' | escape }}</span>
+            <h1>{{ page.icon }} {{ page.title | escape }}</h1>
+            <p>{{ page.summary | escape }}</p>
+            <div class="svc-hero-actions">
+                <a href="#get-started" class="btn btn-gold btn-large">Talk to us about this &rarr;</a>
+                <a href="https://wa.me/2348062499796?text={{ wa | url_encode }}" class="btn btn-outline btn-large" target="_blank" rel="noopener">💬 WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="svc-layout">
+        <main class="svc-main">
+            <div class="article-body svc-body">
+{{ content }}
+            </div>
+
+            {%- if page.included %}
+            <section class="svc-block">
+                <h2>What's included</h2>
+                <ul class="svc-checks">
+                    {%- for item in page.included %}
+                    <li>{{ item | escape }}</li>
+                    {%- endfor %}
+                </ul>
+            </section>
+            {%- endif %}
+
+            {%- if page.modules %}
+            <section class="svc-block">
+                <h2>Choose what you need</h2>
+                <div class="svc-modules">
+                    {%- for m in page.modules %}
+                    <div class="svc-module">
+                        <h3>{{ m.name | escape }}</h3>
+                        <p>{{ m.text | escape }}</p>
+                    </div>
+                    {%- endfor %}
+                </div>
+            </section>
+            {%- endif %}
+
+            <section class="svc-block">
+                <h2>How it works</h2>
+                <ol class="svc-steps">
+                    <li><strong>Tell us your plan.</strong> Fill in the short form below or message us on WhatsApp.</li>
+                    <li><strong>Free first chat.</strong> An advisor reviews your situation and tells you honestly what you need, and what you don't.</li>
+                    <li><strong>Your plan and quote.</strong> You get a clear checklist, timeline and written fee before you pay anything.</li>
+                    <li><strong>We work with you.</strong> We prepare, review and coach with you until your application or trip is ready.</li>
+                </ol>
+            </section>
+
+            <section class="svc-block svc-fees" id="fees">
+                <h2>Fees</h2>
+                <details class="fee-reveal">
+                    <summary>View our professional fee</summary>
+                    <p><strong class="svc-price">{{ page.price | default: 'Tailored quote' | escape }}</strong></p>
+                    <p>{{ page.price_note | default: 'We give you a written quote after a free first chat, before you pay anything.' | escape }}</p>
+                    {%- if page.modules %}
+                    <ul class="fee-list">
+                        {%- for m in page.modules %}{% if m.price %}
+                        <li>{{ m.name | escape }}: <strong>{{ m.price | escape }}</strong></li>
+                        {%- endif %}{% endfor %}
+                    </ul>
+                    {%- endif %}
+                </details>
+            </section>
+
+            {%- if page.excluded %}
+            <section class="svc-block svc-note">
+                <h2>Not included</h2>
+                <p>{{ page.excluded | escape }}</p>
+            </section>
+            {%- endif %}
+
+            {%- if page.faqs %}
+            <section class="svc-block">
+                <h2>Common questions</h2>
+                {%- for f in page.faqs %}
+                <details class="svc-faq">
+                    <summary>{{ f.q | escape }}</summary>
+                    <p>{{ f.a | escape }}</p>
+                </details>
+                {%- endfor %}
+            </section>
+            {%- endif %}
+        </main>
+
+        <aside class="svc-aside">
+            <div class="svc-price-card">
+                <span class="svc-price-label">Free first chat</span>
+                <strong class="svc-price">Let's talk about your plans</strong>
+                <p>Tell us where you are in the process and we'll explain what you need, and what you don't. <a href="#fees">See fees</a></p>
+                <a href="#get-started" class="btn btn-gold btn-block">Get started</a>
+                <a href="https://wa.me/2348062499796?text={{ wa | url_encode }}" class="btn btn-whatsapp btn-block" target="_blank" rel="noopener">💬 Ask on WhatsApp</a>
+            </div>
+            <div class="svc-other">
+                <h3>Other services</h3>
+                <ul>
+                    {%- for s in services %}{% unless s.url == page.url %}
+                    <li><a href="{{ s.url | relative_url }}">{{ s.icon }} {{ s.title | escape }}</a></li>
+                    {%- endunless %}{% endfor %}
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <section class="svc-cta" id="get-started">
+        <div class="article-cta-box">
+            <h2>Ready to talk about {{ page.short | default: page.title | escape }}?</h2>
+            <p>Tell us a little about your plans and an advisor will get back to you. The first chat is free and there's no obligation.</p>
+            <a href="../?service={{ page.form_service | url_encode }}#contact" class="btn btn-gold">Fill in the contact form &rarr;</a>
+            <a href="https://wa.me/2348062499796?text={{ wa | url_encode }}" class="btn btn-whatsapp" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+        </div>
+    </section>
+    <p class="article-disclaimer">Visa decisions are made solely by the relevant embassy, immigration authority or institution. Fyzzo Voyage does not guarantee visa approval, admission or immigration outcomes. Government fees, tuition, flights and insurance are paid separately to the providers.</p>
+
+    <footer class="blog-footer">
+        <div class="footer-social">
+            <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" aria-label="Instagram"><i class="si si-instagram"></i></a>
+            <a href="https://www.tiktok.com/@voyagebyfyzzo" target="_blank" rel="noopener" aria-label="TikTok"><i class="si si-tiktok"></i></a>
+            <a href="https://www.facebook.com/voyagebyfyzzo" target="_blank" rel="noopener" aria-label="Facebook"><i class="si si-facebook"></i></a>
+            <a href="https://x.com/voyagebyfyzzo" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="si si-x"></i></a>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=Fyzzo%20Voyage" target="_blank" rel="noopener" aria-label="Fyzzo Voyage on Google"><i class="si si-google"></i></a>
+        </div>
+        <p>&copy; {{ site.time | date: '%Y' }} Fyzzo Voyage, a unit of Fyzzo Global. <a href="../">Back to website</a></p>
+    </footer>
+</body>
+</html>

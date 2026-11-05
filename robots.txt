@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lyndaogbogua-vpal.github.io/fyzzo-voyage/sitemap.xml

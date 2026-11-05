@@ -1,0 +1,103 @@
+{%- assign cta = site.data.ctas[page.cta] | default: site.data.ctas.study -%}
+{%- if page.image contains '://' -%}{%- assign cover = page.image -%}{%- else -%}{%- assign cover = page.image | prepend: site.url -%}{%- endif -%}
+{%- assign words = content | number_of_words -%}{%- assign minutes = words | divided_by: 200 | plus: 1 -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | escape }} | Fyzzo Voyage</title>
+    <meta name="description" content="{{ page.description | strip_html | escape }}">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ page.title | escape }}">
+    <meta property="og:description" content="{{ page.description | strip_html | escape }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    {%- if page.image %}
+    <meta property="og:image" content="{{ cover }}">
+    {%- endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="../assets/fyzzo_voyage_logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="blog.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": {{ page.title | jsonify }},
+      "description": {{ page.description | strip_html | jsonify }},
+      "datePublished": "{{ page.date | date: '%Y-%m-%d' }}",
+      "dateModified": "{{ page.last_modified_at | default: page.date | date: '%Y-%m-%d' }}",
+      {%- if page.image %}
+      "image": {{ cover | jsonify }},
+      {%- endif %}
+      "author": { "@type": "Organization", "name": "Fyzzo Voyage" },
+      "publisher": { "@type": "Organization", "name": "Fyzzo Voyage", "logo": { "@type": "ImageObject", "url": "{{ '/assets/fyzzo_voyage_logo.png' | absolute_url }}" } }
+    }
+    </script>
+</head>
+<body>
+    <header class="blog-header">
+        <div class="blog-header-inner">
+            <a href="../" aria-label="Fyzzo Voyage home"><img src="../assets/fyzzo_voyage_logo.png" alt="Fyzzo Voyage" class="brand-logo"></a>
+            <nav class="blog-nav">
+                <a href="../">Home</a>
+                <a href="../#services">Services</a>
+                <a href="./" class="active">Blog</a>
+                <a href="../#contact">Contact</a>
+            </nav>
+            <a href="https://wa.me/2348062499796?text={{ cta.whatsapp | url_encode }}" class="btn btn-whatsapp" target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+    </header>
+
+    <article>
+        <div class="article-hero">
+            <a class="article-back" href="./">&larr; All articles</a>
+            <h1>{{ page.title | escape }}</h1>
+            {%- if page.description %}
+            <p class="article-lead">{{ page.description | escape }}</p>
+            {%- endif %}
+            <div class="post-meta"><span class="post-tag">{{ page.category | default: 'Guides' | escape }}</span><span>{{ page.date | date: '%-d %B %Y' }}</span><span>· {{ minutes }} min read</span><span>· By the Fyzzo Voyage Advisory Desk</span></div>
+        </div>
+        {%- if page.image %}
+        <div class="article-cover">
+            <img src="{{ page.image }}" alt="{{ page.image_alt | default: page.title | escape }}">
+        </div>
+        {%- endif %}
+
+        <div class="article-body">
+{{ content }}
+        </div>
+    </article>
+
+    <div class="article-cta">
+        <div class="article-cta-box">
+            <h2>{{ cta.title }}</h2>
+            <p>{{ cta.text }}</p>
+            <a href="{{ cta.link }}" class="btn btn-gold">{{ cta.button }}</a>
+            <a href="https://wa.me/2348062499796?text={{ cta.whatsapp | url_encode }}" class="btn btn-whatsapp" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+        </div>
+    </div>
+    <p class="article-disclaimer">{{ page.disclaimer | default: "This article is general guidance, not legal or immigration advice. Rules and fees change, so always check the official government website before you apply. Visa decisions are made solely by the relevant embassy or immigration authority." | escape }}</p>
+
+    <section class="related-wrap">
+        <h2>More guides</h2>
+        <div id="blogList" class="blog-list" data-exclude="{{ page.slug }}" data-limit="3"></div>
+    </section>
+
+    <footer class="blog-footer">
+        <div class="footer-social">
+            <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" aria-label="Instagram"><i class="si si-instagram"></i></a>
+            <a href="https://www.tiktok.com/@voyagebyfyzzo" target="_blank" rel="noopener" aria-label="TikTok"><i class="si si-tiktok"></i></a>
+            <a href="https://www.facebook.com/voyagebyfyzzo" target="_blank" rel="noopener" aria-label="Facebook"><i class="si si-facebook"></i></a>
+            <a href="https://x.com/voyagebyfyzzo" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="si si-x"></i></a>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=Fyzzo%20Voyage" target="_blank" rel="noopener" aria-label="Fyzzo Voyage on Google"><i class="si si-google"></i></a>
+        </div>
+        <p>&copy; {{ site.time | date: '%Y' }} Fyzzo Voyage, a unit of Fyzzo Global. <a href="../">Back to website</a></p>
+    </footer>
+    <script src="blog.js"></script>
+</body>
+</html>

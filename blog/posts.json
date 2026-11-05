@@ -1,0 +1,21 @@
+---
+layout: null
+permalink: /blog/posts.json
+---
+{%- assign items = site.articles | where_exp: "a", "a.published != false" | sort: "date" | reverse -%}
+[
+{%- for p in items -%}
+{%- if p.image contains '://' -%}{%- assign img = p.image -%}{%- elsif p.image -%}{%- assign img = p.image | prepend: site.url -%}{%- else -%}{%- assign img = '' -%}{%- endif -%}
+{%- assign words = p.content | number_of_words -%}
+  {
+    "slug": {{ p.slug | jsonify }},
+    "title": {{ p.title | jsonify }},
+    "excerpt": {{ p.description | strip_html | jsonify }},
+    "date": "{{ p.date | date: '%Y-%m-%d' }}",
+    "category": {{ p.category | default: 'Guides' | jsonify }},
+    "readMinutes": {{ words | divided_by: 200 | plus: 1 }},
+    "image": {{ img | jsonify }},
+    "imageAlt": {{ p.image_alt | default: p.title | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+]

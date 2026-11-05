@@ -1,0 +1,82 @@
+---
+layout: null
+permalink: /services/
+---
+{%- assign services = site.services | sort: "order" -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | Fyzzo Voyage</title>
+    <meta name="description" content="Study abroad, visit and family visas, refusal reviews, proof of funds, flights, holidays and relocation support for Nigerians. See what each Fyzzo Voyage service includes.">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Our Services | Fyzzo Voyage">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <link rel="icon" type="image/png" href="../assets/fyzzo_voyage_logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css?v=20261106">
+    <link rel="stylesheet" href="../blog/blog.css?v=20261106">
+    <link rel="stylesheet" href="services.css?v=20261106">
+</head>
+<body>
+    <header class="blog-header">
+        <div class="blog-header-inner">
+            <a href="../" aria-label="Fyzzo Voyage home"><img src="../assets/fyzzo_voyage_logo.png" alt="Fyzzo Voyage" class="brand-logo"></a>
+            <nav class="blog-nav">
+                <a href="../">Home</a>
+                <a href="./" class="active">Services</a>
+                <a href="../blog/">Blog</a>
+                <a href="../#contact">Contact</a>
+            </nav>
+            <a href="https://wa.me/2348062499796?text=Hello%20Fyzzo%20Voyage%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services." class="btn btn-whatsapp" target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+    </header>
+
+    <section class="blog-hero">
+        <span class="section-kicker">WHAT WE DO</span>
+        <h1>Our Services</h1>
+        <p>Study, visit, travel or relocate: pick a service to see exactly what's included, how it works and what it costs. Your first chat with us is free.</p>
+    </section>
+
+    <div class="svc-grid">
+        {%- for s in services %}
+        <a class="svc-card" href="{{ s.url | relative_url }}">
+            {%- if s.image %}<img src="{{ s.image }}" alt="{{ s.image_alt | default: s.title | escape }}" loading="lazy">{% endif %}
+            <div class="svc-card-body">
+                <span class="post-tag" style="align-self:flex-start">{{ s.kicker | escape }}</span>
+                <h2>{{ s.icon }} {{ s.title | escape }}</h2>
+                <p>{{ s.summary | escape }}</p>
+                <div class="svc-card-foot">
+                    <span class="post-read">See what's included &rarr;</span>
+                </div>
+            </div>
+        </a>
+        {%- endfor %}
+    </div>
+
+    <section class="svc-cta">
+        <div class="article-cta-box">
+            <h2>Not sure which service you need?</h2>
+            <p>Tell us your plans and we'll point you to the right one, honestly, even if it's not one we sell.</p>
+            <a href="../?service=General%20Consultation#contact" class="btn btn-gold">Fill in the contact form &rarr;</a>
+            <a href="https://wa.me/2348062499796?text=Hello%20Fyzzo%20Voyage%2C%20I%20am%20not%20sure%20which%20service%20I%20need." class="btn btn-whatsapp" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+        </div>
+    </section>
+    <p class="article-disclaimer">Visa decisions are made solely by the relevant embassy, immigration authority or institution. Fyzzo Voyage does not guarantee visa approval, admission or immigration outcomes.</p>
+
+    <footer class="blog-footer">
+        <div class="footer-social">
+            <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" aria-label="Instagram"><i class="si si-instagram"></i></a>
+            <a href="https://www.tiktok.com/@voyagebyfyzzo" target="_blank" rel="noopener" aria-label="TikTok"><i class="si si-tiktok"></i></a>
+            <a href="https://www.facebook.com/voyagebyfyzzo" target="_blank" rel="noopener" aria-label="Facebook"><i class="si si-facebook"></i></a>
+            <a href="https://x.com/voyagebyfyzzo" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="si si-x"></i></a>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=Fyzzo%20Voyage" target="_blank" rel="noopener" aria-label="Fyzzo Voyage on Google"><i class="si si-google"></i></a>
+        </div>
+        <p>&copy; {{ site.time | date: '%Y' }} Fyzzo Voyage, a unit of Fyzzo Global. <a href="../">Back to website</a></p>
+    </footer>
+</body>
+</html>
