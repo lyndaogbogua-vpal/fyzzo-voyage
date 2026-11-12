@@ -1,9 +1,9 @@
 /* Fyzzo Voyage service pages — builds on ../style.css and ../blog/blog.css */
 
 .svc-hero {
-    background: linear-gradient(180deg, rgba(7, 22, 44, 0.80), rgba(11, 37, 69, 0.94)),
+    background: linear-gradient(180deg, rgba(5, 38, 40, 0.80), rgba(8, 61, 63, 0.94)),
                 var(--svc-img, none) center 35% / cover no-repeat;
-    background-color: #0B2545;
+    background-color: #083D3F;
     color: #FFFFFF;
     padding: 56px 20px 60px;
 }
@@ -12,7 +12,7 @@
     margin: 0 auto;
 }
 .svc-hero .article-back { display: inline-block; margin-bottom: 18px; }
-.svc-hero .section-kicker { color: var(--gold, #C99738); display: block; }
+.svc-hero .section-kicker { color: var(--gold, #FF7A59); display: block; }
 .svc-hero h1 {
     color: #FFFFFF;
     font-size: clamp(1.9rem, 4.2vw, 2.9rem);
@@ -42,7 +42,7 @@
 .svc-block { margin: 34px 0; }
 .svc-block h2 {
     font-size: 1.4rem;
-    color: var(--navy-primary, #0B2545);
+    color: var(--navy-primary, #083D3F);
     margin: 0 0 14px;
 }
 .svc-checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
@@ -62,7 +62,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--gold, #C99738);
+    background: var(--gold, #FF7A59);
     color: #FFFFFF;
     font-weight: 800;
     font-size: 0.75rem;
@@ -83,9 +83,9 @@
     flex-direction: column;
     gap: 6px;
 }
-.svc-module h3 { font-size: 1.02rem; color: var(--navy-primary, #0B2545); margin: 0; }
+.svc-module h3 { font-size: 1.02rem; color: var(--navy-primary, #083D3F); margin: 0; }
 .svc-module p { font-size: 0.92rem; color: #475569; margin: 0; flex: 1; }
-.svc-module-price { font-weight: 800; color: #8A6416; margin-top: 6px; }
+.svc-module-price { font-weight: 800; color: #B8452A; margin-top: 6px; }
 
 .svc-steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .svc-steps li {
@@ -103,7 +103,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--navy-primary, #0B2545);
+    background: var(--navy-primary, #083D3F);
     color: #FFFFFF;
     font-weight: 800;
     display: grid;
@@ -128,7 +128,7 @@
 .svc-faq summary {
     cursor: pointer;
     font-weight: 700;
-    color: var(--navy-primary, #0B2545);
+    color: var(--navy-primary, #083D3F);
     padding: 15px 0;
     list-style-position: outside;
 }
@@ -138,13 +138,13 @@
 .svc-price-card {
     background: #FFFFFF;
     border: 1px solid var(--border-color, #E2E8F0);
-    border-top: 5px solid var(--gold, #C99738);
+    border-top: 5px solid var(--gold, #FF7A59);
     border-radius: 16px;
     padding: 22px;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
 }
 .svc-price-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #64748B; font-weight: 700; }
-.svc-price { display: block; font-size: 1.7rem; color: var(--navy-primary, #0B2545); margin: 4px 0 8px; line-height: 1.2; }
+.svc-price { display: block; font-size: 1.7rem; color: var(--navy-primary, #083D3F); margin: 4px 0 8px; line-height: 1.2; }
 .svc-price-card p { font-size: 0.88rem; color: #475569; margin: 0 0 16px; }
 .svc-price-card .btn + .btn { margin-top: 10px; }
 .svc-other {
@@ -153,10 +153,10 @@
     border-radius: 16px;
     padding: 18px 22px;
 }
-.svc-other h3 { font-size: 1rem; color: var(--navy-primary, #0B2545); margin: 0 0 10px; }
+.svc-other h3 { font-size: 1rem; color: var(--navy-primary, #083D3F); margin: 0 0 10px; }
 .svc-other ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-.svc-other a { color: var(--navy-primary, #0B2545); font-weight: 600; font-size: 0.92rem; }
-.svc-other a:hover { color: var(--gold, #C99738); }
+.svc-other a { color: var(--navy-primary, #083D3F); font-weight: 600; font-size: 0.92rem; }
+.svc-other a:hover { color: var(--gold, #FF7A59); }
 
 .svc-cta { max-width: 1100px; margin: 20px auto 24px; padding: 0 20px; }
 .svc-cta .article-cta-box .btn + .btn { margin-left: 8px; }
@@ -177,18 +177,18 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    color: var(--navy-primary, #0B2545);
+    color: var(--navy-primary, #083D3F);
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.svc-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1); color: var(--navy-primary, #0B2545); }
+.svc-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1); color: var(--navy-primary, #083D3F); }
 .svc-card img { width: 100%; height: 170px; object-fit: cover; display: block; }
 .svc-card-body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .svc-card h2 { font-size: 1.15rem; margin: 0; }
 .svc-card p { font-size: 0.9rem; color: #475569; margin: 0; flex: 1; }
 .svc-card-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 8px; font-size: 0.88rem; }
 .svc-card-foot .post-read { margin: 0; }
-.svc-card-price { font-weight: 700; color: #8A6416; }
+.svc-card-price { font-weight: 700; color: #B8452A; }
 
 @media (max-width: 960px) {
     .svc-layout { grid-template-columns: 1fr; gap: 10px; }
@@ -215,16 +215,16 @@
     margin: 26px 0 6px;
     font-size: 0.86rem;
 }
-.svc-toc strong { color: var(--navy-primary, #0B2545); margin-right: 4px; }
+.svc-toc strong { color: var(--navy-primary, #083D3F); margin-right: 4px; }
 .svc-toc a {
     background: #FFFFFF;
     border: 1px solid var(--border-color, #E2E8F0);
     border-radius: 999px;
     padding: 6px 12px;
-    color: var(--navy-primary, #0B2545);
+    color: var(--navy-primary, #083D3F);
     font-weight: 600;
 }
-.svc-toc a:hover { border-color: var(--gold, #C99738); color: #8A6416; }
+.svc-toc a:hover { border-color: var(--gold, #FF7A59); color: #B8452A; }
 .svc-topic {
     background: #FFFFFF;
     border: 1px solid var(--border-color, #E2E8F0);
@@ -235,15 +235,15 @@
     transition: box-shadow 0.4s ease, border-color 0.4s ease;
 }
 .svc-topic:target {
-    border-color: var(--gold, #C99738);
-    box-shadow: 0 0 0 4px rgba(201, 151, 56, 0.18), 0 14px 30px rgba(15, 23, 42, 0.08);
+    border-color: var(--gold, #FF7A59);
+    box-shadow: 0 0 0 4px rgba(255, 122, 89, 0.18), 0 14px 30px rgba(15, 23, 42, 0.08);
 }
-.svc-topic h2 { font-size: 1.3rem; color: var(--navy-primary, #0B2545); margin: 0 0 10px; line-height: 1.3; }
+.svc-topic h2 { font-size: 1.3rem; color: var(--navy-primary, #083D3F); margin: 0 0 10px; line-height: 1.3; }
 .svc-topic-icon { margin-right: 4px; }
 .svc-topic > p { color: #334155; margin: 0 0 14px; }
 .svc-topic .svc-checks li { background: var(--bg-light, #F8FAFC); }
 .svc-tip {
-    background: var(--gold-light, #FBF3E2);
+    background: var(--gold-light, #F7EFE3);
     border-radius: 10px;
     padding: 12px 14px;
     font-size: 0.93rem;
