@@ -500,6 +500,15 @@ img {
     margin-bottom: 24px;
 }
 
+.hero-intake-badge { color: #FFFFFF; transition: var(--transition); }
+.hero-intake-badge:hover { border-color: var(--gold); background: rgba(255, 122, 89, 0.14); }
+.hero-intake-badge .badge-tag { animation: badgePulse 2.4s ease-in-out infinite; }
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 122, 89, 0.55); }
+    50% { box-shadow: 0 0 0 8px rgba(255, 122, 89, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-intake-badge .badge-tag { animation: none; } }
+
 .badge-tag {
     background-color: var(--gold);
     color: #FFFFFF;

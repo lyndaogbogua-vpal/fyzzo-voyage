@@ -27,7 +27,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css?v=20261113b">
+    <link rel="stylesheet" href="style.css?v=20261113d">
+    <link rel="stylesheet" href="motion-reel.css?v=20261113e">
 </head>
 <body>
 
@@ -130,10 +131,10 @@
         <div class="hero-photo" aria-hidden="true"></div>
         <div class="hero-bg-overlay"></div>
         <div class="hero-content">
-            <div class="hero-badge">
-                <span class="badge-tag">FYZZO VOYAGE</span>
-                <span>Study · Travel · Relocate · With Confidence</span>
-            </div>
+            <a class="hero-badge hero-intake-badge" href="#contact">
+                <span class="badge-tag" data-intake="badge">UK MAY 2027 INTAKE</span>
+                <span data-intake="line">Applications now open · Start your file early &rarr;</span>
+            </a>
             
             <h1 class="hero-title">
                 Your Journey Abroad Starts <br>
@@ -221,6 +222,106 @@
                         <p>Rigorous document review to identify and address documentation gaps</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3b. Motion slides: animated story slides (motion-reel.css / motion-reel.js) -->
+    <section class="mreel-section" aria-label="Fyzzo Voyage highlights">
+        <div class="section-container">
+            <div class="mreel" id="mreel" tabindex="0" aria-roledescription="carousel">
+                <div class="mreel-bars" role="tablist" aria-label="Choose a slide"></div>
+
+                <!-- 1. Intake (text filled from the intake calendar in app.js) -->
+                <article class="mreel-slide ms-intake is-active" aria-roledescription="slide" aria-label="1 of 6">
+                    <div class="ms-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+                    <svg class="ms-flightpath" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+                        <path id="msPath1" d="M-40 360 C 220 300, 420 120, 1040 60" fill="none" stroke="rgba(255,122,89,.55)" stroke-width="2" stroke-dasharray="6 10"/>
+                    </svg>
+                    <span class="ms-plane" aria-hidden="true">✈</span>
+                    <div class="ms-copy">
+                        <span class="ms-kicker" data-mreel="kicker">UK MAY 2027 INTAKE</span>
+                        <h2 class="ms-title"><span class="ms-line">Start your UK degree</span><span class="ms-line">this <em data-mreel="term">May 2027</em>.</span></h2>
+                        <p class="ms-sub" data-mreel="countdown">About 24 weeks until courses start. Aim to have your offer and funds ready by 19 Feb 2027.</p>
+                        <div class="ms-cta">
+                            <a href="#contact" class="btn btn-gold">Start your application &rarr;</a>
+                            <a href="#quiz" class="btn ms-ghost">2-minute eligibility quiz</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2. Journey -->
+                <article class="mreel-slide ms-journey" aria-roledescription="slide" aria-label="2 of 6">
+                    <div class="ms-copy ms-copy-top">
+                        <span class="ms-kicker">YOUR ROUTE TO THE UK</span>
+                        <h2 class="ms-title"><span class="ms-line">Five steps. <em>One clear plan.</em></span></h2>
+                    </div>
+                    <ol class="ms-steps">
+                        <li style="--i:0"><b>1</b><strong>Offer</strong><span>Choose your course and get your offer letter</span></li>
+                        <li style="--i:1"><b>2</b><strong>Deposit &amp; CAS</strong><span>Pre-CAS interview, deposit, then your CAS</span></li>
+                        <li style="--i:2"><b>3</b><strong>28-day funds</strong><span>Tuition balance plus living costs, held 28 days</span></li>
+                        <li style="--i:3"><b>4</b><strong>Visa</strong><span>Usually about 3 weeks after biometrics</span></li>
+                        <li style="--i:4"><b>5</b><strong>Fly</strong><span>Arrive up to 1 month before your course</span></li>
+                    </ol>
+                    <div class="ms-track" aria-hidden="true"><span class="ms-track-fill"></span><span class="ms-track-plane">✈</span></div>
+                </article>
+
+                <!-- 3. 28-day rule -->
+                <article class="mreel-slide ms-funds" aria-roledescription="slide" aria-label="3 of 6">
+                    <div class="ms-ring" aria-hidden="true">
+                        <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="ms-ring-bg"/><circle cx="60" cy="60" r="52" class="ms-ring-fg"/></svg>
+                        <div class="ms-ring-num"><span data-mreel="day">28</span><small>days</small></div>
+                    </div>
+                    <div class="ms-copy">
+                        <span class="ms-kicker">THE 28-DAY RULE</span>
+                        <h2 class="ms-title"><span class="ms-line">Your money must stay put</span><span class="ms-line"><em>28 days in a row.</em></span></h2>
+                        <p class="ms-sub">If the balance dips below the required amount even once, the 28 days start again. We check your statement before you apply.</p>
+                        <div class="ms-cta"><a href="#calculator" class="btn btn-gold">Work out your amount &rarr;</a></div>
+                    </div>
+                </article>
+
+                <!-- 4. Real student -->
+                <article class="mreel-slide ms-photo" aria-roledescription="slide" aria-label="4 of 6">
+                    <div class="ms-photo-img" style="background-image:url('assets/proof_student_uk_arrival.jpg')" role="img" aria-label="A Fyzzo Voyage student outside the Herbert Art Gallery in Coventry, UK, on a snowy day"></div>
+                    <div class="ms-photo-shade" aria-hidden="true"></div>
+                    <div class="ms-copy">
+                        <span class="ms-kicker">REAL STUDENTS</span>
+                        <h2 class="ms-title"><span class="ms-line">From application</span><span class="ms-line">to <em>a winter in Coventry.</em></span></h2>
+                        <p class="ms-sub">One of our students, settled in the UK. Your story can start with the May 2027 intake.</p>
+                        <div class="ms-cta"><a href="#reviews" class="btn btn-gold">Read student stories &rarr;</a></div>
+                    </div>
+                </article>
+
+                <!-- 5. Real offer -->
+                <article class="mreel-slide ms-offer" aria-roledescription="slide" aria-label="5 of 6">
+                    <div class="ms-copy">
+                        <span class="ms-kicker">REAL OFFERS</span>
+                        <h2 class="ms-title"><span class="ms-line">Gap in study?</span><span class="ms-line"><em>Offers still happen.</em></span></h2>
+                        <ul class="ms-checks">
+                            <li style="--i:0">Gap-in-study explanation and updated CV</li>
+                            <li style="--i:1">WAEC / NECO result verification</li>
+                            <li style="--i:2">Pre-CAS interview coaching</li>
+                        </ul>
+                    </div>
+                    <div class="ms-doc" aria-hidden="true"><img src="assets/proof_wolverhampton_offer.jpg" alt="" loading="lazy"><span class="ms-doc-tag">Conditional offer received</span></div>
+                </article>
+
+                <!-- 6. Free guide -->
+                <article class="mreel-slide ms-guide" aria-roledescription="slide" aria-label="6 of 6">
+                    <div class="ms-book" aria-hidden="true">
+                        <div class="ms-book-cover"><small>FYZZO VOYAGE</small><strong>2027 Study &amp; Visa Master Guide</strong><span>10 proof-of-funds rules</span></div>
+                    </div>
+                    <div class="ms-copy">
+                        <span class="ms-kicker">FREE DOWNLOAD</span>
+                        <h2 class="ms-title"><span class="ms-line">The 10 bank statement rules</span><span class="ms-line"><em>that prevent refusals.</em></span></h2>
+                        <p class="ms-sub">Plus UK, Canada and Europe options, and how to handle WAEC and study gaps.</p>
+                        <div class="ms-cta"><a href="#" class="btn btn-gold" onclick="openLeadMagnetModal(); return false;">Get the free guide &rarr;</a></div>
+                    </div>
+                </article>
+
+                <button class="mreel-nav mreel-prev" type="button" aria-label="Previous slide">&#8249;</button>
+                <button class="mreel-nav mreel-next" type="button" aria-label="Next slide">&#8250;</button>
+                <button class="mreel-pause" type="button" aria-label="Pause slides">❚❚</button>
             </div>
         </div>
     </section>
@@ -1956,6 +2057,7 @@
     <script src="fyvoy-kb.js?v=20261113b"></script>
     <script src="fyvoy-trips.js?v=20261113b"></script>
     <script src="fyvoy-pof.js?v=20261106c"></script>
-    <script src="app.js?v=20261113c"></script>
+    <script src="app.js?v=20261113d"></script>
+    <script src="motion-reel.js?v=20261113e"></script>
 </body>
 </html>

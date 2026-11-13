@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Motion slides ("mreel"): animated story slides under the hero.
+   Teal & coral brand (rebrand 12 Nov 2026). Animations replay each time a slide
+   becomes active (.is-active is toggled by motion-reel.js).
+   ========================================================================== */
+
+.mreel-section { padding: 48px 0 8px; background: var(--bg-light); }
+
+.mreel {
+    --mr-teal-d: #052628; --mr-teal: #083D3F; --mr-lagoon: #0E7C7B;
+    --mr-coral: #FF7A59; --mr-coral-d: #E8603C; --mr-blush: #FFC2AE; --mr-sand: #F7EFE3;
+    position: relative;
+    height: clamp(440px, 46vw, 540px);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--mr-teal-d);
+    color: #fff;
+    box-shadow: var(--shadow-xl);
+    outline: none;
+    isolation: isolate;
+}
+.mreel:focus-visible { box-shadow: 0 0 0 3px var(--mr-coral), var(--shadow-xl); }
+
+/* Story-style progress bars */
+.mreel-bars {
+    position: absolute; z-index: 6; top: 16px; left: 24px; right: 24px;
+    display: flex; gap: 6px;
+}
+.mreel-bars button {
+    flex: 1; height: 16px; padding: 6px 0; border: 0; background: none; cursor: pointer;
+}
+.mreel-bars button span {
+    display: block; height: 4px; border-radius: 4px; background: rgba(255,255,255,.25); overflow: hidden;
+}
+.mreel-bars button span i {
+    display: block; height: 100%; width: 0; background: var(--mr-coral); border-radius: 4px;
+    transition: width .1s linear;
+}
+.mreel-bars button.is-done span i { width: 100%; }
+
+/* Slides */
+.mreel-slide {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; gap: 40px;
+    padding: 56px 72px 40px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .7s ease, visibility 0s linear .7s;
+    background:
+        radial-gradient(120% 90% at 100% 0%, rgba(14,124,123,.55) 0%, rgba(8,61,63,0) 60%),
+        linear-gradient(135deg, var(--mr-teal) 0%, var(--mr-teal-d) 100%);
+}
+.mreel-slide.is-active { opacity: 1; visibility: visible; transition: opacity .7s ease, visibility 0s; z-index: 2; }
+
+.ms-copy { position: relative; z-index: 3; max-width: 620px; }
+.ms-copy-top { max-width: none; }
+.ms-kicker {
+    display: inline-block; font-size: .74rem; font-weight: 800; letter-spacing: .14em;
+    color: var(--mr-coral); margin-bottom: 14px;
+}
+.ms-title {
+    font-family: 'Playfair Display', Georgia, serif; font-weight: 700; color: #fff;
+    font-size: clamp(1.75rem, 3.6vw, 3rem); line-height: 1.12; margin-bottom: 14px;
+}
+.ms-title em { font-style: italic; color: var(--mr-coral); }
+.ms-line { display: block; overflow: hidden; padding-bottom: .06em; }
+.ms-sub { color: rgba(255,255,255,.82); font-size: clamp(.92rem, 1.3vw, 1.05rem); max-width: 520px; }
+.ms-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.ms-ghost { background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.4); color: #fff; }
+.ms-ghost:hover { border-color: var(--mr-coral); color: #fff; }
+
+/* Shared entrance motion, replayed on every activation */
+.mreel-slide.is-active .ms-kicker { animation: msFadeUp .6s .15s both cubic-bezier(.16,1,.3,1); }
+.mreel-slide.is-active .ms-line { animation: msRise .9s both cubic-bezier(.16,1,.3,1); }
+.mreel-slide.is-active .ms-line:nth-child(1) { animation-delay: .25s; }
+.mreel-slide.is-active .ms-line:nth-child(2) { animation-delay: .4s; }
+.mreel-slide.is-active .ms-sub { animation: msFadeUp .8s .65s both cubic-bezier(.16,1,.3,1); }
+.mreel-slide.is-active .ms-cta { animation: msFadeUp .8s .85s both cubic-bezier(.16,1,.3,1); }
+@keyframes msFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes msRise { from { opacity: 0; transform: translateY(105%); } to { opacity: 1; transform: none; } }
+
+/* 1. Intake: drifting rings + plane on a dashed flight path */
+.ms-rings i {
+    position: absolute; border: 2px solid rgba(255,122,89,.16); border-radius: 50%;
+    right: -160px; top: -200px; width: 520px; height: 520px;
+    animation: msDrift 14s ease-in-out infinite alternate;
+}
+.ms-rings i:nth-child(2) { width: 700px; height: 700px; right: -250px; top: -290px; animation-duration: 18s; }
+.ms-rings i:nth-child(3) { width: 880px; height: 880px; right: -340px; top: -380px; animation-duration: 22s; border-color: rgba(255,194,174,.08); }
+@keyframes msDrift { to { transform: translate(-24px, 18px) rotate(8deg); } }
+.ms-flightpath { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.ms-intake.is-active .ms-flightpath path { stroke-dashoffset: 0; animation: msDash 6s linear infinite; }
+@keyframes msDash { to { stroke-dashoffset: -160; } }
+.ms-plane {
+    position: absolute; z-index: 2; left: 0; top: 0; font-size: 34px; color: var(--mr-coral);
+    offset-path: path("M-40 360 C 220 300, 420 120, 1040 60"); offset-rotate: auto;
+    opacity: 0;
+}
+.ms-intake.is-active .ms-plane { animation: msFly 6.5s .3s cubic-bezier(.45,.05,.35,1) both; }
+@keyframes msFly { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+
+/* 2. Journey steps along a track */
+.ms-journey { flex-direction: column; align-items: stretch; justify-content: center; gap: 26px; }
+.ms-steps { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; position: relative; z-index: 3; }
+.ms-steps li {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius-md);
+    padding: 16px 14px; display: flex; flex-direction: column; gap: 6px;
+}
+.ms-steps b {
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(255,122,89,.18); color: var(--mr-coral); font-size: .85rem;
+}
+.ms-steps strong { color: #fff; font-size: 1rem; }
+.ms-steps span { color: rgba(255,255,255,.72); font-size: .8rem; line-height: 1.4; }
+.ms-journey.is-active .ms-steps li { animation: msStep .7s both cubic-bezier(.16,1,.3,1); animation-delay: calc(.6s + var(--i) * .7s); }
+.ms-journey.is-active .ms-steps li b { animation: msLight .5s both; animation-delay: calc(.9s + var(--i) * .7s); }
+@keyframes msStep { from { opacity: 0; transform: translateY(24px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes msLight { to { background: var(--mr-coral); color: #052628; } }
+.ms-track { position: relative; height: 4px; border-radius: 4px; background: rgba(255,255,255,.12); margin: 0 6px; }
+.ms-track-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: linear-gradient(90deg, var(--mr-lagoon), var(--mr-coral)); border-radius: 4px; }
+.ms-track-plane { position: absolute; top: 50%; left: 0; transform: translate(-50%, -54%); color: var(--mr-coral); font-size: 22px; }
+.ms-journey.is-active .ms-track-fill { animation: msFill 3.6s .6s both cubic-bezier(.4,0,.2,1); }
+.ms-journey.is-active .ms-track-plane { animation: msSlide 3.6s .6s both cubic-bezier(.4,0,.2,1); }
+@keyframes msFill { to { width: 100%; } }
+@keyframes msSlide { to { left: 100%; } }
+
+/* 3. 28-day ring */
+.ms-ring { position: relative; flex: 0 0 auto; width: clamp(170px, 22vw, 250px); aspect-ratio: 1; z-index: 3; }
+.ms-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ms-ring circle { fill: none; stroke-width: 9; }
+.ms-ring-bg { stroke: rgba(255,255,255,.12); }
+.ms-ring-fg { stroke: var(--mr-coral); stroke-linecap: round; stroke-dasharray: 327; stroke-dashoffset: 0; }
+.ms-funds.is-active .ms-ring-fg { animation: msRing 3s .4s both cubic-bezier(.4,0,.2,1); }
+@keyframes msRing { from { stroke-dashoffset: 327; } to { stroke-dashoffset: 0; } }
+.ms-ring-num { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ms-ring-num span { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(3rem, 6vw, 4.6rem); font-weight: 700; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+.ms-ring-num small { color: var(--mr-blush); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .72rem; }
+
+/* 4. Photo with slow zoom (Ken Burns) */
+.ms-photo { background: var(--mr-teal-d); }
+.ms-photo-img { position: absolute; inset: 0 0 0 46%; background-size: cover; background-position: 50% 34%; transform: scale(1.04); transform-origin: 50% 35%; }
+.ms-photo.is-active .ms-photo-img { animation: msKen 9s ease-out both; }
+@keyframes msKen { from { transform: scale(1.18) translate(2%, 2%); } to { transform: scale(1.04) translate(0, 0); } }
+.ms-photo-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,38,40,1) 0%, rgba(5,38,40,1) 46%, rgba(5,38,40,.35) 56%, rgba(5,38,40,0) 70%); }
+
+/* 5. Offer letter card */
+.ms-offer { justify-content: space-between; }
+.ms-checks { list-style: none; display: grid; gap: 10px; margin-top: 8px; }
+.ms-checks li { position: relative; padding-left: 32px; color: rgba(255,255,255,.9); }
+.ms-checks li::before {
+    content: "✓"; position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--mr-coral); color: #052628; font-weight: 800; font-size: .78rem;
+}
+.ms-offer.is-active .ms-checks li { animation: msFadeUp .6s both; animation-delay: calc(.8s + var(--i) * .35s); }
+.ms-doc { position: relative; z-index: 3; flex: 0 0 auto; width: clamp(190px, 24vw, 280px); }
+.ms-doc img { width: 100%; height: clamp(300px, 34vw, 400px); object-fit: cover; object-position: top; border-radius: 10px; box-shadow: 0 30px 60px rgba(0,0,0,.45); transform: rotate(4deg); }
+.ms-offer.is-active .ms-doc img { animation: msDoc 1s .3s both cubic-bezier(.16,1,.3,1); }
+@keyframes msDoc { from { opacity: 0; transform: translate(60px, 30px) rotate(14deg); } to { opacity: 1; transform: rotate(4deg); } }
+.ms-doc-tag {
+    position: absolute; left: -18px; bottom: 26px; background: var(--mr-coral); color: #052628;
+    font-weight: 800; font-size: .78rem; padding: 8px 14px; border-radius: 30px; box-shadow: var(--shadow-lg);
+}
+.ms-offer.is-active .ms-doc-tag { animation: msPop .5s 1.2s both cubic-bezier(.34,1.56,.64,1); }
+@keyframes msPop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+
+/* 6. Guide book */
+.ms-book { flex: 0 0 auto; perspective: 900px; z-index: 3; }
+.ms-book-cover {
+    width: clamp(160px, 18vw, 210px); aspect-ratio: 3 / 4; border-radius: 6px 12px 12px 6px; padding: 22px 18px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: linear-gradient(160deg, var(--mr-lagoon) 0%, var(--mr-teal) 55%, var(--mr-teal-d) 100%);
+    border-left: 10px solid var(--mr-coral-d); box-shadow: 0 30px 60px rgba(0,0,0,.45);
+    transform: rotateY(-18deg);
+}
+.ms-book-cover small { color: var(--mr-blush); font-weight: 800; letter-spacing: .14em; font-size: .62rem; }
+.ms-book-cover strong { font-family: 'Playfair Display', Georgia, serif; color: #fff; font-size: 1.25rem; line-height: 1.15; }
+.ms-book-cover span { color: var(--mr-coral); font-weight: 700; font-size: .78rem; }
+.ms-guide.is-active .ms-book-cover { animation: msBook 1.1s .2s both cubic-bezier(.16,1,.3,1), msFloat 4s 1.3s ease-in-out infinite alternate; }
+@keyframes msBook { from { opacity: 0; transform: rotateY(-70deg) translateX(-40px); } to { opacity: 1; transform: rotateY(-18deg); } }
+@keyframes msFloat { from { transform: rotateY(-18deg) translateY(0); } to { transform: rotateY(-12deg) translateY(-10px); } }
+
+/* Controls */
+.mreel-nav, .mreel-pause {
+    position: absolute; z-index: 6; border: 1px solid rgba(255,255,255,.25); background: rgba(5,38,40,.55);
+    color: #fff; cursor: pointer; display: grid; place-items: center; transition: var(--transition);
+    backdrop-filter: blur(6px);
+}
+.mreel-nav { top: 50%; width: 42px; height: 42px; margin-top: -21px; border-radius: 50%; font-size: 1.6rem; line-height: 1; }
+.mreel-prev { left: 14px; } .mreel-next { right: 14px; }
+.mreel-pause { right: 18px; bottom: 16px; width: 34px; height: 34px; border-radius: 50%; font-size: .7rem; }
+.mreel-nav:hover, .mreel-pause:hover { background: var(--mr-coral); border-color: var(--mr-coral); color: #052628; }
+
+/* Phones: stack and simplify */
+@media (max-width: 768px) {
+    .mreel-section { padding: 28px 0 0; }
+    .mreel { height: 560px; border-radius: var(--radius-md); }
+    .mreel-slide { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 18px; padding: 48px 22px 64px; }
+    .mreel-bars { left: 16px; right: 16px; top: 12px; }
+    .mreel-nav { display: none; }
+    .ms-funds, .ms-guide, .ms-offer { justify-content: center; }
+    .ms-ring { width: 150px; }
+    .ms-steps { grid-template-columns: 1fr; gap: 6px; }
+    .ms-steps li { flex-direction: row; align-items: center; padding: 8px 12px; gap: 10px; }
+    .ms-steps span { display: none; }
+    .ms-track { display: none; }
+    .ms-doc { position: absolute; right: -16px; top: 34px; width: 118px; opacity: .6; z-index: 1; }
+    .ms-doc img { height: 150px; }
+    .ms-doc-tag { display: none; }
+    .ms-book-cover { width: 120px; }
+    .ms-photo-shade { background: linear-gradient(0deg, rgba(5,38,40,.97) 0%, rgba(5,38,40,.85) 42%, rgba(5,38,40,0) 66%); }
+    .ms-photo-img { inset: 0; background-position: 50% 30%; }
+}
+
+/* Reduced motion: no movement, simple fades only */
+@media (prefers-reduced-motion: reduce) {
+    .mreel-slide.is-active *, .ms-rings i { animation: none !important; }
+    .ms-plane { display: none; }
+    .ms-track-fill { width: 100%; }
+    .ms-track-plane { left: 100%; }
+}

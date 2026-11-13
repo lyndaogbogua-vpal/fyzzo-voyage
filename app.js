@@ -1825,6 +1825,14 @@ function initDynamicIntakes() {
     }
     initAnnouncementRotator();
 
+    // Hero badge: always names the current intake
+    document.querySelectorAll('[data-intake="badge"]').forEach(el => {
+        el.textContent = 'UK ' + sched.primaryTerm.toUpperCase() + ' ' + sched.primaryYear + ' INTAKE';
+    });
+    document.querySelectorAll('[data-intake="line"]').forEach(el => {
+        el.innerHTML = sched.finalCalls ? 'Final calls · Talk to an advisor this week &rarr;' : 'Applications now open · Start your file early &rarr;';
+    });
+
     // 2. Update Study Abroad Division Planning Callout Heading
     const actionHeading = document.getElementById('studyAbroadActionHeading');
     if (actionHeading) {
