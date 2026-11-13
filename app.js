@@ -57,71 +57,105 @@ const CONFIG = {
         aiEndpoint: ""
     },
 
-    // Automatic Dynamic Intake Cycle (§32)
-    // Automatically recalculates primary intake, secondary intake, and years in real-time:
-    // • Oct 1 to Jan 31: Targets the UK May Intake (January is too close to prepare for by then)
-    // • Feb 1 to May 31: Targets May/Spring Intake & upcoming September Intake
-    // • Jun 1 to Sep 30: Targets September/Fall Main Intake & upcoming January Intake
-    getIntakeSchedule: function(customDate) {
-        const now = customDate || new Date();
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth(); // 0 = Jan, 11 = Dec
+    // Automatic Intake Cycle (§32)
+    // UK intakes and roughly when courses start. The site always promotes the next intake that
+    // still leaves enough time to prepare (offer + CAS + 28-day funds + visa). When an intake gets
+    // closer than `intakeCutoffDays`, the site moves on to the following intake by itself.
+    intakeCalendar: [
+        { term: "January",   month: 0, day: 20 },
+        { term: "May",       month: 4, day: 5 },
+        { term: "September", month: 8, day: 20 }
+    ],
+    intakeCutoffDays: 75,      // stop promoting an intake ~11 weeks before it starts
+    intakeFinalCallDays: 120,  // show "FINAL CALLS" in the last ~6 weeks before the cutoff
 
-        let primaryTerm = "January";
-        let primaryYear = currentYear;
-        let secondaryTerm = "May / September";
-        let secondaryYear = currentYear;
-        let priorityBadge = "JANUARY " + currentYear + " INTAKE";
-        let planningCallout = "";
-        let announcementHtml = "";
-        let matchmakerText = "";
+    // Lets you preview the site on another date: add ?previewDate=2027-03-01 to the URL.
+    today: function() {
+        try {
+            const p = new URLSearchParams(location.search).get('previewDate');
+            if (p && /^\d{4}-\d{2}-\d{2}$/.test(p)) return new Date(p + 'T12:00:00');
+        } catch (e) {}
+        return new Date();
+    },
 
-        // From October the January intake is too close to prepare for (CAS + 28-day funds + visa),
-        // so Oct–Jan now targets the UK May intake of the coming year.
-        if (currentMonth >= 9 || currentMonth === 0) { // October (9) to January (0)
-            primaryTerm = "May";
-            primaryYear = currentMonth === 0 ? currentYear : currentYear + 1;
-            secondaryTerm = "September";
-            secondaryYear = primaryYear;
-            priorityBadge = "UK MAY " + primaryYear + " INTAKE";
-            planningCallout = "Planning for the May " + primaryYear + " or September " + primaryYear + " Intake?";
-            announcementHtml = "<strong>" + priorityBadge + ":</strong> UK admissions now open. Start your CAS, 28-day proof of funds and visa file early. <a href=\"#contact\">Start Your Journey &rarr;</a>";
-            matchmakerText = "United Kingdom — May " + primaryYear + " Intake & Graduate Route";
-        } else if (currentMonth >= 1 && currentMonth <= 4) { // February (1) to May (4)
-            primaryTerm = "May";
-            primaryYear = currentYear;
-            secondaryTerm = "September";
-            secondaryYear = currentYear;
-            priorityBadge = "MAY / SPRING " + primaryYear + " INTAKE";
-            planningCallout = "Planning for the May " + primaryYear + " or September " + primaryYear + " Intake?";
-            announcementHtml = "<strong>" + priorityBadge + ":</strong> UK, Canada & Europe Spring admissions open. Fast-track your CAS, admissions, and visa files. <a href=\"#contact\">Start Your Journey &rarr;</a>";
-            matchmakerText = "United Kingdom — May / September " + primaryYear + " Fast-Track & Graduate Route";
-        } else { // June (5) to September (8)
-            primaryTerm = "September";
-            primaryYear = currentYear;
-            secondaryTerm = "January";
-            secondaryYear = currentYear + 1;
-            priorityBadge = "SEPTEMBER " + primaryYear + " MAIN INTAKE";
-            planningCallout = "Planning for the September " + primaryYear + " or January " + secondaryYear + " Intake?";
-            announcementHtml = "<strong>" + priorityBadge + ":</strong> Main Autumn admissions open. Secure your university offer and 28-day Proof of Funds. <a href=\"#contact\">Start Your Journey &rarr;</a>";
-            matchmakerText = "United Kingdom — September " + primaryYear + " Fast-Track & Graduate Route";
+    // The next intakes (start dates) from a given date, soonest first.
+    upcomingIntakes: function(now, count) {
+        const list = [];
+        for (let y = now.getFullYear(); list.length < count + 3; y++) {
+            this.intakeCalendar.forEach(i => {
+                const start = new Date(y, i.month, i.day);
+                if (start > now) list.push({ term: i.term, year: y, start: start });
+            });
         }
+        return list.sort((a, b) => a.start - b.start);
+    },
 
-        const primaryTitle = primaryTerm + " " + primaryYear + " Intake";
-        const secondaryTitle = secondaryTerm + " " + secondaryYear + " Intake";
+    getIntakeSchedule: function(customDate) {
+        const now = customDate || this.today();
+        const DAY = 86400000;
+        const upcoming = this.upcomingIntakes(now, 3)
+            .filter(i => (i.start - now) / DAY >= this.intakeCutoffDays);
+        const primary = upcoming[0];
+        const secondary = upcoming[1];
+        const daysLeft = Math.round((primary.start - now) / DAY);
+        const finalCalls = daysLeft < this.intakeFinalCallDays;
+        const cutoffDate = new Date(primary.start.getTime() - this.intakeCutoffDays * DAY);
+
+        const primaryTerm = primary.term, primaryYear = primary.year;
+        const secondaryTerm = secondary.term, secondaryYear = secondary.year;
+        const priorityBadge = "UK " + primaryTerm.toUpperCase() + " " + primaryYear + " INTAKE" + (finalCalls ? " (FINAL CALLS)" : "");
+        const planningCallout = "Planning for the " + primaryTerm + " " + primaryYear + " or " + secondaryTerm + " " + secondaryYear + " Intake?";
+        const announcementHtml = finalCalls
+            ? "<strong>" + priorityBadge + ":</strong> Last weeks to start your application, CAS and 28-day proof of funds. <a href=\"#contact\">Talk to an advisor now &rarr;</a>"
+            : "<strong>" + priorityBadge + ":</strong> UK admissions now open. Start your CAS, 28-day proof of funds and visa file early. <a href=\"#contact\">Start Your Journey &rarr;</a>";
+        const matchmakerText = "United Kingdom — " + primaryTerm + " " + primaryYear + " Intake & Graduate Route";
 
         return {
             primaryTerm: primaryTerm,
             primaryYear: primaryYear,
             secondaryTerm: secondaryTerm,
             secondaryYear: secondaryYear,
-            primaryTitle: primaryTitle,
-            secondaryTitle: secondaryTitle,
+            primaryTitle: primaryTerm + " " + primaryYear + " Intake",
+            secondaryTitle: secondaryTerm + " " + secondaryYear + " Intake",
             priorityBadge: priorityBadge,
             planningCallout: planningCallout,
             announcementHtml: announcementHtml,
-            matchmakerText: matchmakerText
+            matchmakerText: matchmakerText,
+            finalCalls: finalCalls,
+            weeksLeft: Math.floor(daysLeft / 7),
+            cutoffDate: cutoffDate
         };
+    },
+
+    // Time-limited notices for the top bar. Each shows only between `from` and `until`
+    // (YYYY-MM-DD, `until` is the first day it is hidden). Add new rule changes here.
+    announcementNotices: [
+        { until: "2026-11-30",
+          html: "<strong>FUNDS RISE ON 30 NOV:</strong> UK living-cost amounts go up to £1,570/month in London and £1,203 outside London. <a href=\"#calculator\">Recalculate your funds &rarr;</a>" },
+        { from: "2026-11-30", until: "2027-02-01",
+          html: "<strong>NEW UK FUNDS AMOUNTS:</strong> Since 30 Nov 2026 you need £1,570/month in London or £1,203 outside London. <a href=\"#calculator\">Check your amount &rarr;</a>" },
+        { until: "2027-01-01",
+          html: "<strong>GRADUATE VISA CHANGE:</strong> Apply by 31 Dec 2026 to get 2 years; from 1 Jan 2027 it is 18 months. <a href=\"#contact\">Ask us &rarr;</a>" }
+    ],
+
+    // Messages that always rotate after the intake and dated notices.
+    announcementEvergreen: [
+        "<strong>28-DAY RULE:</strong> Your funds must stay in the account for 28 days in a row before you apply. <a href=\"#calculator\">Check your amount &rarr;</a>",
+        "<strong>FREE 2027 GUIDE:</strong> 10 proof-of-funds rules that help prevent visa refusals. <a href=\"#\" onclick=\"openLeadMagnetModal(); return false;\">Get it free &rarr;</a>",
+        "<strong>VISA REFUSED BEFORE?</strong> We review the refusal letter and help you fix what went wrong. <a href=\"services/visa-refusal-review.html\">Get a review &rarr;</a>"
+    ],
+
+    // Builds the full list of top-bar messages for a date.
+    buildAnnouncements: function(customDate) {
+        const now = customDate || this.today();
+        const s = this.getIntakeSchedule(now);
+        const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        const inWindow = n => (!n.from || now >= new Date(n.from + 'T00:00:00')) && (!n.until || now < new Date(n.until + 'T00:00:00'));
+        const list = [s.announcementHtml];
+        list.push("<strong>" + s.primaryTerm.toUpperCase() + " " + s.primaryYear + " COUNTDOWN:</strong> About " + s.weeksLeft + " weeks until courses start. Aim to have your offer and funds ready by " + fmt(s.cutoffDate) + ". <a href=\"#quiz\">Check your eligibility &rarr;</a>");
+        this.announcementNotices.filter(inWindow).forEach(n => list.push(n.html));
+        list.push("<strong>ALSO OPEN:</strong> " + s.secondaryTitle + " applications for students who need more time. <a href=\"#contact\">Plan ahead &rarr;</a>");
+        return list.concat(this.announcementEvergreen);
     },
     
     // Dynamically evaluated current intake string
@@ -1758,6 +1792,11 @@ function initAnnouncementRotator() {
     const rot = document.getElementById('annRotator');
     if (!rot || rot.dataset.ready) return;
     rot.dataset.ready = '1';
+    // Rebuild the messages from today's date (intake, countdown, dated notices, evergreen tips).
+    try {
+        const msgs = CONFIG.buildAnnouncements();
+        rot.innerHTML = msgs.map((h, n) => '<p class="ann-slide' + (n === 0 ? ' is-active' : '') + '"' + (n === 0 ? ' id="topAnnouncementText"' : '') + '>' + h + '</p>').join('');
+    } catch (e) { /* keep the static messages in the HTML */ }
     const slides = Array.from(rot.querySelectorAll('.ann-slide'));
     if (slides.length < 2) return;
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
