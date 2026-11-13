@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css?v=20261113">
+    <link rel="stylesheet" href="style.css?v=20261113b">
 </head>
 <body>
 
@@ -36,7 +36,13 @@
         <div class="announcement-container">
             <div class="announcement-left">
                 <span class="pulse-indicator"></span>
-                <p><strong>JANUARY 2027 INTAKE:</strong> UK, Canada & Europe admissions guidance open. Prepare your application and financial documentation with clarity. <a href="#contact">Start Your Journey &rarr;</a></p>
+                <div class="ann-rotator" id="annRotator" aria-live="polite">
+                    <p class="ann-slide is-active" id="topAnnouncementText"><strong>UK MAY 2027 INTAKE:</strong> UK admissions now open. Start your CAS, 28-day proof of funds and visa file early. <a href="#contact">Start Your Journey &rarr;</a></p>
+                    <p class="ann-slide"><strong>FREE 2027 GUIDE:</strong> 10 proof-of-funds rules that help prevent visa refusals. <a href="#" onclick="openLeadMagnetModal(); return false;">Get it free &rarr;</a></p>
+                    <p class="ann-slide"><strong>28-DAY RULE:</strong> Your funds must stay in the account for 28 days in a row before you apply. <a href="#calculator">Check your amount &rarr;</a></p>
+                    <p class="ann-slide"><strong>VISA REFUSED BEFORE?</strong> We review the refusal letter and help you fix what went wrong. <a href="services/visa-refusal-review.html">Get a review &rarr;</a></p>
+                    <p class="ann-slide"><strong>NOT SURE WHERE TO START?</strong> Take our 2-minute eligibility quiz for the May 2027 intake. <a href="#quiz">Take the quiz &rarr;</a></p>
+                </div>
             </div>
             <div class="top-contact">
                 <a href="tel:+2348062499796">📞 +234 806 249 9796</a>
@@ -295,7 +301,7 @@
                 
                 <div class="division-action-bar">
                     <div class="div-action-text">
-                        <strong>Planning for the January 2027 or September 2027 Intake?</strong>
+                        <strong>Planning for the May 2027 or September 2027 Intake?</strong>
                         <span>Let's assess your qualifications and build an admissions plan.</span>
                     </div>
                     <a href="services/study-abroad.html" class="btn btn-gold">Explore Study Abroad &rarr;</a>
@@ -1413,7 +1419,7 @@
                         <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" data-social="instagram">Follow &rarr;</a>
                     </div>
                     <div id="instagramFeed" class="insta-grid">
-                        <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" data-social="instagram"><img src="assets/promo_study_abroad.jpg" alt="Study abroad in the UK, Canada and Europe: January 2027 intake" loading="lazy"></a>
+                        <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" data-social="instagram"><img src="assets/promo_study_abroad.jpg" alt="Study abroad in the UK, Canada and Europe" loading="lazy"></a>
                         <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" data-social="instagram"><img src="assets/promo_visa_approved.jpg" alt="UK student visa approved for a Fyzzo Voyage client" loading="lazy"></a>
                         <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" data-social="instagram"><img src="assets/promo_travel_flights.jpg" alt="Fyzzo Voyage travel and flight bookings" loading="lazy"></a>
                         <a href="https://www.instagram.com/voyagebyfyzzo/" target="_blank" rel="noopener" data-social="instagram"><img src="assets/promo_pof_readiness.jpg" alt="Proof of funds readiness review" loading="lazy"></a>
@@ -1631,8 +1637,8 @@
                             <label for="preferredDate">Preferred Intake / Travel Date *</label>
                             <select id="preferredDate" name="preferredDate" required>
                                 <option value="" disabled selected>Select Intake / Travel Timeline</option>
-                                <option value="January 2027 Intake">January 2027 Intake (Priority)</option>
-                                <option value="May / September 2027 Intake">May / September 2027 Intake</option>
+                                <option value="May 2027 Intake">UK May 2027 Intake (Priority)</option>
+                                <option value="September 2027 Intake">September 2027 Intake</option>
                                 <option value="Within 1 - 3 Months">Within 1 – 3 Months</option>
                                 <option value="Within 3 - 6 Months">Within 3 – 6 Months</option>
                                 <option value="Just Exploring Options">Just Exploring Options</option>
@@ -1785,7 +1791,7 @@
                 <div class="lead-form-group">
                     <label for="lmDestination">Destination of Interest *</label>
                     <select id="lmDestination" name="lmDestination" required>
-                        <option value="UK Student Visa (Jan 2027)">🇬🇧 United Kingdom (January 2027 Intake)</option>
+                        <option value="UK Student Visa (May 2027)">🇬🇧 United Kingdom (May 2027 Intake)</option>
                         <option value="Canada Study / PGWP">🇨🇦 Canada (Study & PGWP)</option>
                         <option value="Europe / Ireland Degree">🇪🇺 Europe / Ireland Admissions</option>
                         <option value="Visit / Tourist Visa (UK, US, Canada, Schengen)">✈️ Visit / Tourist Visa (UK, US, Canada, Schengen)</option>
@@ -1949,9 +1955,9 @@
     <!-- Success Toast Notification -->
     <div id="toastNotification" class="toast-notification" style="display: none;"></div>
 
-    <script src="fyvoy-kb.js?v=20261106f"></script>
-    <script src="fyvoy-trips.js?v=20261106"></script>
+    <script src="fyvoy-kb.js?v=20261113b"></script>
+    <script src="fyvoy-trips.js?v=20261113b"></script>
     <script src="fyvoy-pof.js?v=20261106c"></script>
-    <script src="app.js?v=20261107"></script>
+    <script src="app.js?v=20261113b"></script>
 </body>
 </html>

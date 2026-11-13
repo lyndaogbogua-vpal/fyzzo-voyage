@@ -59,7 +59,7 @@ const CONFIG = {
 
     // Automatic Dynamic Intake Cycle (§32)
     // Automatically recalculates primary intake, secondary intake, and years in real-time:
-    // • Oct 1 to Jan 31: Targets January Intake (Priority) of the upcoming/current academic year
+    // • Oct 1 to Jan 31: Targets the UK May Intake (January is too close to prepare for by then)
     // • Feb 1 to May 31: Targets May/Spring Intake & upcoming September Intake
     // • Jun 1 to Sep 30: Targets September/Fall Main Intake & upcoming January Intake
     getIntakeSchedule: function(customDate) {
@@ -76,24 +76,17 @@ const CONFIG = {
         let announcementHtml = "";
         let matchmakerText = "";
 
-        if (currentMonth >= 9) { // October (9), November (10), December (11)
-            primaryTerm = "January";
-            primaryYear = currentYear + 1;
-            secondaryTerm = "May / September";
-            secondaryYear = currentYear + 1;
-            priorityBadge = "JANUARY " + primaryYear + " INTAKE";
-            planningCallout = "Planning for the January " + primaryYear + " or September " + primaryYear + " Intake?";
-            announcementHtml = "<strong>" + priorityBadge + ":</strong> UK, Canada & Europe admissions guidance open. Prepare your application and financial documentation with clarity. <a href=\"#contact\">Start Your Journey &rarr;</a>";
-            matchmakerText = "United Kingdom — January " + primaryYear + " Fast-Track & Graduate Route";
-        } else if (currentMonth === 0) { // January (0)
-            primaryTerm = "January";
-            primaryYear = currentYear;
-            secondaryTerm = "May / September";
-            secondaryYear = currentYear;
-            priorityBadge = "JANUARY " + primaryYear + " INTAKE (FINAL CALLS)";
-            planningCallout = "Planning for the January " + primaryYear + " or May/September " + primaryYear + " Intake?";
-            announcementHtml = "<strong>" + priorityBadge + ":</strong> Final admissions & visa slots closing. Fast-track your visa readiness now. <a href=\"#contact\">Start Your Journey &rarr;</a>";
-            matchmakerText = "United Kingdom — January " + primaryYear + " Fast-Track & Graduate Route";
+        // From October the January intake is too close to prepare for (CAS + 28-day funds + visa),
+        // so Oct–Jan now targets the UK May intake of the coming year.
+        if (currentMonth >= 9 || currentMonth === 0) { // October (9) to January (0)
+            primaryTerm = "May";
+            primaryYear = currentMonth === 0 ? currentYear : currentYear + 1;
+            secondaryTerm = "September";
+            secondaryYear = primaryYear;
+            priorityBadge = "UK MAY " + primaryYear + " INTAKE";
+            planningCallout = "Planning for the May " + primaryYear + " or September " + primaryYear + " Intake?";
+            announcementHtml = "<strong>" + priorityBadge + ":</strong> UK admissions now open. Start your CAS, 28-day proof of funds and visa file early. <a href=\"#contact\">Start Your Journey &rarr;</a>";
+            matchmakerText = "United Kingdom — May " + primaryYear + " Intake & Graduate Route";
         } else if (currentMonth >= 1 && currentMonth <= 4) { // February (1) to May (4)
             primaryTerm = "May";
             primaryYear = currentYear;
@@ -481,7 +474,7 @@ function goToQuizStep(step) {
 
 function calculateQuizEligibility(answers) {
     let matchScore = 92;
-    let recCountry = 'United Kingdom (Postgraduate Jan 2027 Route)';
+    let recCountry = 'United Kingdom (Postgraduate May 2027 Route)';
     let summary = 'Strong alignment for academic progression, fast visa turnaround and 2-year post-study work authorization.';
     let whyPoints = [];
     let reqPoints = [];
@@ -820,7 +813,7 @@ const FYVOY_LEAD_STEPS = [
     { key: 'destination', ask: function(l) { return l.destination ? 'Which country are you considering? (Earlier you looked at **' + l.destination + '**. Tap it, or choose another.)' : 'Which country are you considering?'; },
       chips: ['United Kingdom', 'Canada', 'Ireland', 'Netherlands', 'USA', 'Schengen / Europe', 'Africa', 'Dubai / Asia', 'Not sure, advise me'] },
     { key: 'timeline', ask: function() { return 'When are you hoping to travel or start?'; },
-      chips: ['January 2027', 'Within 3 months', 'In 3–6 months', 'September 2027', 'Just exploring'] },
+      chips: ['May 2027', 'Within 3 months', 'In 3–6 months', 'September 2027', 'Just exploring'] },
     { key: 'notes', optional: true, ask: function() { return 'Anything else our advisor should know? For example your education, any previous refusals or your budget. (Type "skip" if not.)'; } },
     { key: 'consent', ask: function() { return 'Last step: may Fyzzo Voyage contact you on WhatsApp or email about this enquiry, as described in our [Privacy Policy](#privacy)?'; },
       chips: ['Yes, contact me', 'No, thanks'] }
@@ -1759,6 +1752,30 @@ function getInitials(name) {
 // Automatically updates announcement bar, headings, dropdowns, and calculator options
 // based on current calendar date without requiring manual code changes
 // ==========================================================================
+// Cycles the top-bar messages: each slides up and out, the next slides in.
+// Pauses while hovered or focused; slower when the visitor prefers reduced motion.
+function initAnnouncementRotator() {
+    const rot = document.getElementById('annRotator');
+    if (!rot || rot.dataset.ready) return;
+    rot.dataset.ready = '1';
+    const slides = Array.from(rot.querySelectorAll('.ann-slide'));
+    if (slides.length < 2) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const delay = reduce ? 9000 : 5000;
+    let i = 0, paused = false;
+    const show = (next) => {
+        const cur = slides[i];
+        cur.classList.remove('is-active');
+        cur.classList.add('is-leaving');
+        setTimeout(() => cur.classList.remove('is-leaving'), 650);
+        i = next;
+        slides[i].classList.add('is-active');
+    };
+    ['mouseenter', 'focusin'].forEach(e => rot.addEventListener(e, () => { paused = true; }));
+    ['mouseleave', 'focusout'].forEach(e => rot.addEventListener(e, () => { paused = false; }));
+    setInterval(() => { if (!paused && !document.hidden) show((i + 1) % slides.length); }, delay);
+}
+
 function initDynamicIntakes() {
     const sched = CONFIG.getIntakeSchedule();
 
@@ -1767,6 +1784,7 @@ function initDynamicIntakes() {
     if (announcementEl) {
         announcementEl.innerHTML = sched.announcementHtml;
     }
+    initAnnouncementRotator();
 
     // 2. Update Study Abroad Division Planning Callout Heading
     const actionHeading = document.getElementById('studyAbroadActionHeading');

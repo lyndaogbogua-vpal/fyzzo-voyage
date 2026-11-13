@@ -85,7 +85,7 @@ faqs:
   - q: "Which countries do you cover?"
     a: "The UK is our speciality, and we handle it end to end. We also guide students on Ireland, Canada, the Netherlands, the USA and Malaysia."
   - q: "When should I start?"
-    a: "Ideally 6 to 9 months before your intake. For January 2027 intakes, talk to us now, because CAS and proof of funds take time."
+    a: "Ideally 6 to 9 months before your intake. For the May 2027 intake, talk to us now, because CAS and proof of funds take time."
   - q: "Can I bring my family?"
     a: "For the UK, most taught master's students can no longer bring dependants. Government-sponsored students and PhD/research students still can. We'll tell you what applies to you."
   - q: "Do you guarantee admission or a visa?"

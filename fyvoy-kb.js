@@ -89,9 +89,9 @@ const FYVOY_KB = [
     },
     {
         id: 'intake-timeline',
-        title: 'Is it too late for the January 2027 intake?',
+        title: 'Is it too late for the January 2027 intake? When should I aim for?',
         keywords: ['january', 'jan intake', 'january 2027', 'september 2027', 'may intake', 'intake', 'too late', 'deadline', 'when should i apply', 'when to apply', 'timeline'],
-        answer: 'Many UK universities still accept applications for **January 2027**, but time is tight. Work backwards:\n• **Offer + deposit + CAS:** universities need time for pre-CAS checks and interviews\n• **Funds:** the full amount must sit in the account for **28 days in a row** before you apply\n• **Visa:** about **3 weeks** after biometrics\n• **Travel:** you can arrive up to 1 month before the course (for courses over 6 months)\n\nIf you are starting from zero today, speak to an advisor **this week**. If January is too tight, **May and September 2027** intakes are good options.',
+        answer: 'For new applicants, **January 2027 is now too close** to prepare for properly, so we are helping students aim for the **UK May 2027 intake** (and September 2027). Work backwards:\n• **Offer + deposit + CAS:** universities need time for pre-CAS checks and interviews\n• **Funds:** the full amount must sit in the account for **28 days in a row** before you apply\n• **Visa:** about **3 weeks** after biometrics\n• **Travel:** you can arrive up to 1 month before the course (for courses over 6 months)\n\nFor **May 2027**, start your applications and funds planning **now**. Speak to an advisor this week so nothing is rushed.',
         services: ['study', 'pof'],
         next: ['student-visa', 'proof-of-funds', 'graduate-visa']
     },
