@@ -748,7 +748,7 @@
                     <div class="pricing-card-footer">
                         <details class="fee-reveal">
                             <summary>View professional fee</summary>
-                            <p><strong>₦500,000</strong> for the full study abroad journey. Government and university fees are paid separately.</p>
+                            <p><strong>₦600,000</strong> Standard · <strong>₦850,000</strong> Premium (adds accommodation search, airport pickup and a 30-day arrival check-in). Pay in full, or 70% to start and 30% on your offer letter. Government and university fees are paid separately.</p>
                         </details>
                         <a href="services/study-abroad.html" class="btn btn-gold btn-block">Explore This Service</a>
                     </div>
@@ -1241,10 +1241,9 @@
                         <div class="calc-form-group">
                             <label for="ruleVersion">Immigration Rules Version *</label>
                             <select id="ruleVersion" onchange="recalculateUKFinancials()">
-                                <option value="current" selected>Applications submitted before 30 November 2026 (£1,529 London / £1,171 Outside London)</option>
-                                <option value="updated">Applications submitted from 30 November 2026 (£1,570 London / £1,203 Outside London)</option>
+                                <option value="current" selected>Current GOV.UK rates (£1,529 London / £1,171 Outside London)</option>
                             </select>
-                            <span class="calc-help-text">Select applicable rules based on your planned visa application submission date.</span>
+                            <span class="calc-help-text">Official amounts from GOV.UK, checked November 2026. We update this when the rules change.</span>
                         </div>
                         
                         <div class="calc-form-group">
@@ -1292,7 +1291,7 @@
                         <div class="calc-breakdown-box">
                             <div class="breakdown-row">
                                 <span>Rule Base & Location:</span>
-                                <strong id="outLocationRule">Outside London (Before 30 Nov 2026)</strong>
+                                <strong id="outLocationRule">Outside London (current GOV.UK rates)</strong>
                             </div>
                             <div class="breakdown-row">
                                 <span>Monthly Maintenance Rate:</span>
@@ -1853,11 +1852,13 @@
                 <div class="footer-legal-links">
                     <a href="#" onclick="openLegalModal('disclaimer'); return false;">Visa Disclaimer</a>
                     <span>|</span>
-                    <a href="#" onclick="openLegalModal('terms'); return false;">Terms of Service</a>
+                    <a href="terms.html">Terms of Service</a>
                     <span>|</span>
-                    <a href="#" onclick="openLegalModal('privacy'); return false;">Privacy Policy</a>
+                    <a href="privacy.html">Privacy Policy</a>
                     <span>|</span>
-                    <a href="#" onclick="openLegalModal('refund'); return false;">Refund Policy</a>
+                    <a href="refund.html">Refund Policy</a>
+                    <span>|</span>
+                    <a href="may-2027.html">May 2027 Intake</a>
                 </div>
             </div>
         </div>
@@ -2054,10 +2055,10 @@
     <!-- Success Toast Notification -->
     <div id="toastNotification" class="toast-notification" style="display: none;"></div>
 
-    <script src="fyvoy-kb.js?v=20261113b"></script>
+    <script src="fyvoy-kb.js?v=20261117a"></script>
     <script src="fyvoy-trips.js?v=20261113b"></script>
-    <script src="fyvoy-pof.js?v=20261106c"></script>
-    <script src="app.js?v=20261113d"></script>
+    <script src="fyvoy-pof.js?v=20261117a"></script>
+    <script src="app.js?v=20261117a"></script>
     <script src="motion-reel.js?v=20261113e"></script>
 </body>
 </html>

@@ -7,8 +7,8 @@ order: 1
 summary: "From choosing the right university and course to your CAS, student visa and pre-departure briefing, we guide you through every step of studying abroad."
 image: "https://images.unsplash.com/photo-1594750852563-5ed8e0421d40?auto=format&fit=crop&crop=faces,center&w=1600&h=700&q=70"
 image_alt: "Graduates celebrating at their graduation ceremony"
-price: "₦500,000"
-price_note: "One fee for the full journey, from university choice to student visa. A free first chat comes first, and you get a written quote before paying."
+price: "₦600,000"
+price_note: "Standard package, from university choice to student visa. Premium (₦850,000) adds accommodation search, airport pickup and a 30-day arrival check-in. Pay in full, or 70% to start and 30% on your offer letter. Free first chat; written quote before you pay."
 form_service: "Study Abroad Guidance & Admissions"
 included:
   - "A profile review: your grades, work history, budget and goals"

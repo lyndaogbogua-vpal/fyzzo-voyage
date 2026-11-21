@@ -17,7 +17,7 @@ This folder starts with `_`, so GitHub Pages does not publish it.
 | ETA fee | £20 | fyvoy-kb.js `need-visa` | https://www.gov.uk/eta | ✅ 2026-11-04 |
 | Immigration Health Surcharge | £776/yr students; £1,035/yr others | fyvoy-kb.js `ihs`, `student-visa` | https://www.gov.uk/healthcare-immigration-application/how-much-pay | ✅ 2026-11-04 |
 | Student maintenance (per month, up to 9 months) | London £1,529; outside London £1,171 | fyvoy-kb.js `proof-of-funds`, `cost-of-living`; app.js CONFIG.ukVisa (current rules); blog `uk-student-visa-proof-of-funds-28-day-rule.html`; index.html calculator labels | https://www.gov.uk/student-visa/money | ✅ 2026-11-04 |
-| "From 30 November 2026" maintenance option in calculator | London £1,570; outside £1,203; dependants £874 / £702 | app.js CONFIG.ukVisa (second rule set); index.html calculator `<select>` | https://www.gov.uk/student-visa/money and Statements of changes to the Immigration Rules | ⚠️ NOT found on GOV.UK on 2026-11-04; confirm or remove |
+| ~~"From 30 November 2026" maintenance option~~ (REMOVED 17 Nov 2026) | Not on GOV.UK when checked 17 Nov 2026; removed from calculator, top bar, kb and proof-of-funds page | app.js CONFIG.ukVisa (second rule set); index.html calculator `<select>` | https://www.gov.uk/student-visa/money and Statements of changes to the Immigration Rules | ⚠️ NOT found on GOV.UK on 2026-11-04; confirm or remove |
 | Dependant maintenance (current) | London £845; outside £680 per month | app.js CONFIG.ukVisa | https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants | ⚠️ not yet checked |
 | 28-day rule / 31-day window | 28 consecutive days, ending within 31 days of applying | fyvoy-kb.js `proof-of-funds`; blog proof-of-funds article | https://www.gov.uk/student-visa/money | ✅ 2026-11-04 |
 | Nigeria not on differential evidence list | Nigeria must submit financial evidence | fyvoy-kb.js `proof-of-funds`; blog proof-of-funds article | https://www.gov.uk/student-visa/money | ✅ 2026-11-04 |
@@ -67,3 +67,4 @@ This folder starts with `_`, so GitHub Pages does not publish it.
 | Date | Change | Source |
 |---|---|---|
 | 2026-11-04 | Register created; UK and Canada figures verified | See sources above |
+| 2026-11-17 | Removed unconfirmed '30 Nov 2026' UK maintenance figures (GOV.UK still shows £1,529 / £1,171) | https://www.gov.uk/student-visa/money |

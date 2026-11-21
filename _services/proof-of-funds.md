@@ -21,7 +21,7 @@ topics:
   - id: student-funds
     icon: "💳"
     title: "Financial Documentation for Student Visas"
-    intro: "For a UK Student visa you show your unpaid first-year tuition plus living costs for up to 9 months: £1,529 to £1,570 a month in London, or £1,171 to £1,203 a month elsewhere (the higher figures apply from 30 November 2026). We always recommend planning with the higher figure plus about 10% for naira exchange-rate changes."
+    intro: "For a UK Student visa you show your unpaid first-year tuition plus living costs for up to 9 months: £1,529 a month in London, or £1,171 a month elsewhere (current GOV.UK amounts, checked November 2026). We always recommend planning for about 10% extra for naira exchange-rate changes."
     points:
       - "The 28-day rule: the money must be held for 28 days in a row, ending within 31 days of your application"
       - "Accepted accounts: your own, or your parent's or legal guardian's with their consent letter and your birth certificate"

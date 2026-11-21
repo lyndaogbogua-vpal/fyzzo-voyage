@@ -130,10 +130,6 @@ const CONFIG = {
     // Time-limited notices for the top bar. Each shows only between `from` and `until`
     // (YYYY-MM-DD, `until` is the first day it is hidden). Add new rule changes here.
     announcementNotices: [
-        { until: "2026-11-30",
-          html: "<strong>FUNDS RISE ON 30 NOV:</strong> UK living-cost amounts go up to £1,570/month in London and £1,203 outside London. <a href=\"#calculator\">Recalculate your funds &rarr;</a>" },
-        { from: "2026-11-30", until: "2027-02-01",
-          html: "<strong>NEW UK FUNDS AMOUNTS:</strong> Since 30 Nov 2026 you need £1,570/month in London or £1,203 outside London. <a href=\"#calculator\">Check your amount &rarr;</a>" },
         { until: "2027-01-01",
           html: "<strong>GRADUATE VISA CHANGE:</strong> Apply by 31 Dec 2026 to get 2 years; from 1 Jan 2027 it is 18 months. <a href=\"#contact\">Ask us &rarr;</a>" }
     ],
@@ -166,7 +162,7 @@ const CONFIG = {
     // Statutory UK Student Visa Maintenance Requirements (§12, §13)
     ukVisa: {
         current: {
-            name: "Before 30 Nov 2026",
+            name: "current GOV.UK rates",
             londonMonthly: 1529,
             londonMax9Months: 13761,
             outsideLondonMonthly: 1171,
@@ -174,15 +170,8 @@ const CONFIG = {
             dependantLondonMonthly: 845,
             dependantOutsideLondonMonthly: 680
         },
-        updated: {
-            name: "From 30 Nov 2026",
-            londonMonthly: 1570,
-            londonMax9Months: 14130,
-            outsideLondonMonthly: 1203,
-            outsideLondonMax9Months: 10827,
-            dependantLondonMonthly: 874,
-            dependantOutsideLondonMonthly: 702
-        },
+        // Add an "updated" rule set (same shape as "current") only once GOV.UK publishes new amounts.
+        updated: null,
         exchangeRateGBPtoNGN: 2200, // Indicative baseline (Updated: October 2026)
         planningBufferPercent: 0.10 // 10% optional personal budgeting buffer
     }
@@ -784,12 +773,13 @@ const LEGAL_CONTENT = {
     },
     refund: {
         title: "Refund & Cancellation Policy",
-        body: `<p><strong>1. Professional Service Fees:</strong><br>
-        Fyzzo Voyage service fees cover professional advisory work, application preparation, and document audits commenced immediately upon engagement. Once document review or advisory work has commenced, service fees are non-refundable.</p>
-        <p><strong>2. Third-Party Payments:</strong><br>
-        Statutory fees paid to embassies, universities, airlines, or hotels are subject to the respective third-party cancellation policies.</p>
-        <p><strong>3. Service Cancellation:</strong><br>
-        If a client chooses to cancel a service prior to document review or submission, any unutilized portion of the advisory fee may be held as credit toward future services at Fyzzo Voyage's discretion.</p>`
+        body: `<p><strong>1. Our fees are non-refundable:</strong><br>
+        As soon as you pay, we start work on your file and commit time and costs on your behalf, so fees paid to Fyzzo Voyage are non-refundable. Please ask every question you have before you pay.</p>
+        <p><strong>2. How we stand behind your Study Abroad application:</strong><br>
+        Visa refused: we review the refusal and prepare your re-application at no extra Fyzzo Voyage fee if you reapply within 6 months (government fees are paid again). CAS refused or intake too late: we move you to the next intake free if you continue within 30 days; after that a ₦150,000 re-activation fee applies. Our error: we redo the work at no cost.</p>
+        <p><strong>3. Third-party payments:</strong><br>
+        Fees paid to embassies, universities, airlines or hotels follow their own refund rules.</p>
+        <p><a href="refund.html">Read the full Refund &amp; Cancellation Policy &rarr;</a></p>`
     }
 };
 
@@ -1670,7 +1660,7 @@ function fyvoyShowPof() {
         total = [live[0] + dep[0], live[1] + dep[1]];
         text = '🇬🇧 **UK Student visa** for ' + who + ':\n' + lines.join('\n');
         if (extra) text += '\n\n⚠️ Most master\'s students **can no longer bring dependants**. Only PhD/research students and government-sponsored students can. Check this before you plan for your family.';
-        text += '\n\nThe money must sit in the account for **28 days in a row**, ending within 31 days of your application. The higher figures include the **new rates from 30 November 2026**.';
+        text += '\n\nThe money must sit in the account for **28 days in a row**, ending within 31 days of your application.';
     } else if (p.purpose === 'study' && p.dest === 'canada') {
         const C = P.canadaStudy;
         currency = 'CAD';
