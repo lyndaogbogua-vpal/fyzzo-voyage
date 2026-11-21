@@ -130,6 +130,10 @@ const CONFIG = {
     // Time-limited notices for the top bar. Each shows only between `from` and `until`
     // (YYYY-MM-DD, `until` is the first day it is hidden). Add new rule changes here.
     announcementNotices: [
+        { until: "2026-11-30",
+          html: "<strong>FUNDS RISE ON 30 NOV:</strong> UK student living costs go up to £1,570/month in London and £1,203 outside London (rule change HC 584). <a href=\"#calculator\">Recalculate your funds &rarr;</a>" },
+        { from: "2026-11-30", until: "2027-02-01",
+          html: "<strong>NEW UK FUNDS AMOUNTS:</strong> Since 30 Nov 2026 you need £1,570/month in London or £1,203 outside London. <a href=\"#calculator\">Check your amount &rarr;</a>" },
         { until: "2027-01-01",
           html: "<strong>GRADUATE VISA CHANGE:</strong> Apply by 31 Dec 2026 to get 2 years; from 1 Jan 2027 it is 18 months. <a href=\"#contact\">Ask us &rarr;</a>" }
     ],
@@ -162,7 +166,7 @@ const CONFIG = {
     // Statutory UK Student Visa Maintenance Requirements (§12, §13)
     ukVisa: {
         current: {
-            name: "current GOV.UK rates",
+            name: "before 30 Nov 2026",
             londonMonthly: 1529,
             londonMax9Months: 13761,
             outsideLondonMonthly: 1171,
@@ -170,8 +174,16 @@ const CONFIG = {
             dependantLondonMonthly: 845,
             dependantOutsideLondonMonthly: 680
         },
-        // Add an "updated" rule set (same shape as "current") only once GOV.UK publishes new amounts.
-        updated: null,
+        // From 30 Nov 2026: HC 584 (3 Sep 2026) changes ST 12.3/12.4 only. Dependant amounts are unchanged.
+        updated: {
+            name: "from 30 Nov 2026",
+            londonMonthly: 1570,
+            londonMax9Months: 14130,
+            outsideLondonMonthly: 1203,
+            outsideLondonMax9Months: 10827,
+            dependantLondonMonthly: 845,
+            dependantOutsideLondonMonthly: 680
+        },
         exchangeRateGBPtoNGN: 2200, // Indicative baseline (Updated: October 2026)
         planningBufferPercent: 0.10 // 10% optional personal budgeting buffer
     }

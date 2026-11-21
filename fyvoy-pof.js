@@ -21,10 +21,10 @@ const FYVOY_POF = {
     symbols: { GBP: '£', EUR: '€', USD: '$', CAD: 'CAD $' },
     buffer: 0.10,   // 10% exchange-rate safety buffer on the recommended (high) figure
 
-    // UK Student visa (GOV.UK, checked Nov 2026). Living costs for up to 9 months. [low, high] kept equal until GOV.UK changes the rates.
+    // UK Student visa (GOV.UK). Living costs for up to 9 months; higher figure = rates from 30 Nov 2026 (HC 584). Dependant amounts unchanged.
     ukStudy: {
         months: 9,
-        living:    { london: [1529, 1529], outside: [1171, 1171] },   // per month, student
+        living:    { london: [1529, 1570], outside: [1171, 1203] },   // per month, student
         dependant: { london: [845, 845],   outside: [680, 680] },     // per month, each dependant
         tuition: [12000, 25000]   // typical unpaid first-year tuition for a master's (your CAS shows the real figure)
     },
